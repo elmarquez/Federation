@@ -1,0 +1,15 @@
+/apiclasses
+/deploy
+/docs
+/sampleclasses
+/samples
+/src
+/zip
+
+samples.jar
+
+*.bat
+*.html
+*.sh
+*.txt
+*.xml
