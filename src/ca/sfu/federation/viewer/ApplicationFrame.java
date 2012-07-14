@@ -17,7 +17,6 @@ package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
-import com.javadocking.util.LookAndFeelUtil;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Toolkit;
@@ -28,7 +27,6 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.JPopupMenu;
 
 /**
  * Main application frame.

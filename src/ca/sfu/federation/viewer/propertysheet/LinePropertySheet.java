@@ -1,7 +1,4 @@
 /**
- * ComponentLineSheet.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -16,27 +13,22 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 59
  * Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package ca.sfu.federation.viewer.propertysheet;
 
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.InputTable;
 import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.exception.NonExistantMethodException;
-import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
 import ca.sfu.federation.model.geometry.IPoint;
 import ca.sfu.federation.model.geometry.Line;
-import ca.sfu.federation.ApplicationContext;
 import com.developer.rose.BeanProxy;
 import java.awt.BorderLayout;
-import java.beans.IntrospectionException;
 import java.lang.reflect.Method;
 import java.util.*;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import se.datadosen.component.RiverLayout;
 
 /**
@@ -44,9 +36,8 @@ import se.datadosen.component.RiverLayout;
  * @version 0.1
  */
 public class LinePropertySheet extends javax.swing.JPanel implements Observer {
-    
-    //--------------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(LinePropertySheet.class.getName());
     
     private ParametricModel model;
     private Component target;
@@ -77,7 +68,6 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
     private JLabel lblDirection;
     
     //--------------------------------------------------------------------------
-
     
     /**
      * ParametricModelSheet constructor.
@@ -305,10 +295,9 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
             this.target.setUpdateMethod(item);
             // update the input arguments panel
             this.buildUpdateMethodInputsPanel();
-        } catch (NonExistantMethodException ex) {
-            ex.printStackTrace();
-        } catch (NonExistantUpdateAnnotationException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }    
     
@@ -318,10 +307,9 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("description",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         
     }
@@ -332,10 +320,9 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("name",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }
     
@@ -359,10 +346,9 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
             this.jtfMidPoint.setText(String.valueOf(midPoint));
             this.jtfEndPoint.setText(String.valueOf(endPoint));
             this.jtfLength.setText(String.valueOf(length));
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         
         Method[] methods = this.target.getUpdateMethods();
@@ -394,10 +380,10 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: ComponentSheet received event notification id " + eventId);
+            logger.log(Level.INFO,"ComponentSheet received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_PROPERTY_CHANGE:
-                    System.out.println("INFO: ComponentSheet fired property change event.");
+                    logger.log(Level.INFO,"ComponentSheet fired property change event");
                     this.setValues();
                     break;
             }

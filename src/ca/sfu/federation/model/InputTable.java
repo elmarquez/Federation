@@ -1,7 +1,4 @@
 /**
- * InputTable.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -36,16 +33,12 @@ import java.util.*;
  */
 public class InputTable extends Observable implements Serializable {
     
-    //--------------------------------------------------------------------------
-
-    
     private ArrayList inputs;       // the inputs, in order
     private String description;  // description of the update method
     private INamed parent; // the parent object
     private boolean primed;      // all inputs have the required user input values
     
     //--------------------------------------------------------------------------
-
     
     /**
      * InputTable constructor.
@@ -58,7 +51,6 @@ public class InputTable extends Observable implements Serializable {
     }
     
     //--------------------------------------------------------------------------
-
     
     /**
      * Add a property to the table.

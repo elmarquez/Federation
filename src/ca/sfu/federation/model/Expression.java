@@ -1,7 +1,4 @@
 /**
- * Expression.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -20,9 +17,12 @@ package ca.sfu.federation.model;
 
 import com.developer.rose.BeanProxy;
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * A user specified expression that can be resolved to a value or object.  
@@ -34,8 +34,7 @@ import java.util.regex.Pattern;
  */
 public class Expression implements Serializable {
 
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(Expression.class.getName());
 
     private static final String[] OPERATORS = {"!","%","^","&&","||","*","/","+","-"};
     private static final int NUMBER_LITERAL = 0;
@@ -51,7 +50,6 @@ public class Expression implements Serializable {
     private IContext context;        // the collection of NamedObjects available to the expression for performing computations
     
     //--------------------------------------------------------------------------
-
     
     /**
      * Expression constructor.  Context object will only be required when the 
@@ -99,7 +97,6 @@ public class Expression implements Serializable {
 
     //--------------------------------------------------------------------------
 
-
     /**
      * Get dependancies for this expression.
      * @return Elements on which this Expression is dependant.
@@ -139,7 +136,8 @@ public class Expression implements Serializable {
             try {
                 result = exp.solve();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"Could not solve expression\n\n{0}",stack);
             }
         } else {
             result = Parameter;
@@ -440,7 +438,8 @@ public class Expression implements Serializable {
                 params.add(expLhs);
                 params.add(expRhs);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"Could not solve expression\n\n{0}",stack);
             }
             result.add(term);
             result.add(params);
@@ -480,7 +479,8 @@ public class Expression implements Serializable {
                     // TODO: invoke the function, get result value
                     // function.invoke(this, null);
                 } catch (Exception ex) {
-                    System.out.println("ERROR: Could not invoke user specified function " + ex);
+                    String stack = ExceptionUtils.getFullStackTrace(ex);
+                    logger.log(Level.WARNING,"Could not invoke user specified function\n\n{0}",stack);
                 }
                 break;
             case Expression.COMPOUND:

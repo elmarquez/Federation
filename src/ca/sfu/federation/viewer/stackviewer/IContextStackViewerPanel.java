@@ -1,7 +1,4 @@
 /**
- * IContextStackViewerPanel.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,30 +16,17 @@
 
 package ca.sfu.federation.viewer.stackviewer;
 
-import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.ApplicationContext;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.HeadlessException;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.Transparency;
+import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.model.ParametricModel;
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.PixelGrabber;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import org.openide.util.Utilities;
@@ -53,8 +37,7 @@ import org.openide.util.Utilities;
  */
 public class IContextStackViewerPanel extends JPanel implements Observer {
     
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(IContextStackViewerPanel.class.getName());
 
     private ParametricModel model;
     private IContext context;
@@ -281,7 +264,7 @@ public class IContextStackViewerPanel extends JPanel implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: IContextStackViewerPanel received event notification id " + eventId);
+            logger.log(Level.INFO,"IContextStackViewerPanel received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_CONTEXT_CHANGE:
                 case ApplicationContext.EVENT_ELEMENT_ADD:

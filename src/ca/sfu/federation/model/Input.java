@@ -1,7 +1,4 @@
 /**
- * Input.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -26,12 +23,8 @@ import java.util.Set;
 /**
  * User input object.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class Input implements Serializable {
-
-    //--------------------------------------------------------------------------
-
 
     private static final int STATE_INVALID = 0;
     private static final int STATE_VALID = 1;
@@ -46,7 +39,6 @@ public class Input implements Serializable {
     private ExpressionSolver solver; // expression solver
 
     //--------------------------------------------------------------------------
-
 
     /**
      * Input constructor.  The Input is not ready to use until it has been 
@@ -67,7 +59,6 @@ public class Input implements Serializable {
     }
 
     //--------------------------------------------------------------------------
-
 
     /**
      * Get expression dependancies for this Input.

@@ -1,7 +1,4 @@
 /**
- * BehaviorPropertySheet.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,23 +16,24 @@
 
 package ca.sfu.federation.viewer.propertysheet;
 
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Assembly;
 import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.ApplicationContext;
 import com.developer.rose.BeanProxy;
 import java.beans.IntrospectionException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * @author  Davis Marques
- * @version 0.1.0
  */
 public class BehaviorPropertySheet extends JPanel implements Observer {
 
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(BehaviorPropertySheet.class.getName());
     
     private ParametricModel model;
     private Assembly target;
@@ -53,7 +51,6 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
     private javax.swing.JLabel lblName;
 
     //--------------------------------------------------------------------------
-
 
     /** 
      * ParametricModelSheet constructor.
@@ -158,27 +155,31 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
 
     private void jtfConditionActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: AssemblySheet jtfDescriptionActionListener fired. " + command);
+        logger.log(Level.INFO,"AssemblySheet jtfDescriptionActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("description",evt.getActionCommand());
         } catch (IntrospectionException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }
 
     private void jtfNameActionListener(java.awt.event.ActionEvent evt) {                                       
         String command = evt.getActionCommand();
-        System.out.println("INFO: AssemblySheet jtfNameActionListener fired. " + command);
+        logger.log(Level.INFO,"AssemblySheet jtfNameActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("name",evt.getActionCommand());
         } catch (IntrospectionException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }                                      
     
@@ -205,10 +206,10 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: AssemblySheet received event notification id " + eventId);
+            logger.log(Level.INFO,"AssemblySheet received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_PROPERTY_CHANGE:
-                    System.out.println("INFO: AssemblySheet fired property change event.");
+                    logger.log(Level.INFO,"AssemblySheet fired property change event");
                     this.setValues();
                     break;
             }

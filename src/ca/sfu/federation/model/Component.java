@@ -1,7 +1,4 @@
 /**
- * Component.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -26,8 +23,11 @@ import java.awt.Image;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.j3d.Group;
 import javax.media.j3d.Node;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openide.util.Utilities;
 
 /**
@@ -71,12 +71,10 @@ import org.openide.util.Utilities;
  * TODO: need to study the cycle of setting the update method/method name, serializing/deserializing the object, etc. to ensure that it is always set
  *
  * @author Davis Marques
- * @version 0.1.0
  */
 public class Component extends Observable implements IViewable, IGraphable, IUpdateable, Observer, Serializable {
-    
-    //--------------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(Component.class.getName());
     
     private String name;                    // the name for this node
     private String basename;                // default name prefix
@@ -93,7 +91,6 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     private boolean visible;                // true if the result object should be displayed
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTOR
 
    /**
      * Component constructor.
@@ -129,7 +126,8 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         try {
             this.context.add(this);            
         } catch (IllegalArgumentException ex) {
-            System.out.println(ex.getMessage());
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not register in context",stack);
         }
     }
     
@@ -157,7 +155,8 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         try {
             MyContext.add(this);            
         } catch (IllegalArgumentException ex) {
-            System.out.println(ex.getMessage());
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not register in context",stack);
         }
     }
     
@@ -167,6 +166,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     /**
      * Clear the Result cache.
      */
+    @Override
     public void clearResultCache() {
         this.result = null;
     }
@@ -174,9 +174,10 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     /**
      * Delete the object from its context.
      */
+    @Override
     public void delete() {
         // tell observers to release me
-        System.out.println("INFO: Component signalled Observers to release and delete object.");
+        logger.log(Level.INFO,"Component signalled Observers to release and delete object");
         this.setChanged();
         this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST));
     }
@@ -185,6 +186,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get canonical name.
      * @return Fully qualified name.
      */
+    @Override
     public String getCanonicalName() {
         String fqn = "";
         if (this.context != null) {
@@ -198,6 +200,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get the context for this Element.
      * @return The context for this Element.
      */
+    @Override
     public IContext getContext() {
         return this.context;
     }
@@ -206,6 +209,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get the Elements on which this Element is dependant.
      * @return Elements upon which this Element is dependant.
      */
+    @Override
     public Map getDependancies() {
         return this.inputTable.getDependancies();
     }
@@ -214,6 +218,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get icon representation for this Component.
      * @return Icon
      */
+    @Override
     public Image getIcon() {
         return this.icon;
     }
@@ -244,6 +249,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get the name of this object.
      * @return The name of this object.
      */
+    @Override
     public String getName() {
         return this.name;
     }
@@ -253,6 +259,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Subclasses of Component must override this method.
      * @return Java3D Node
      */
+    @Override
     public Node getRenderable() {
         return new Group();
     }
@@ -261,6 +268,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get thumbnail image representation for this component.
      * @return Image.
      */
+    @Override
     public Image getThumbnail() {
         return this.thumbnail;
     }
@@ -307,6 +315,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get the visibility state of this object.
      * @return The visibility state of this object. True if visible, false otherwise.
      */
+    @Override
     public boolean getVisible() {
         return this.visible;
     }
@@ -314,14 +323,17 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     /**
      * Restore the update method field value after deserialization.
      */
+    @Override
     public void restore() {
         if (!this.updateMethodName.equals("")) {
             try {
                 this.setUpdateMethod(this.updateMethodName);
             } catch (NonExistantMethodException ex) {
-                ex.printStackTrace();
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"Could not set update method\n\n{0}",stack);
             } catch (NonExistantUpdateAnnotationException ex) {
-                ex.printStackTrace();
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"Could not set update method\n\n{0}",stack);
             }
         }
     }
@@ -330,6 +342,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Set the Context.
      * @param MyContext The Context for the object.
      */
+    @Override
     public void setContext(IContext MyContext) {
         this.context = MyContext;
     }
@@ -374,6 +387,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * @param Name Name for this object.
      * TODO: need to make sure that the new name does not already exist in the context.  there should be a vetoable change listener in play here
      */
+    @Override
     public void setName(String Name) {
         String old = this.name;
         this.name = Name;
@@ -418,7 +432,8 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         try {
             this.inputTable.generateInputs(this.updateMethod);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get inputs\n\n{0}",stack);
         }
         // notify observers
         this.setChanged();
@@ -429,6 +444,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Set the visibility state of the object.
      * @param State Visibility state of the object.  True if the object should be displayed, false otherwise.
      */
+    @Override
     public void setVisible(boolean State) {
         this.visible = State;
         // notify observers
@@ -440,6 +456,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Update the state of this Element.
      * @return True if the update succeeded, false otherwise.
      */
+    @Override
     public boolean update() {
         // init
         boolean result = false;
@@ -456,14 +473,15 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
             try {
                 Object updateresult = this.updateMethod.invoke(this,args);
                 result = true;
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"Could not update state\n\n{0}",stack);
             }
         } else {
             // no update method set so just pass by for now
             result = true;
         }
-        System.out.println("INFO: Update on " + this.toString() + ": " + result);
+        logger.log(Level.INFO,"Update on {0}:{1}", new Object[]{this.toString(), result});
         // return result
         return result;
     }   
@@ -473,6 +491,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * @param o Observable object.
      * @param arg Update argument.
      */
+    @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;

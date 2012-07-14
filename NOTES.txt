@@ -1,18 +1,35 @@
+--------------------------------------------------------------------------------
+Federation Modeler
 
+
+--------------------------------------------------------------------------------
 Versions
 
+0.4.0
+. Supporting slideshow documentation
+
+0.3.0
+. Save project model and application state to file
+
+0.2.2
+. 2D model viewer
+. Component classes that implement 2D graphics drawing
+. Open 2D model views from Scenario view
+. Viewers should observe model, maintain proper state
 
 0.2.1
+* Replace all System.out.println calls to logging framework calls >> in progress
+. Basic test suite for core model and utility classes
+. Component constructor methods should throw exceptions
 
 0.2.0
-.
-.
-.
+- Docking panel layout
+- Create new model through File/New Project
 
 0.1.0
 - First release
 
 
+--------------------------------------------------------------------------------
+Notes
 
-Swing application framework
-http://java.sun.com/developer/technicalArticles/javase/swingappfr/

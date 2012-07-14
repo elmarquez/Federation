@@ -1,7 +1,4 @@
 /**
- * ViewerSetContextFocusAction .java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -20,9 +17,11 @@
 package ca.sfu.federation.action;
 
 import ca.sfu.federation.ApplicationContext;
-import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.model.ParametricModel;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
@@ -30,19 +29,16 @@ import javax.swing.Icon;
  * Set the current context of the model.  If the context is an instance of
  * Parametric Model, then we set the viewer type to 
  * @author Davis Marques
- * @version 0.1.0
  */
 public class IContextSetCurrentAction extends AbstractAction {
-    
-    //--------------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(IContextSetCurrentAction.class.getName());
     
     private ParametricModel model;
     private IContext context;
 
     //--------------------------------------------------------------------------
 
-    
     /**
      * IContextSetCurrentAction constructor.
      * 
@@ -62,13 +58,12 @@ public class IContextSetCurrentAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
-
     /**
      * Set the current context.
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        System.out.println("INFO: IContextSetCurrentAction performed action. Set context to " + this.context.getCanonicalName());
+        logger.log(Level.INFO,"IContextSetCurrentAction performed action. Set context to {0}", this.context.getCanonicalName());
         model.setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,this.context);
     }
     

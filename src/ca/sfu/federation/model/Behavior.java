@@ -1,7 +1,4 @@
 /**
- * Behavior.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -24,6 +21,9 @@ import ca.sfu.federation.model.util.exception.MalformedSelectionRuleException;
 import java.awt.Image;
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openide.util.Utilities;
 
 /**
@@ -38,13 +38,11 @@ import org.openide.util.Utilities;
  * TODO: need to identify behaviors that are assigned to an object
  *
  * @author Davis Marques
- * @version 0.1.0
  */
 public class Behavior implements Observer, Serializable {
+
+    private static final Logger logger = Logger.getLogger(Behavior.class.getName());
     
-    //--------------------------------------------------------------------------
-
-
     private IContext context;       // the context which the behavior monitors
     private INamed host;      // the object to which this behavior is bound
     private String updateCondition; // host selection rule
@@ -56,7 +54,6 @@ public class Behavior implements Observer, Serializable {
     private Image thumbnail;        // thumbnail representation of this object
     
     //--------------------------------------------------------------------------
-
 
     /** 
      * Behavior constructor.
@@ -106,15 +103,15 @@ public class Behavior implements Observer, Serializable {
         this.updateCondition = UpdateCondition;
         try {
             this.selection = new Selection(UpdateCondition,this.context);
-        } catch (MalformedSelectionRuleException msre) {
-            msre.printStackTrace();
+        } catch (MalformedSelectionRuleException ex) {
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Malformed selection rule\n\n{0}",stack);
         }
         // update action
         this.updateAction = UpdateAction;
     }
 
     //--------------------------------------------------------------------------
-
 
     /**
      * Stop listening for changes from the environment. 
@@ -141,8 +138,9 @@ public class Behavior implements Observer, Serializable {
     public void setUpdateCondition(String Condition) {
         try {
             this.selection = new Selection(Condition,this.context);
-        } catch (MalformedSelectionRuleException msre) {
-            msre.printStackTrace();
+        } catch (MalformedSelectionRuleException ex) {
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Malformed selection rule\n\n{0}",stack);
         }
     }
     
@@ -152,22 +150,24 @@ public class Behavior implements Observer, Serializable {
      * @param arg Update message.
      */
     public void update(Observable o, Object arg) {
-        System.out.println("INFO: Behavior update: on object " + o.toString());
+        logger.log(Level.INFO,"Behavior update: on object {0}", o.toString());
         // filter the list using the user provided rules
         LinkedHashMap outputset = (LinkedHashMap) this.selection.update();
         if (outputset.size()>0) {
-            System.out.print("INFO: Behavior " + this.toString() + " found targets: ");
+            logger.log(Level.INFO,"Behavior {0} found targets: ", this.toString());
         } 
         Iterator iter = outputset.values().iterator();
+        StringBuilder sb = new StringBuilder();
         while (iter.hasNext()) {
             INamed named = (INamed) iter.next();
-            System.out.print(" " + named.getName());
+            sb.append(" ");
+            sb.append(named.getName());
         }
-        System.out.println("\n");
+        logger.log(Level.INFO,sb.toString());
         /*
         if (this.updateCondition != null && this.updateAction != null) {
             // determine the type of the update
-            System.out.println("INFO: Behavior update: "+o.toString()+", "+arg.toString());
+            System out println("INFO: Behavior update: "+o.toString()+", "+arg.toString());
             // get the set of elements in the environment; remove bound assembly self from list
             LinkedHashMap inputset = (LinkedHashMap) this.context.getElements();
             // filter the list using the user provided rules

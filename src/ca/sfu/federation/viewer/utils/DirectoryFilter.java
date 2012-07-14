@@ -1,7 +1,4 @@
 /**
- * DirectoryFilter.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -16,7 +13,6 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 59
  * Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package ca.sfu.federation.viewer.utils;
 
 import java.io.File;
@@ -25,12 +21,8 @@ import javax.swing.filechooser.FileFilter;
 /**
  * Filter an input list to return only directory objects.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class DirectoryFilter extends FileFilter {
-
-    //--------------------------------------------------------------------------
-
     
     /**
      * DirectoryFilter constructor.
@@ -39,7 +31,6 @@ public class DirectoryFilter extends FileFilter {
     }
     
     //--------------------------------------------------------------------------
-
 
     /**
      * Determine whether the file is a directory.

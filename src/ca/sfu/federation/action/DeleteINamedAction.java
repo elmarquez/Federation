@@ -1,7 +1,4 @@
 /**
- * INamedObjectDeleteAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -21,25 +18,22 @@ package ca.sfu.federation.action;
 
 import ca.sfu.federation.model.INamed;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
 /**
  * Delete the INamed from the model.
- * 
  * @author Davis Marques
- * @version 0.1.0
  */
 public class DeleteINamedAction extends AbstractAction {
     
-    //--------------------------------------------------------------------------
-
-    
+    private static final Logger logger = Logger.getLogger(DeleteINamedAction.class.getName());
     private INamed target;
     
     //--------------------------------------------------------------------------
-
     
     /**
      * INamedObjectDeleteAction constructor.
@@ -57,15 +51,14 @@ public class DeleteINamedAction extends AbstractAction {
     }
     
     //--------------------------------------------------------------------------
-
     
     public void actionPerformed(ActionEvent e) {
         // confirm delete action before proceeding
         int i = JOptionPane.showOptionDialog(null,"Are you sure you want to delete '" + this.target.getName() + "'?","Confirm Delete",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,null,null,JOptionPane.OK_OPTION);
         if (i==0) {
-            System.out.println("INFO: INamedObjectDeleteAction performed action.");
+            logger.log(Level.INFO,"INamedObjectDeleteAction performed action");
             this.target.delete();
         }
     }
     
-} 
+} // end class

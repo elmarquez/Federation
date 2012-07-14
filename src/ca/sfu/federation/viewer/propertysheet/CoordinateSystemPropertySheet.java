@@ -1,7 +1,4 @@
 /**
- * CoordinateSystemPropertySheet.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,30 +16,27 @@
 
 package ca.sfu.federation.viewer.propertysheet;
 
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.exception.NonExistantMethodException;
 import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
-import ca.sfu.federation.ApplicationContext;
 import com.developer.rose.BeanProxy;
 import java.beans.IntrospectionException;
 import java.lang.reflect.Method;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * @author  Davis Marques
- * @version 0.1
  */
 public class CoordinateSystemPropertySheet extends JPanel implements Observer {
 
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(CoordinateSystemPropertySheet.class.getName());
     
     private JScrollPane jScrollPane1;
     private JComboBox jcbUpdateMethod;
@@ -70,9 +64,8 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
     
     //--------------------------------------------------------------------------
 
-
     /** 
-     * ParametricModelSheet constructor.
+     * CoordinateSystemPropertySheet constructor
      */
     public CoordinateSystemPropertySheet() {
         lblINamedObject = new JLabel();
@@ -241,84 +234,75 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
     
     //--------------------------------------------------------------------------
 
-
     private void jtfDescriptionActionListener(java.awt.event.ActionEvent evt) {                                              
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfDescriptionActionListener fired. " + command);
+        logger.log(Level.INFO,"CoordinateSystemPropertySheet jtfDescriptionActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("description",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
-
     }                                             
 
     private void jtfNameActionListener(java.awt.event.ActionEvent evt) {                                       
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfNameActionListener fired. " + command);
+        logger.log(Level.INFO,"CoordinateSystemPropertySheet jtfNameActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("name",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }                                      
 
     private void jtfXActionListener(java.awt.event.ActionEvent evt) {                                    
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfXActionListener fired. " + command);
+        logger.log(Level.INFO,"CoordinateSystemPropertySheet jtfXActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("X",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }
 
     private void jtfYActionListener(java.awt.event.ActionEvent evt) {                                    
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfYActionListener fired. " + command);
+        logger.log(Level.INFO,"CoordinateSystemPropertySheet jtfYActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("Y",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
-
     }                                   
 
     private void jtfZActionListener(java.awt.event.ActionEvent evt) {                                    
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfZActionListener fired. " + command);
+        logger.log(Level.INFO,"CoordinateSystemPropertySheet jtfZActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("Z",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }                                   
 
     private void jcbUpdateMethodActionListener(java.awt.event.ActionEvent evt) {                                               
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jcbUpdateMethodActionListener fired. " + command);
+        logger.log(Level.INFO,"CoordinateSystemPropertySheet jcbUpdateMethodActionListener fired {0}", command);
         try {
             this.target.setUpdateMethod(evt.getActionCommand());
             // update the input arguments panel
-        } catch (NonExistantMethodException ex) {
-            ex.printStackTrace();
-        } catch (NonExistantUpdateAnnotationException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }                                              
     
@@ -352,10 +336,10 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: ComponentSheet received event notification id " + eventId);
+            logger.log(Level.INFO,"CoordinateSystemPropertySheet received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_PROPERTY_CHANGE:
-                    System.out.println("INFO: ComponentSheet fired property change event.");
+                    logger.log(Level.INFO,"CoordinateSystemPropertySheet fired property change event");
                     this.setValues();
                     break;
             }

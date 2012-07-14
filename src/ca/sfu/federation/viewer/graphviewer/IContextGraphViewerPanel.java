@@ -1,7 +1,4 @@
 /**
- * IContextGraphViewerPanel.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -20,28 +17,15 @@
 package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.ApplicationContext;
-import ca.sfu.federation.model.Assembly;
-import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.Scenario;
-import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.INamed;
 import ca.sfu.federation.action.ScenarioNewInstanceAction;
+import ca.sfu.federation.model.*;
 import java.awt.BorderLayout;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.*;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JToolBar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
 import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -53,9 +37,8 @@ import org.netbeans.api.visual.widget.Widget;
  * @version 0.1.0
  */
 public class IContextGraphViewerPanel extends JPanel implements MouseListener, Observer {
-    
-    //-------------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(IContextGraphViewerPanel.class.getName());
     
     // view components
     private JScrollPane jScrollPane;
@@ -68,7 +51,6 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     private MutableSceneModel scene;
     
     //-------------------------------------------------------------------------
-
     
     /**
      * IContextGraphViewerPanel constructor.
@@ -94,7 +76,6 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     }
     
     //-------------------------------------------------------------------------
-
     
     /**
      * Build the default toolbar.
@@ -142,7 +123,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
         }
         // if we have already created a scene for this context, restore it
         if (this.scenes.containsKey(this.context.getCanonicalName())) {
-            System.out.println("INFO: IContextGraphViewerPanel retrieving scene for " + this.context.getCanonicalName());
+            logger.log(Level.INFO,"IContextGraphViewerPanel retrieving scene for {0}", this.context.getCanonicalName());
             // fetch the existing scene from the scene list
             this.scene = (MutableSceneModel) this.scenes.get(this.context.getCanonicalName());
             this.scene.validate();
@@ -156,7 +137,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
             this.validate();
             return;
         } else {
-            System.out.println("INFO: IContextGraphViewerPanel creating new scene for " + this.context.getCanonicalName());
+            logger.log(Level.INFO,"IContextGraphViewerPanel creating new scene for {0}", this.context.getCanonicalName());
             // create a new scene, add it to the scene list
             this.scene = new MutableSceneModel(this.context);
             this.scenes.put(this.context.getCanonicalName(),this.scene);
@@ -217,7 +198,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     }
     
     public void mouseReleased(MouseEvent e) {
-        System.out.println("INFO: mouse released " + e.getPoint().getLocation().toString());
+        logger.log(Level.INFO,"mouse released {0}", e.getPoint().getLocation().toString());
         Point p = e.getPoint();
         this.model.setViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE,p);
     }
@@ -236,10 +217,10 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: IContextGraphViewerPanel received event notification id " + eventId);
+            logger.log(Level.INFO,"IContextGraphViewerPanel received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_CONTEXT_CHANGE:
-                    System.out.println("INFO: IContextGraphViewerPanel fired context change.");
+                    logger.log(Level.INFO,"IContextGraphViewerPanel fired context change");
                     // stop listening on the previous context
                     if (this.context instanceof Observable  && this.context != this.model) {
                         Observable ob = (Observable) this.context;
@@ -249,7 +230,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
                     this.buildGraph();
                     break;
                 case ApplicationContext.EVENT_STATE_CHANGE:
-                    System.err.println("WARNING: IContextGraphViewerPanel state change not implemented.");
+                    logger.log(Level.WARNING,"IContextGraphViewerPanel state change not implemented");
                     break;
             }
         }
@@ -262,9 +243,6 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
      * Popup menu provider.
      */
     private final class IContextGraphViewerPanelPopupProvider implements PopupMenuProvider, ActionListener {
-        
-        //----------------------------------------------------------------------
-    
         
         private JPopupMenu menu;
         private AntialiasedScene scene;

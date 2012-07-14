@@ -1,7 +1,4 @@
 /**
- * ComponentVisualWidget.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,15 +16,17 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.Component;
 import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.IViewable;
 import ca.sfu.federation.model.INamed;
+import ca.sfu.federation.model.IViewable;
 import java.awt.Font;
 import java.awt.Image;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.border.Border;
@@ -41,12 +40,10 @@ import org.netbeans.api.visual.widget.Widget;
 /**
  * A graphic representation of a model object.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class ComponentVisualWidget extends Widget implements IVisualWidget, Observer {
-    
-    //--------------------------------------------------------------------------
-
+ 
+    private static final Logger logger = Logger.getLogger(ComponentVisualWidget.class.getName());
     
     private static final String ACTION_OPEN_SCENARIO = "OPENSCENARIO";
     private static final String ACTION_SET_ACTIVE_SCENARIO = "SETSCENARIOACTIVE";
@@ -59,7 +56,6 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
     private WidgetAction moveAction = ActionFactory.createMoveAction();
     
     //--------------------------------------------------------------------------
-
     
     /**
      * ContainerVisualWidget constructor.
@@ -115,7 +111,6 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
     }
     
     //--------------------------------------------------------------------------
-
     
     /**
      * Get the target of the widget.
@@ -136,7 +131,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
             switch (eventId) {
                 case ApplicationContext.EVENT_DESCRIPTION_CHANGE:
                 case ApplicationContext.EVENT_NAME_CHANGE:
-                    System.out.println("INFO: ComponentVisualWidget fired name or description change event.");
+                    logger.log(Level.INFO,"ComponentVisualWidget fired name or description change event");
                     this.nameLabelWidget.setLabel(named.getName());
                     this.updateMethodLabelWidget.setLabel(named.getCanonicalName());
                     if (named instanceof Component) {
@@ -145,7 +140,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
                     }
                     break;
                 case ApplicationContext.EVENT_ELEMENT_CHANGE:
-                    System.out.println("INFO: ComponentVisualWidget fired element change event.");
+                    logger.log(Level.INFO,"ComponentVisualWidget fired element change event");
                     this.nameLabelWidget.setLabel(named.getName());
                     this.updateMethodLabelWidget.setLabel(named.getCanonicalName());
                     if (named instanceof Component) {
@@ -155,7 +150,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
                     this.iconWidget.setImage(named.getIcon());
                     break;
                 case ApplicationContext.EVENT_ICON_CHANGE:
-                    System.out.println("INFO: ComponentVisualWidget fired icon change event.");
+                    logger.log(Level.INFO,"ComponentVisualWidget fired icon change event");
                     this.iconWidget.setImage(named.getIcon());
                     break;
             }
