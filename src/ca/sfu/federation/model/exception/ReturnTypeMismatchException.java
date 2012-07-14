@@ -26,10 +26,10 @@ package ca.sfu.federation.model.exception;
 public class ReturnTypeMismatchException extends Exception {
     
     //-------------------------------------------------------------------------
-    // FIELDS
+
     
     //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /** 
      * ReturnTypeMismatchException constructor.
@@ -46,7 +46,7 @@ public class ReturnTypeMismatchException extends Exception {
     }
 
     //-------------------------------------------------------------------------
-    // METHODS
+
     
 }
 

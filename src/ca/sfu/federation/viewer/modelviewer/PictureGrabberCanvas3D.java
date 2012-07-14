@@ -42,7 +42,7 @@ import javax.media.j3d.Raster;
 class PictureGrabberCanvas3D extends Canvas3D {
 
     //-------------------------------------------------------------------------
-    // FIELDS
+
     
     private int width = -1;
     private int height = -1;
@@ -52,7 +52,7 @@ class PictureGrabberCanvas3D extends Canvas3D {
     private BufferedImage canvas_img = null;
 
     //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     public PictureGrabberCanvas3D(GraphicsConfiguration config, int width, int height) {
         super(config, true);
@@ -60,7 +60,7 @@ class PictureGrabberCanvas3D extends Canvas3D {
     }
 
     //-------------------------------------------------------------------------
-    // METHODS
+
     
     public static GraphicsConfiguration getOffscreenGraphicsConfig() {
         GraphicsConfigTemplate3D template = new GraphicsConfigTemplate3D();
@@ -208,7 +208,7 @@ class PictureGrabberCanvas3D extends Canvas3D {
 //        tempspin.rotY(Math.PI / 5.0d);
 //        spin.mul(tempspin);
 //        spin.setScale(0.7);
-//        spin.setTranslation(new Vector3d(-0.4, 0.3, 0.0));
+//        spin.setTranslation(new ArrayList3d(-0.4, 0.3, 0.0));
 //        TransformGroup objTrans = new TransformGroup(spin);
 //        objRoot.addChild(objTrans);
 //

@@ -27,16 +27,16 @@ import ca.sfu.federation.model.geometry.CoordinateSystem;
 import ca.sfu.federation.model.geometry.Line;
 import ca.sfu.federation.model.geometry.Plane;
 import ca.sfu.federation.model.geometry.Point;
-import ca.sfu.federation.viewer.action.AssemblyNewInstanceAction;
-import ca.sfu.federation.viewer.action.ComponentNewInstanceAction;
-import ca.sfu.federation.viewer.action.ScenarioNewInstanceAction;
-import ca.sfu.federation.viewer.action.GraphViewerAddAnnotationAction;
-import ca.sfu.federation.viewer.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.AssemblyNewInstanceAction;
+import ca.sfu.federation.action.ComponentNewInstanceAction;
+import ca.sfu.federation.action.ScenarioNewInstanceAction;
+import ca.sfu.federation.action.GraphViewerAddAnnotationAction;
+import ca.sfu.federation.action.IContextSetCurrentAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.Iterator;
+import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -53,7 +53,7 @@ import org.netbeans.api.visual.widget.Widget;
 public class StaticSceneModelPopupProvider implements PopupMenuProvider, ActionListener {
     
     //----------------------------------------------------------------------
-    // FIELDS
+
     
     private Scene scene;
     private IContext context;
@@ -62,7 +62,7 @@ public class StaticSceneModelPopupProvider implements PopupMenuProvider, ActionL
     private java.awt.Point lastMouseRelease;
     
     //----------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Popup menu provider.
@@ -74,7 +74,7 @@ public class StaticSceneModelPopupProvider implements PopupMenuProvider, ActionL
     }
     
     //----------------------------------------------------------------------
-    // METHODS
+
     
     public JPopupMenu getPopupMenu(Widget widget) {
         JPopupMenu menu = new JPopupMenu();
@@ -126,10 +126,10 @@ public class StaticSceneModelPopupProvider implements PopupMenuProvider, ActionL
         menu.add(new JSeparator());
         // set view
         submenu = new JMenu("Set Current Context");
-        Vector parents = (Vector) this.context.getParents();
-        Enumeration e = parents.elements();
-        while (e.hasMoreElements()) {
-            IContext c = (IContext) e.nextElement();
+        ArrayList parents = (ArrayList) this.context.getParents();
+        Iterator e = parents.iterator();
+        while (e.hasNext()) {
+            IContext c = (IContext) e.next();
             String name = c.getCanonicalName();
             IContextSetCurrentAction vscfa = new IContextSetCurrentAction(name,null,name,null,c);
             submenu.add(vscfa);

@@ -23,17 +23,11 @@ import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.IGraphable;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.model.ConfigManager;
-import gnu.trove.THashMap;
+import ca.sfu.federation.ApplicationContext;
 import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.RenderingHints;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Vector;
+import java.util.*;
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.anchor.AnchorFactory;
@@ -55,7 +49,7 @@ import org.netbeans.api.visual.widget.Widget;
 public class MutableSceneModel extends Scene implements Observer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private IContext context;             // the context we are representing
     
@@ -63,9 +57,9 @@ public class MutableSceneModel extends Scene implements Observer {
     private LayerWidget edgeLayer;        // layer for edges
     private LayerWidget annotationLayer;  // layer for annotations
 
-    private Vector nodes;                 // nodes
-    private Vector edges;                 // edges
-    private THashMap annotations;         // annotations
+    private ArrayList nodes;                 // nodes
+    private ArrayList edges;                 // edges
+    private LinkedHashMap annotations;         // annotations
     private int annotationId;             // for generating annotation id
     
     private int x = 15;                   // new widget x coordinate
@@ -74,7 +68,7 @@ public class MutableSceneModel extends Scene implements Observer {
     private boolean init = true;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * MutableSceneModel constructor.
@@ -83,12 +77,12 @@ public class MutableSceneModel extends Scene implements Observer {
         // init
         ParametricModel model = ParametricModel.getInstance();
         this.context = MyContext;
-        this.nodes = new Vector();
-        this.edges = new Vector();
-        this.annotations = new THashMap();
+        this.nodes = new ArrayList();
+        this.edges = new ArrayList();
+        this.annotations = new LinkedHashMap();
         this.annotationId = 0;
         // set visual properties
-        this.setBackground(ConfigManager.BACKGROUND_MEDIUM2);
+        this.setBackground(ApplicationContext.BACKGROUND_MEDIUM2);
         // add layers to scene
         this.nodeLayer = new LayerWidget(this);
         this.edgeLayer = new LayerWidget(this);
@@ -117,7 +111,7 @@ public class MutableSceneModel extends Scene implements Observer {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Create an annotation at the mouse release position.
@@ -129,7 +123,7 @@ public class MutableSceneModel extends Scene implements Observer {
         this.annotationId++;
         boolean found = false;
         while(!found) {
-            if (this.annotations.contains(this.annotationId)) {
+            if (this.annotations.containsKey(this.annotationId)) {
                 this.annotationId++;
             } else {
                 found = true;
@@ -142,7 +136,7 @@ public class MutableSceneModel extends Scene implements Observer {
         // add the annotation to the index
         this.annotations.put(annotation.getId(),annotation);
         // set the annotation location
-        Point p = (Point) ParametricModel.getInstance().getViewState(ConfigManager.VIEWER_LAST_MOUSERELEASE);
+        Point p = (Point) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
         annotation.setPreferredLocation(p);
         // revalidate the scene model
         this.validate();
@@ -157,7 +151,7 @@ public class MutableSceneModel extends Scene implements Observer {
         if (Named instanceof IGraphable) {
             // get the dependancies
             IGraphable graphObj = (IGraphable) Named;
-            THashMap dependancies = (THashMap) graphObj.getDependancies();
+            LinkedHashMap dependancies = (LinkedHashMap) graphObj.getDependancies();
             // create edges for each of the dependancies
             Iterator it = dependancies.values().iterator();
             while (it.hasNext()) {
@@ -175,7 +169,7 @@ public class MutableSceneModel extends Scene implements Observer {
      * @param Target NamedObject edge target.
      */
     private void addEdge(INamed Source, INamed Target) {
-        THashMap nodes = (THashMap) this.getNodesByTargetName();
+        LinkedHashMap nodes = (LinkedHashMap) this.getNodesByTargetName();
         // create a new empty edge
         ConnectionWidget edge = new ConnectionWidget(this);
         this.edges.add(edge);
@@ -186,7 +180,7 @@ public class MutableSceneModel extends Scene implements Observer {
         edge.setTargetAnchor(AnchorFactory.createRectangularAnchor(targetWidget));
         // set visual attributes
         edge.setCheckClipping(true);
-        edge.setForeground(ConfigManager.BACKGROUND_LIGHT);
+        edge.setForeground(ApplicationContext.BACKGROUND_LIGHT);
         edge.setStroke(new BasicStroke(1.0f));
         edge.setTargetAnchorShape(AnchorShape.TRIANGLE_FILLED);
         // add edge to edge layer
@@ -208,7 +202,7 @@ public class MutableSceneModel extends Scene implements Observer {
                 node.setPreferredLocation(new Point(this.x,this.y));
                 this.x += 180;
             } else {
-                Point p = (Point) ParametricModel.getInstance().getViewState(ConfigManager.VIEWER_LAST_MOUSERELEASE);
+                Point p = (Point) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
                 node.setPreferredLocation(p);
             }
         } else {
@@ -219,7 +213,7 @@ public class MutableSceneModel extends Scene implements Observer {
                 node.setPreferredLocation(new Point(this.x,this.y));
                 this.x += 180;
             } else {
-                Point p = (Point) ParametricModel.getInstance().getViewState(ConfigManager.VIEWER_LAST_MOUSERELEASE);
+                Point p = (Point) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
                 node.setPreferredLocation(p);
             }
         }
@@ -240,16 +234,16 @@ public class MutableSceneModel extends Scene implements Observer {
      * @param Named NamedObject to be deleted.
      */
     private void deleteNode(INamed Named) {
-//        THashMap nodes = (THashMap) this.getNodesByTargetName();
+//        LinkedHashMap nodes = (LinkedHashMap) this.getNodesByTargetName();
 //        Widget widget = (Widget) nodes.get(Named.getName());
 //        this.nodes.remove(widget);
 //        // remove edges
         
         // temp hard search
-        Enumeration e = this.nodes.elements();
+        Iterator e = this.nodes.iterator();
         boolean found = false;
-        while (e.hasMoreElements() && !found) {
-            Widget widget = (Widget) e.nextElement();
+        while (e.hasNext() && !found) {
+            Widget widget = (Widget) e.next();
             if (widget instanceof ContainerVisualWidget) {
                 ContainerVisualWidget cvw = (ContainerVisualWidget) widget;
                 if (cvw.getTarget().getName().equals(Named.getName())) {
@@ -284,12 +278,12 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     private Map getEdgesBySourceName() {
         // init
-        THashMap mapping = new THashMap();
+        LinkedHashMap mapping = new LinkedHashMap();
         // for each edge
-        Enumeration e = this.edges.elements();
-        while (e.hasMoreElements()) {
+        Iterator e = this.edges.iterator();
+        while (e.hasNext()) {
             // get the edge
-            ConnectionWidget edge = (ConnectionWidget) e.nextElement();
+            ConnectionWidget edge = (ConnectionWidget) e.next();
             // get its source widget
             Widget widget = edge.getSourceAnchor().getRelatedWidget();
             // get the NamedObject referenced by the widget
@@ -303,10 +297,10 @@ public class MutableSceneModel extends Scene implements Observer {
             }
             // add the named as key for the edge list if it is not yet there
             if (!mapping.containsKey(name)) {
-                mapping.put(name,new Vector());
+                mapping.put(name,new ArrayList());
             }
             // add the edge to the list for the namedobject
-            Vector edgelist = (Vector) mapping.get(name);
+            ArrayList edgelist = (ArrayList) mapping.get(name);
             edgelist.add(edge);
         }
         // return result
@@ -319,12 +313,12 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     private Map getEdgesByTargetName() {
         // init
-        THashMap mapping = new THashMap();
+        LinkedHashMap mapping = new LinkedHashMap();
         // for each edge
-        Enumeration e = this.edges.elements();
-        while (e.hasMoreElements()) {
+        Iterator e = this.edges.iterator();
+        while (e.hasNext()) {
             // get the edge
-            ConnectionWidget edge = (ConnectionWidget) e.nextElement();
+            ConnectionWidget edge = (ConnectionWidget) e.next();
             // get its target widget
             Widget widget = edge.getTargetAnchor().getRelatedWidget();
             // get the NamedObject referenced by the widget
@@ -338,10 +332,10 @@ public class MutableSceneModel extends Scene implements Observer {
             }
             // add the named as key for the edge list if it is not yet there
             if (!mapping.containsKey(name)) {
-                mapping.put(name,new Vector());
+                mapping.put(name,new ArrayList());
             }
             // add the edge to the list for the namedobject
-            Vector edges = (Vector) mapping.get(name);
+            ArrayList edges = (ArrayList) mapping.get(name);
             edges.add(edge);
         }
         // return result
@@ -360,10 +354,10 @@ public class MutableSceneModel extends Scene implements Observer {
      * Get mapping from NamedObject to VisualWidget.
      */
     public Map getNodesByTargetName() {
-        THashMap mapping = new THashMap();
-        Enumeration e = this.nodes.elements();
-        while (e.hasMoreElements()) {
-            Object object = e.nextElement();
+        LinkedHashMap mapping = new LinkedHashMap();
+        Iterator e = this.nodes.iterator();
+        while (e.hasNext()) {
+            Object object = e.next();
             if (object instanceof ContainerVisualWidget) {
                 ContainerVisualWidget cvw = (ContainerVisualWidget) object;
                 mapping.put(cvw.getTarget().getName(),cvw);                
@@ -381,7 +375,7 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     public void initScene() {
         // add viewable elements to the scene
-        THashMap elements = (THashMap) this.context.getElements();
+        LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
         Iterator iter = elements.values().iterator();
         while (iter.hasNext()) {
             INamed named = (INamed) iter.next();
@@ -430,11 +424,11 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     private void removeEdgesConnectedToWidget(Widget MyWidget) {
         // edges to be removed
-        Vector removeList = new Vector();
+        ArrayList removeList = new ArrayList();
         // build list of edges to be removed
-        Enumeration e = this.edges.elements();
-        while (e.hasMoreElements()) {
-            ConnectionWidget edge = (ConnectionWidget) e.nextElement();
+        Iterator e = this.edges.iterator();
+        while (e.hasNext()) {
+            ConnectionWidget edge = (ConnectionWidget) e.next();
             Widget source = edge.getSourceAnchor().getRelatedWidget();
             Widget target = edge.getTargetAnchor().getRelatedWidget();
             if (MyWidget == source || MyWidget == target) {
@@ -458,27 +452,27 @@ public class MutableSceneModel extends Scene implements Observer {
             Integer eventId = (Integer) arg;
             System.out.println("INFO: MutableSceneModel received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_ELEMENT_ADD:
+                case ApplicationContext.EVENT_ELEMENT_ADD:
                     System.out.println("INFO: MutableSceneModel fired element add.");
                     this.updateAddElements();
                     break;
-                case ConfigManager.EVENT_ELEMENT_CHANGE:
+                case ApplicationContext.EVENT_ELEMENT_CHANGE:
                     System.out.println("INFO: MutableSceneModel fired element change.");
                     // update object visual state
 
                     // update edges
                     this.updateEdges();
                     break;
-                case ConfigManager.EVENT_ELEMENT_DELETED:
+                case ApplicationContext.EVENT_ELEMENT_DELETED:
                     System.out.println("INFO: MutableSceneModel fired element deleted event.");
                     this.updateDeleteElements();
                     break;
-                case ConfigManager.EVENT_ELEMENT_DELETE_REQUEST:
+                case ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST:
                     System.out.println("INFO: MutableSceneModel fired element delete.");
                     INamed named = (INamed) o;
                     this.updateDeleteElement(named);
                     break;
-                case ConfigManager.EVENT_THUMBNAIL_CHANGE:
+                case ApplicationContext.EVENT_THUMBNAIL_CHANGE:
                     System.out.println("INFO: MutableSceneModel fired thumbnail change event.");
                     this.updateThumbnails();
                     break;
@@ -491,10 +485,10 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     private void updateAddElements() {
         // get the list of objects in the context
-        THashMap elements = (THashMap) this.context.getElements();
-        THashMap nodesByName = (THashMap) this.getNodesByTargetName();
+        LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
+        LinkedHashMap nodesByName = (LinkedHashMap) this.getNodesByTargetName();
         // determine which elements are new
-        Vector newElements = new Vector();
+        ArrayList newElements = new ArrayList();
         Iterator iter = elements.values().iterator();
         while (iter.hasNext()) {
             INamed named = (INamed) iter.next();
@@ -504,9 +498,9 @@ public class MutableSceneModel extends Scene implements Observer {
             }
         }
         // create new widget
-        Enumeration e = newElements.elements();
-        while (e.hasMoreElements()) {
-            INamed named = (INamed) e.nextElement();
+        Iterator e = newElements.iterator();
+        while (e.hasNext()) {
+            INamed named = (INamed) e.next();
             this.addNode(named);
             this.addDependancyEdges(named);
             if (named instanceof Observable) {
@@ -525,10 +519,10 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     private void updateDeleteElement(INamed Named) {
         // determine which element has been deleted
-        THashMap nodesByName = (THashMap) this.getNodesByTargetName();
+        LinkedHashMap nodesByName = (LinkedHashMap) this.getNodesByTargetName();
         if (nodesByName.containsKey(Named.getName())) {
             // get the widget that corresponds with the NamedObject
-            Enumeration e = null;
+            Iterator e = null;
             Widget widget = (Widget) nodesByName.get(Named.getName());
             if (widget != null) {
                 this.removeEdgesConnectedToWidget(widget);
@@ -547,9 +541,9 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     private void updateDeleteElements() {
         // get the list of context objects
-        THashMap elements = (THashMap) this.context.getElements();
+        LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
         // get the list of visual widgets
-        THashMap widgets = (THashMap) this.getNodesByTargetName();
+        LinkedHashMap widgets = (LinkedHashMap) this.getNodesByTargetName();
         // find out which widget does not have a corresponding model element
         Iterator iter = widgets.values().iterator();
         boolean found = false;
@@ -576,7 +570,7 @@ public class MutableSceneModel extends Scene implements Observer {
         // clear all current edges
         this.edgeLayer.removeChildren();
         // get the list of namedobjects in the scene
-        THashMap elements = (THashMap) this.context.getElements();
+        LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
         Iterator iter = elements.values().iterator();
         while (iter.hasNext()) {
             INamed named = (INamed) iter.next();
@@ -589,9 +583,9 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     private void updateThumbnails() {
         // for each visual widget, update its thumbnail
-        Enumeration e = this.nodes.elements();
-        while (e.hasMoreElements()) {
-            Widget widget = (Widget) e.nextElement();
+        Iterator e = this.nodes.iterator();
+        while (e.hasNext()) {
+            Widget widget = (Widget) e.next();
             if (widget instanceof ContainerVisualWidget) {
                 ContainerVisualWidget vw = (ContainerVisualWidget) widget;
                 vw.updateThumbnail();

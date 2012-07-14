@@ -21,9 +21,9 @@ package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.viewer.action.ParametricModelRenameAction;
-import ca.sfu.federation.viewer.action.PropertySheetSetFocusAction;
-import ca.sfu.federation.viewer.action.ScenarioNewInstanceAction;
+import ca.sfu.federation.action.RenameProjectAction;
+import ca.sfu.federation.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.ScenarioNewInstanceAction;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
@@ -37,10 +37,10 @@ import javax.swing.JSeparator;
 public class ParametricModelPopupMenu extends JPopupMenu {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ParametricModelPopupMenu constructor.
@@ -54,7 +54,7 @@ public class ParametricModelPopupMenu extends JPopupMenu {
         submenu.add(snia);
         this.add(submenu);
         // menu item - rename        
-        ParametricModelRenameAction pmra = new ParametricModelRenameAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R));
+        RenameProjectAction pmra = new RenameProjectAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R));
         this.add(pmra);
         // menu item - separator
         this.add(new JSeparator());
@@ -64,6 +64,6 @@ public class ParametricModelPopupMenu extends JPopupMenu {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class

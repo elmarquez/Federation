@@ -21,7 +21,7 @@ package ca.sfu.federation.model;
 import com.developer.rose.BeanProxy;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 /**
@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
 public class Expression implements Serializable {
 
     //--------------------------------------------------------------------------
-    // FIELDS
+
 
     private static final String[] OPERATORS = {"!","%","^","&&","||","*","/","+","-"};
     private static final int NUMBER_LITERAL = 0;
@@ -51,7 +51,7 @@ public class Expression implements Serializable {
     private IContext context;        // the collection of NamedObjects available to the expression for performing computations
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Expression constructor.  Context object will only be required when the 
@@ -85,10 +85,10 @@ public class Expression implements Serializable {
         } else if (isCompound(MyExpression)) {
             this.type = Expression.COMPOUND;
             // parseCompoundExpression the expression into components
-            Vector components = parseCompoundExpression(MyExpression,Context);
+            ArrayList components = parseCompoundExpression(MyExpression,Context);
             // assign expression components to term and parameter fields
-            this.term = (String) components.elementAt(0);
-            Vector params = (Vector) components.elementAt(1);
+            this.term = (String) components.get(0);
+            ArrayList params = (ArrayList) components.get(1);
             this.parameters = new Expression[params.size()];
             params.toArray(this.parameters);
         } else {
@@ -98,7 +98,7 @@ public class Expression implements Serializable {
     }
 
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Get dependancies for this expression.
@@ -106,10 +106,10 @@ public class Expression implements Serializable {
      */
     public List getDependancies() {
         // init
-        Vector dependancies = new Vector();
+        ArrayList dependancies = new ArrayList();
         // get dependancies for subexpressions first
         for (int i=0;i<this.parameters.length;i++) {
-            Vector v = (Vector) parameters[i].getDependancies();
+            ArrayList v = (ArrayList) parameters[i].getDependancies();
             dependancies.addAll(v);
         }
         // get dependancies for self
@@ -377,25 +377,25 @@ public class Expression implements Serializable {
      * Splits the user specified expression into left hand and right hand sides 
      * relative to the first operator found.  If there is a grouping within the 
      * expression, it splits the expression at the highlest level grouping, at 
-     * the first operator found.  Returns a Vector with the operator as the 
+     * the first operator found.  Returns a ArrayList with the operator as the 
      * first element, and any parameters as the remaining elements of the 
-     * Vector ordered from left to right.
+     * ArrayList ordered from left to right.
      *
      * TODO: should throw an exception if the statement structure is incorrect
      * TODO: need to take into account operator precedence, grouping
      *
      * @param MyExpression User defined expression.
      * @param Context The set of NamedObjects available to this expression for computation.
-     * @return Vector with term as first element, and parameters as additional elements.
+     * @return ArrayList with term as first element, and parameters as additional elements.
      */
-    private static Vector parseCompoundExpression(String MyExpression, IContext Context) {
+    private static ArrayList parseCompoundExpression(String MyExpression, IContext Context) {
         // init
         String s, o;
         String lhs, rhs; // left, right hand side expressions
         String term; // operator
         int rhsStartIndex = 0;
-        Vector result = new Vector();
-        Vector params = new Vector();
+        ArrayList result = new ArrayList();
+        ArrayList params = new ArrayList();
         // if there are groupings in this expression
         if (MyExpression.contains("(")) {
             // TODO: grouping

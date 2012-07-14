@@ -1,7 +1,4 @@
 /**
- * AssemblyPropertySheet.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -20,24 +17,23 @@
 package ca.sfu.federation.viewer.propertysheet;
 
 import ca.sfu.federation.model.Assembly;
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.ConfigManager;
 import com.developer.rose.BeanProxy;
 import java.beans.IntrospectionException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * @author  Davis Marques
- * @version 0.1.0
  */
 public class AssemblyPropertySheet extends JPanel implements Observer {
-
-    //--------------------------------------------------------------------------
-    // FIELDS
     
     private ParametricModel model;
     private Assembly target;
@@ -59,12 +55,13 @@ public class AssemblyPropertySheet extends JPanel implements Observer {
     private javax.swing.JLabel lblX;
     private javax.swing.JLabel lblY;
     private javax.swing.JLabel lblZ;
+
+    private static final Logger logger = Logger.getLogger(AssemblyPropertySheet.class.getName());
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
 
     /** 
-     * ParametricModelSheet constructor.
+     * AssemblyPropertySheet constructor
      */
     public AssemblyPropertySheet() {
         lblINamedObject = new JLabel();
@@ -185,26 +182,31 @@ public class AssemblyPropertySheet extends JPanel implements Observer {
         
         // add action listeners
         jtfName.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfNameActionListener(evt);
             }
         });
         jtfDescription.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfDescriptionActionListener(evt);
             }
         });
         jtfX.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfXActionListener(evt);
             }
         });
         jtfY.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfYActionListener(evt);
             }
         });
         jtfZ.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfZActionListener(evt);
             }
@@ -212,76 +214,86 @@ public class AssemblyPropertySheet extends JPanel implements Observer {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     private void jtfDescriptionActionListener(java.awt.event.ActionEvent evt) {                                              
         String command = evt.getActionCommand();
-        System.out.println("INFO: AssemblySheet jtfDescriptionActionListener fired. " + command);
+        logger.log(Level.FINE,"AssemblySheet jtfDescriptionActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("description",evt.getActionCommand());
         } catch (IntrospectionException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get description field value\n\n{0}",stack);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get description field value\n\n{0}",stack);
         }
     }                                             
 
     private void jtfNameActionListener(java.awt.event.ActionEvent evt) {                                       
         String command = evt.getActionCommand();
-        System.out.println("INFO: AssemblySheet jtfNameActionListener fired. " + command);
+        logger.log(Level.FINE,"AssemblySheet jtfNameActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("name",evt.getActionCommand());
         } catch (IntrospectionException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get name field value\n\n{0}",stack);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get name field value\n\n{0}",stack);
         }
     }                                      
 
     private void jtfXActionListener(java.awt.event.ActionEvent evt) {                                    
         String command = evt.getActionCommand();
-        System.out.println("INFO: AssemblySheet jtfXActionListener fired. " + command);
+        logger.log(Level.FINE,"AssemblySheet jtfXActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("X",evt.getActionCommand());
         } catch (IntrospectionException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get X field value\n\n{0}",stack);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get X field value\n\n{0}",stack);
         }
     }                                   
 
     private void jtfYActionListener(java.awt.event.ActionEvent evt) {                                    
         String command = evt.getActionCommand();
-        System.out.println("INFO: AssemblySheet jtfYActionListener fired. " + command);
+        logger.log(Level.FINE,"AssemblySheet jtfYActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("Y",evt.getActionCommand());
         } catch (IntrospectionException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get Y field value\n\n{0}",stack);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get Y field value\n\n{0}",stack);
         }
     }                                   
 
     private void jtfZActionListener(java.awt.event.ActionEvent evt) {                                    
         String command = evt.getActionCommand();
-        System.out.println("INFO: AssemblySheet jtfZActionListener fired. " + command);
+        logger.log(Level.FINE,"AssemblySheet jtfZActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("Z",evt.getActionCommand());
         } catch (IntrospectionException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get Z field value\n\n{0}",stack);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get Z field value\n\n{0}",stack);
         }
     }
     
     private void setValues() {
         // target
-        this.target = (Assembly) this.model.getViewState(ConfigManager.VIEWER_SELECTION);
+        this.target = (Assembly) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
         // listen for changes on the target
         if (this.target instanceof Observable) {
             Observable o = (Observable) this.target;
@@ -301,13 +313,14 @@ public class AssemblyPropertySheet extends JPanel implements Observer {
      * @param o Observable object.
      * @param arg Update argument.
      */
+    @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: AssemblySheet received event notification id " + eventId);
+            logger.log(Level.INFO,"AssemblySheet received event notification id {0}", eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_PROPERTY_CHANGE:
-                    System.out.println("INFO: AssemblySheet fired property change event.");
+                case ApplicationContext.EVENT_PROPERTY_CHANGE:
+                    logger.log(Level.FINE,"AssemblySheet fired property change event");
                     this.setValues();
                     break;
             }

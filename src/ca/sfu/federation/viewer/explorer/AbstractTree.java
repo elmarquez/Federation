@@ -45,14 +45,14 @@ import javax.swing.tree.TreePath;
 public class AbstractTree extends JTree implements ActionListener {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private JPopupMenu popup;
     private JMenuItem mi;
     private AbstractTree self;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * AbstractTree constructor.
@@ -97,7 +97,7 @@ public class AbstractTree extends JTree implements ActionListener {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     public void actionPerformed(ActionEvent e) {
     }

@@ -20,13 +20,13 @@
 package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.IViewable;
 import ca.sfu.federation.model.INamed;
-import gnu.trove.THashMap;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.LinkedHashMap;
 import java.util.Observable;
 import java.util.Observer;
 import org.netbeans.api.visual.action.ActionFactory;
@@ -47,7 +47,7 @@ import org.netbeans.api.visual.widget.Widget;
 public class ContainerVisualWidget extends Widget implements IVisualWidget, Observer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private static final String ACTION_OPEN_SCENARIO = "OPENSCENARIO";
     private static final String ACTION_SET_ACTIVE_SCENARIO = "SETSCENARIOACTIVE";
@@ -65,7 +65,7 @@ public class ContainerVisualWidget extends Widget implements IVisualWidget, Obse
     private WidgetAction moveAction = ActionFactory.createMoveAction();
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * VisualWidget2 constructor.
@@ -87,9 +87,9 @@ public class ContainerVisualWidget extends Widget implements IVisualWidget, Obse
         switch (style) {
             case 0:
                 this.setLayout(LayoutFactory.createVerticalLayout(LayoutFactory.SerialAlignment.JUSTIFY,4));
-                border = BorderFactory.createRoundedBorder(8,8,4,4,ConfigManager.BACKGROUND_LIGHT,ConfigManager.BACKGROUND_DARK);
+                border = BorderFactory.createRoundedBorder(8,8,4,4,ApplicationContext.BACKGROUND_LIGHT,ApplicationContext.BACKGROUND_DARK);
                 this.setBorder(border);
-                this.setBackground(ConfigManager.BACKGROUND_MEDIUM);
+                this.setBackground(ApplicationContext.BACKGROUND_MEDIUM);
                 this.setOpaque(true);
                 break;
             case 1:
@@ -97,9 +97,9 @@ public class ContainerVisualWidget extends Widget implements IVisualWidget, Obse
                 break;
             case 2:
                 this.setLayout(LayoutFactory.createVerticalLayout(LayoutFactory.SerialAlignment.JUSTIFY,4));
-                border = BorderFactory.createBevelBorder(true,ConfigManager.BACKGROUND_MEDIUM);
+                border = BorderFactory.createBevelBorder(true,ApplicationContext.BACKGROUND_MEDIUM);
                 this.setBorder(border);
-                this.setBackground(ConfigManager.BACKGROUND_MEDIUM);
+                this.setBackground(ApplicationContext.BACKGROUND_MEDIUM);
                 this.setOpaque(true);
                 break;
         }
@@ -114,7 +114,7 @@ public class ContainerVisualWidget extends Widget implements IVisualWidget, Obse
         
         // set label
         label = new LabelWidget(MyScene, Named.getName());
-        label.setForeground(ConfigManager.TEXT_LIGHT);
+        label.setForeground(ApplicationContext.TEXT_LIGHT);
         this.addChild(label);
         
         // make the widget moveable
@@ -128,7 +128,7 @@ public class ContainerVisualWidget extends Widget implements IVisualWidget, Obse
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Get the target of the widget.
@@ -147,22 +147,22 @@ public class ContainerVisualWidget extends Widget implements IVisualWidget, Obse
             Integer eventId = (Integer) arg;
             System.out.println("INFO: ContainerVisualWidget received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_NAME_CHANGE:
+                case ApplicationContext.EVENT_NAME_CHANGE:
                     System.out.println("INFO: ContainerVisualWidget fired name change event.");
                     INamed named = (INamed) o;
                     this.label.setLabel(named.getName());
                     this.repaint();
                     break;
-                case ConfigManager.EVENT_PROPERTY_CHANGE:
+                case ApplicationContext.EVENT_PROPERTY_CHANGE:
                     System.err.println("ERROR: ContainerVisualWidget property change event not implemented.");
                     break;
-                case ConfigManager.EVENT_DESCRIPTION_CHANGE:
+                case ApplicationContext.EVENT_DESCRIPTION_CHANGE:
                     System.err.println("ERROR: ContainerVisualWidget description change event not implemented.");
                     break;
-                case ConfigManager.EVENT_ICON_CHANGE:
+                case ApplicationContext.EVENT_ICON_CHANGE:
                     System.err.println("ERROR: ContainerVisualWidget icon change event not implemented.");
                     break;
-                case ConfigManager.EVENT_THUMBNAIL_CHANGE:
+                case ApplicationContext.EVENT_THUMBNAIL_CHANGE:
                     System.err.println("ERROR: ContainerVisualWidget thumbnail change event not implemented.");
                     break;
             }
@@ -177,7 +177,7 @@ public class ContainerVisualWidget extends Widget implements IVisualWidget, Obse
     protected void updateThumbnail() {
         // get thumbnails 
         ParametricModel model = ParametricModel.getInstance();
-        THashMap thumbnails = (THashMap) model.getViewState(ConfigManager.VIEWER_ICONTEXT_THUMBNAILS);
+        LinkedHashMap thumbnails = (LinkedHashMap) model.getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
         // set thumbnail
         BufferedImage image = (BufferedImage) thumbnails.get(this.target.getCanonicalName());
         if (image != null) {

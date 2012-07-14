@@ -25,7 +25,7 @@ import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import java.util.ResourceBundle;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.ColoringAttributes;
@@ -45,7 +45,7 @@ import org.openide.util.Utilities;
 public class Line extends Component implements ILine {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private IPoint startPoint;
     private IPoint midPoint;
@@ -54,7 +54,7 @@ public class Line extends Component implements ILine {
     private double length;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Line constructor.
@@ -75,7 +75,7 @@ public class Line extends Component implements ILine {
             index++;
         }
         // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         this.setIcon(Utilities.loadImage(config.getString("line-icon")));
     }
     
@@ -87,12 +87,12 @@ public class Line extends Component implements ILine {
     public Line(String Name, IContext MyContext) {
         super(Name,MyContext);
         // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         this.setIcon(Utilities.loadImage(config.getString("line-icon")));
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Calculate direction, length and midpoint properties.

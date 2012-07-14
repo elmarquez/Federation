@@ -20,9 +20,9 @@
 package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.viewer.action.INamedObjectDeleteAction;
-import ca.sfu.federation.viewer.action.INamedObjectRenameAction;
-import ca.sfu.federation.viewer.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.DeleteINamedAction;
+import ca.sfu.federation.action.RenameINamedAction;
+import ca.sfu.federation.action.PropertySheetSetFocusAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -40,14 +40,14 @@ import org.netbeans.api.visual.widget.Widget;
 public class ComponentVisualWidgetPopupProvider implements PopupMenuProvider, ActionListener {
     
     //----------------------------------------------------------------------
-    // FIELDS
+
     
     private Scene scene;
     private ComponentVisualWidget widget;
     private INamed target;
     
     //----------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Popup menu provider.
@@ -60,16 +60,16 @@ public class ComponentVisualWidgetPopupProvider implements PopupMenuProvider, Ac
     }
     
     //----------------------------------------------------------------------
-    // METHODS
+
     
     public JPopupMenu getPopupMenu(Widget widget) {
         // create menu
         JPopupMenu menu = new JPopupMenu("Model Object Actions");
         // rename object
-        INamedObjectRenameAction rename = new INamedObjectRenameAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),target);
+        RenameINamedAction rename = new RenameINamedAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),target);
         menu.add(rename);
         // delete object
-        INamedObjectDeleteAction delete = new INamedObjectDeleteAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),target);
+        DeleteINamedAction delete = new DeleteINamedAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),target);
         menu.add(delete);
         // separator
         menu.add(new JSeparator());

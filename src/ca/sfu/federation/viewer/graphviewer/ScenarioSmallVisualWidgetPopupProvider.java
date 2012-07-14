@@ -21,10 +21,10 @@ package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.viewer.action.IContextSetCurrentAction;
-import ca.sfu.federation.viewer.action.INamedObjectDeleteAction;
-import ca.sfu.federation.viewer.action.INamedObjectRenameAction;
-import ca.sfu.federation.viewer.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.DeleteINamedAction;
+import ca.sfu.federation.action.RenameINamedAction;
+import ca.sfu.federation.action.PropertySheetSetFocusAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -41,14 +41,14 @@ import org.netbeans.api.visual.widget.Widget;
 public class ScenarioSmallVisualWidgetPopupProvider implements PopupMenuProvider, ActionListener {
     
     //----------------------------------------------------------------------
-    // FIELDS
+
     
     private JPopupMenu menu;
     private AntialiasedScene scene;
     private ScenarioSmallVisualWidget widget;
     
     //----------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Popup menu provider.
@@ -65,10 +65,10 @@ public class ScenarioSmallVisualWidgetPopupProvider implements PopupMenuProvider
         IContextSetCurrentAction setfocus = new IContextSetCurrentAction("Open Scenario",null,"Open Scenario",new Integer(KeyEvent.VK_O),target);
         menu.add(setfocus);
         // menu item - rename target object
-        INamedObjectRenameAction rename = new INamedObjectRenameAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),(INamed)target);
+        RenameINamedAction rename = new RenameINamedAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),(INamed)target);
         menu.add(rename);
         // menu item - delete target object
-        INamedObjectDeleteAction delete = new INamedObjectDeleteAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),(INamed)target);
+        DeleteINamedAction delete = new DeleteINamedAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),(INamed)target);
         menu.add(delete);
         // separator
         menu.add(new JSeparator());
@@ -78,7 +78,7 @@ public class ScenarioSmallVisualWidgetPopupProvider implements PopupMenuProvider
     }
     
     //----------------------------------------------------------------------
-    // METHODS
+
     
     public JPopupMenu getPopupMenu(Widget widget) {
         return menu;

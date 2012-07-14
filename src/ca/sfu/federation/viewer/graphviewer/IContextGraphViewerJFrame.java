@@ -21,7 +21,7 @@ package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Toolkit;
@@ -36,12 +36,12 @@ import javax.swing.JFrame;
 public class IContextGraphViewerJFrame extends JFrame {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private ParametricModel model;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * IContextGraphViewerJFrame constructor.
@@ -52,10 +52,10 @@ public class IContextGraphViewerJFrame extends JFrame {
         IContextGraphViewerPanel panel = new IContextGraphViewerPanel();
         contentpane.add(panel,BorderLayout.CENTER);
         this.model = ParametricModel.getInstance();
-        if (!this.model.getViewState().containsKey(ConfigManager.VIEWER_CURRENT_CONTEXT)) {
-            this.model.setViewState(ConfigManager.VIEWER_CURRENT_CONTEXT,this.model);
+        if (!this.model.getViewState().containsKey(ApplicationContext.VIEWER_CURRENT_CONTEXT)) {
+            this.model.setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,this.model);
         }
-        IContext context = (IContext) this.model.getViewState(ConfigManager.VIEWER_CURRENT_CONTEXT);
+        IContext context = (IContext) this.model.getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
         this.setTitle("IContext Graph Viewer - " + context.getName());
         this.pack();
         this.setVisible(true);
@@ -63,6 +63,6 @@ public class IContextGraphViewerJFrame extends JFrame {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
 } // end class

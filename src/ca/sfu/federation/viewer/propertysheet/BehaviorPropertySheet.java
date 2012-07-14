@@ -21,7 +21,7 @@ package ca.sfu.federation.viewer.propertysheet;
 
 import ca.sfu.federation.model.Assembly;
 import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import com.developer.rose.BeanProxy;
 import java.beans.IntrospectionException;
 import java.util.Observable;
@@ -35,7 +35,7 @@ import javax.swing.JPanel;
 public class BehaviorPropertySheet extends JPanel implements Observer {
 
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private ParametricModel model;
     private Assembly target;
@@ -53,7 +53,7 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
     private javax.swing.JLabel lblName;
 
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /** 
      * ParametricModelSheet constructor.
@@ -154,7 +154,7 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     private void jtfConditionActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
@@ -184,7 +184,7 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
     
     private void setValues() {
         // target
-        this.target = (Assembly) this.model.getViewState(ConfigManager.VIEWER_SELECTION);
+        this.target = (Assembly) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
         // listen for changes on the target
         if (this.target instanceof Observable) {
             Observable o = (Observable) this.target;
@@ -207,7 +207,7 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
             Integer eventId = (Integer) arg;
             System.out.println("INFO: AssemblySheet received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_PROPERTY_CHANGE:
+                case ApplicationContext.EVENT_PROPERTY_CHANGE:
                     System.out.println("INFO: AssemblySheet fired property change event.");
                     this.setValues();
                     break;

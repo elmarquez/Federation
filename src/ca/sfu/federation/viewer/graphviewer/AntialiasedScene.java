@@ -29,10 +29,10 @@ import org.netbeans.api.visual.widget.Scene;
 public class AntialiasedScene extends Scene {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
 
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * AntialiasedScene constructor.
@@ -41,7 +41,7 @@ public class AntialiasedScene extends Scene {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Paint canvas.

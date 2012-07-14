@@ -27,10 +27,10 @@ package ca.sfu.federation.model.exception;
 public class ParameterCountMismatchException extends Exception {
     
     //-------------------------------------------------------------------------
-    // FIELDS
+
     
     //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     public ParameterCountMismatchException() {
     }
@@ -40,6 +40,6 @@ public class ParameterCountMismatchException extends Exception {
     }
 
     //-------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class ParameterCountMismatchException

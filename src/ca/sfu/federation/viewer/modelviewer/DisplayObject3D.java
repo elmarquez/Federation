@@ -30,12 +30,12 @@ import javax.media.j3d.Shape3D;
 public class DisplayObject3D extends Shape3D {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private IViewable target; // the model object that this object represents in the 3D viewer
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * DisplayObject3D constructor.
@@ -52,7 +52,7 @@ public class DisplayObject3D extends Shape3D {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Get the target object.

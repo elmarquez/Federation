@@ -77,16 +77,12 @@ import java.util.*;
  */
 public class BeanProxy implements IBeanProxy {
     
-    //--------------------------------------------------------------------------
-    // FIELDS
-    
     private Object    bean;
     private Class     beanClass;
     private Hashtable pdsByName;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
-    
+
     /**
      * Constructs a proxy for the given class.
      * @param theBeanClass The target bean class.
@@ -120,7 +116,7 @@ public class BeanProxy implements IBeanProxy {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     public Object getBean() {
         return bean;
@@ -163,7 +159,7 @@ public class BeanProxy implements IBeanProxy {
      * @return List of property names.
      */
     public List getPropertyNames() {
-        Vector names = new Vector();
+        ArrayList names = new ArrayList();
         Enumeration e = this.pdsByName.elements();
         while (e.hasMoreElements()) {
             PropertyDescriptor pd = (PropertyDescriptor) e.nextElement();

@@ -19,7 +19,7 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
@@ -40,13 +40,13 @@ import org.netbeans.api.visual.widget.Widget;
 public class AnnotationWidget extends Widget {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private LabelWidget label;
     private int id;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * AnnotationWidget constructor.
@@ -57,18 +57,18 @@ public class AnnotationWidget extends Widget {
         this.id = Id;
         // set the widget properties
         this.setLayout(LayoutFactory.createVerticalLayout(LayoutFactory.SerialAlignment.JUSTIFY,4));
-        this.setBackground(ConfigManager.BACKGROUND_MEDIUM);
+        this.setBackground(ApplicationContext.BACKGROUND_MEDIUM);
         this.setOpaque(true);
         // set label
         label = new LabelWidget(MyScene,Text);
-        label.setForeground(ConfigManager.TEXT_LIGHT);
+        label.setForeground(ApplicationContext.TEXT_LIGHT);
         this.addChild(label);
         // make the widget moveable
         this.getActions().addAction(ActionFactory.createMoveAction());
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     public int getId() {
         return this.id;
@@ -83,14 +83,14 @@ public class AnnotationWidget extends Widget {
     private final class MyAnnotationPopupProvider implements PopupMenuProvider, ActionListener {
 
         //----------------------------------------------------------------------
-        // FIELDS
+    
         
         private JPopupMenu menu;
         private Scene scene;
         private AnnotationWidget widget;
         
         //----------------------------------------------------------------------
-        // CONSTRUCTORS
+    
 
         /**
          * Popup menu provider.
@@ -120,7 +120,7 @@ public class AnnotationWidget extends Widget {
         }
         
         //----------------------------------------------------------------------
-        // METHODS
+    
 
         public JPopupMenu getPopupMenu(Widget widget) {
             return menu;

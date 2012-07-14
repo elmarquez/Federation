@@ -21,20 +21,20 @@ package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.Scenario;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.IViewable;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.viewer.action.IContextSetCurrentAction;
-import ca.sfu.federation.viewer.action.INamedObjectDeleteAction;
-import ca.sfu.federation.viewer.action.INamedObjectRenameAction;
-import ca.sfu.federation.viewer.action.PropertySheetSetFocusAction;
-import gnu.trove.THashMap;
+import ca.sfu.federation.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.DeleteINamedAction;
+import ca.sfu.federation.action.RenameINamedAction;
+import ca.sfu.federation.action.PropertySheetSetFocusAction;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.LinkedHashMap;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JPopupMenu;
@@ -57,7 +57,7 @@ import org.netbeans.api.visual.widget.Widget;
 public class ScenarioVisualWidget extends Widget implements Observer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private static final String ACTION_OPEN_SCENARIO = "OPENSCENARIO";
     private static final String ACTION_SET_ACTIVE_SCENARIO = "SETSCENARIOACTIVE";
@@ -72,7 +72,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
     private WidgetAction moveAction = ActionFactory.createMoveAction();
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ScenarioVisualWidget constructor.
@@ -92,10 +92,10 @@ public class ScenarioVisualWidget extends Widget implements Observer {
         
         // set the widget properties
         this.setLayout(LayoutFactory.createVerticalLayout(LayoutFactory.SerialAlignment.JUSTIFY,4));
-        Border border = BorderFactory.createLineBorder(1,ConfigManager.BACKGROUND_LIGHT);
+        Border border = BorderFactory.createLineBorder(1,ApplicationContext.BACKGROUND_LIGHT);
         border.getInsets().set(5,5,5,5);
         this.setBorder(border);
-        this.setBackground(ConfigManager.BACKGROUND_LIGHT);
+        this.setBackground(ApplicationContext.BACKGROUND_LIGHT);
         this.setOpaque(true);
 
         // set thumbnail or icon
@@ -109,7 +109,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
         
         // set labelWidget
         labelWidget = new LabelWidget(MyScene,MyScenario.getName());
-        labelWidget.setForeground(ConfigManager.TEXT_LIGHT);
+        labelWidget.setForeground(ApplicationContext.TEXT_LIGHT);
         this.addChild(labelWidget);
         
         // make the widget moveable
@@ -123,7 +123,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Get the target of the widget.
@@ -142,18 +142,18 @@ public class ScenarioVisualWidget extends Widget implements Observer {
             Integer eventId = (Integer) arg;
             System.out.println("INFO: ScenarioVisualWidget received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_NAME_CHANGE:
+                case ApplicationContext.EVENT_NAME_CHANGE:
                     INamed named = (INamed) o;
                     this.labelWidget.setLabel(named.getName());
                     System.out.println("INFO: ScenarioVisualWidget fired label update.");
                     break;
-                case ConfigManager.EVENT_DESCRIPTION_CHANGE:
+                case ApplicationContext.EVENT_DESCRIPTION_CHANGE:
                     System.out.println("ERROR: Not implemented. VisualWidget.update:DescriptionChange");
                     break;
-                case ConfigManager.EVENT_ICON_CHANGE:
+                case ApplicationContext.EVENT_ICON_CHANGE:
                     System.out.println("ERROR: Not implemented. VisualWidget.update:Icon Change");
                     break;
-                case ConfigManager.EVENT_THUMBNAIL_CHANGE:
+                case ApplicationContext.EVENT_THUMBNAIL_CHANGE:
                     System.out.println("INFO: ScenarioVisualWidget fired thumbnail update.");
                     this.updateThumbnail();
                     break;
@@ -169,7 +169,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
     protected void updateThumbnail() {
         // get thumbnails 
         ParametricModel model = ParametricModel.getInstance();
-        THashMap thumbnails = (THashMap) model.getViewState(ConfigManager.VIEWER_ICONTEXT_THUMBNAILS);
+        LinkedHashMap thumbnails = (LinkedHashMap) model.getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
         // set thumbnail
         BufferedImage image = (BufferedImage) thumbnails.get(this.target.getCanonicalName());
         if (image != null) {
@@ -186,14 +186,14 @@ public class ScenarioVisualWidget extends Widget implements Observer {
     private final class MyScenarioPopupProvider implements PopupMenuProvider, ActionListener {
         
         //----------------------------------------------------------------------
-        // FIELDS
+    
         
         private JPopupMenu menu;
         private MutableSceneModel scene;
         private ScenarioVisualWidget widget;
         
         //----------------------------------------------------------------------
-        // CONSTRUCTORS
+    
         
         /**
          * Popup menu provider.
@@ -212,10 +212,10 @@ public class ScenarioVisualWidget extends Widget implements Observer {
             IContextSetCurrentAction setfocus = new IContextSetCurrentAction("Open Scenario",null,"Open Scenario",new Integer(KeyEvent.VK_O),context);
             menu.add(setfocus);
             // menu item - rename context object
-            INamedObjectRenameAction rename = new INamedObjectRenameAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),target);
+            RenameINamedAction rename = new RenameINamedAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),target);
             menu.add(rename);
             // menu item - delete context object
-            INamedObjectDeleteAction delete = new INamedObjectDeleteAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),target);
+            DeleteINamedAction delete = new DeleteINamedAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),target);
             menu.add(delete);
             // separator
             menu.add(new JSeparator());
@@ -225,7 +225,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
         }
         
         //----------------------------------------------------------------------
-        // METHODS
+    
         
         public JPopupMenu getPopupMenu(Widget widget) {
             return menu;
@@ -234,7 +234,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
         public void actionPerformed(ActionEvent e) {
             if (this.widget.target instanceof IContext) {
                 IContext context = (IContext) this.widget.getTarget();
-                ParametricModel.getInstance().setViewState(ConfigManager.VIEWER_CURRENT_CONTEXT,context);
+                ParametricModel.getInstance().setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,context);
                 this.scene.setActiveTool(e.getActionCommand());
             }
         }

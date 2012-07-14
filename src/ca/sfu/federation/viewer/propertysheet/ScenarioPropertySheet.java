@@ -21,7 +21,7 @@ package ca.sfu.federation.viewer.propertysheet;
 
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.Scenario;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import com.developer.rose.BeanProxy;
 import java.beans.IntrospectionException;
 import java.util.Observable;
@@ -36,7 +36,7 @@ import javax.swing.JTextField;
 public class ScenarioPropertySheet extends javax.swing.JPanel implements Observer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private javax.swing.JTextField jtfCanonicalName;
     private javax.swing.JTextField jtfClass;
@@ -54,7 +54,7 @@ public class ScenarioPropertySheet extends javax.swing.JPanel implements Observe
     private Scenario target;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /** 
      * ParametricModelSheet constructor.
@@ -163,7 +163,7 @@ public class ScenarioPropertySheet extends javax.swing.JPanel implements Observe
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     private void jtfDescriptionActionListener(java.awt.event.ActionEvent evt) {                                              
         String command = evt.getActionCommand();
@@ -193,7 +193,7 @@ public class ScenarioPropertySheet extends javax.swing.JPanel implements Observe
 
     private void setValues() {
         // target
-        this.target = (Scenario) this.model.getViewState(ConfigManager.VIEWER_SELECTION);
+        this.target = (Scenario) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
         // listen for changes on the target
         if (this.target instanceof Observable) {
             Observable o = (Observable) this.target;
@@ -218,7 +218,7 @@ public class ScenarioPropertySheet extends javax.swing.JPanel implements Observe
             Integer eventId = (Integer) arg;
             System.out.println("INFO: ScenarioSheet received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_PROPERTY_CHANGE:
+                case ApplicationContext.EVENT_PROPERTY_CHANGE:
                     System.out.println("INFO: ScenarioSheet fired property change event.");
                     this.setValues();
                     break;

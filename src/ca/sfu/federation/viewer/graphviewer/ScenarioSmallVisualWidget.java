@@ -19,7 +19,7 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.IViewable;
 import ca.sfu.federation.model.INamed;
@@ -43,7 +43,7 @@ import org.netbeans.api.visual.widget.Widget;
 public class ScenarioSmallVisualWidget extends Widget implements Observer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private static final String ACTION_OPEN_SCENARIO = "OPENSCENARIO";
     private static final String ACTION_SET_ACTIVE_SCENARIO = "SETSCENARIOACTIVE";
@@ -57,7 +57,7 @@ public class ScenarioSmallVisualWidget extends Widget implements Observer {
     private WidgetAction moveAction = ActionFactory.createMoveAction();
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ScenarioVisualWidget constructor.
@@ -75,8 +75,8 @@ public class ScenarioSmallVisualWidget extends Widget implements Observer {
         }
         // set the widget properties
         this.setLayout(LayoutFactory.createHorizontalLayout(LayoutFactory.SerialAlignment.JUSTIFY,4));
-        this.setBackground(ConfigManager.BACKGROUND_MEDIUM);
-        Border border = BorderFactory.createLineBorder(1,ConfigManager.BACKGROUND_LIGHT);
+        this.setBackground(ApplicationContext.BACKGROUND_MEDIUM);
+        Border border = BorderFactory.createLineBorder(1,ApplicationContext.BACKGROUND_LIGHT);
         border.getInsets().set(10,10,10,10);
         this.setBorder(border);
         this.setOpaque(true);
@@ -90,7 +90,7 @@ public class ScenarioSmallVisualWidget extends Widget implements Observer {
         }
         // set label
         label = new LabelWidget(MyScene,MyContext.getName());
-        label.setForeground(ConfigManager.TEXT_LIGHT);
+        label.setForeground(ApplicationContext.TEXT_LIGHT);
         this.addChild(label);
         // add context menu to widget
         IContext context = this.target.getContext();
@@ -100,7 +100,7 @@ public class ScenarioSmallVisualWidget extends Widget implements Observer {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Get the target of the widget.
@@ -118,17 +118,17 @@ public class ScenarioSmallVisualWidget extends Widget implements Observer {
                 if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
             switch (eventId) {
-                case ConfigManager.EVENT_NAME_CHANGE:
+                case ApplicationContext.EVENT_NAME_CHANGE:
                     INamed named = (INamed) o;
                     this.label.setLabel(named.getName());
                     break;
-                case ConfigManager.EVENT_DESCRIPTION_CHANGE:
+                case ApplicationContext.EVENT_DESCRIPTION_CHANGE:
                     System.out.println("ERROR: Not implemented. VisualWidget.update:DescriptionChange");
                     break;
-                case ConfigManager.EVENT_ICON_CHANGE:
+                case ApplicationContext.EVENT_ICON_CHANGE:
                     System.out.println("ERROR: Not implemented. VisualWidget.update:Icon Change");
                     break;
-                case ConfigManager.EVENT_THUMBNAIL_CHANGE:
+                case ApplicationContext.EVENT_THUMBNAIL_CHANGE:
                     System.out.println("ERROR: Not implemented. VisualWidget.update:Thumbnail Change");
                     break;
             }

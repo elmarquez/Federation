@@ -25,15 +25,12 @@ import ca.sfu.federation.model.exception.NonExistantMethodException;
 import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
 import ca.sfu.federation.model.geometry.Point;
 import ca.sfu.federation.model.InputTable;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import com.developer.rose.BeanProxy;
 import java.awt.BorderLayout;
 import java.beans.IntrospectionException;
 import java.lang.reflect.Method;
-import java.util.Enumeration;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Vector;
+import java.util.*;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -47,7 +44,7 @@ import se.datadosen.component.RiverLayout;
 public class PointPropertySheet extends javax.swing.JPanel implements Observer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private JComboBox jcbUpdateMethod;
     private JPanel jspUpdateMethodInputs;
@@ -74,7 +71,7 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
     private Component target;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ParametricModelSheet constructors.
@@ -245,7 +242,7 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
     }
     
     //-------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Build an Update Method user input panel.
@@ -256,13 +253,13 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
         JPanel panel = new JPanel();
         // build panel
         InputTable inputTable = this.target.getInputTable();
-        Vector keys = (Vector) inputTable.getInputKeys();
+        ArrayList keys = (ArrayList) inputTable.getInputKeys();
         if (keys.size()>0) {
             panel.setLayout(new RiverLayout());
             boolean first = true;
-            Enumeration e = keys.elements();
-            while (e.hasMoreElements()) {
-                String key = (String) e.nextElement();
+            Iterator e = keys.iterator();
+            while (e.hasNext()) {
+                String key = (String) e.next();
                 if (first) {
                     panel.add("p left",new JLabel(key));
                     panel.add("tab hfill",new InputTextField(inputTable,key));
@@ -366,7 +363,7 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
     
     private void setValues() {
         // target
-        this.target = (Point) this.model.getViewState(ConfigManager.VIEWER_SELECTION);
+        this.target = (Point) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
         // set field values
         this.lblINamedObject.setText(this.target.getName());
         this.jtfClass.setText(this.target.getClass().toString());
@@ -418,7 +415,7 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
             Integer eventId = (Integer) arg;
             System.out.println("INFO: ComponentSheet received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_PROPERTY_CHANGE:
+                case ApplicationContext.EVENT_PROPERTY_CHANGE:
                     System.out.println("INFO: ComponentSheet fired property change event.");
                     this.setValues();
                     break;

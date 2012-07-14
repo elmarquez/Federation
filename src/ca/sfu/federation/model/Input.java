@@ -31,7 +31,7 @@ import java.util.Set;
 public class Input implements Serializable {
 
     //--------------------------------------------------------------------------
-    // FIELDS
+
 
     private static final int STATE_INVALID = 0;
     private static final int STATE_VALID = 1;
@@ -46,7 +46,7 @@ public class Input implements Serializable {
     private ExpressionSolver solver; // expression solver
 
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /**
      * Input constructor.  The Input is not ready to use until it has been 
@@ -67,7 +67,7 @@ public class Input implements Serializable {
     }
 
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Get expression dependancies for this Input.

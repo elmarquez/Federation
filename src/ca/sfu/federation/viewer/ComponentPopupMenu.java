@@ -21,7 +21,7 @@ package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.viewer.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.PropertySheetSetFocusAction;
 import java.awt.event.KeyEvent;
 import javax.swing.JPopupMenu;
 
@@ -33,12 +33,12 @@ import javax.swing.JPopupMenu;
 public class ComponentPopupMenu extends JPopupMenu {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private Component target;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ComponentPopupMenu constructor.
@@ -53,6 +53,6 @@ public class ComponentPopupMenu extends JPopupMenu {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class

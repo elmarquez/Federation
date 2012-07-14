@@ -18,18 +18,12 @@
  */
 package ca.sfu.federation.model;
 
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.util.Selection;
 import ca.sfu.federation.model.util.exception.MalformedSelectionRuleException;
-import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.model.ConfigManager;
-import gnu.trove.THashMap;
 import java.awt.Image;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
+import java.util.*;
 import org.openide.util.Utilities;
 
 /**
@@ -49,7 +43,7 @@ import org.openide.util.Utilities;
 public class Behavior implements Observer, Serializable {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
 
     private IContext context;       // the context which the behavior monitors
     private INamed host;      // the object to which this behavior is bound
@@ -62,7 +56,7 @@ public class Behavior implements Observer, Serializable {
     private Image thumbnail;        // thumbnail representation of this object
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /** 
      * Behavior constructor.
@@ -70,7 +64,7 @@ public class Behavior implements Observer, Serializable {
      */
     public Behavior(Assembly MyAssembly) {
         // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // set properties
         this.icon = Utilities.loadImage(config.getString("behavior-icon"));
         this.thumbnail = Utilities.loadImage(config.getString("behavior-thumbnail"));
@@ -94,7 +88,7 @@ public class Behavior implements Observer, Serializable {
      */
     public Behavior(Assembly MyAssembly, String UpdateCondition, String UpdateAction) {
         // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // set properties
         this.icon = Utilities.loadImage(config.getString("behavior-icon"));
         this.thumbnail = Utilities.loadImage(config.getString("behavior-thumbnail"));
@@ -120,7 +114,7 @@ public class Behavior implements Observer, Serializable {
     }
 
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Stop listening for changes from the environment. 
@@ -160,7 +154,7 @@ public class Behavior implements Observer, Serializable {
     public void update(Observable o, Object arg) {
         System.out.println("INFO: Behavior update: on object " + o.toString());
         // filter the list using the user provided rules
-        THashMap outputset = (THashMap) this.selection.update();
+        LinkedHashMap outputset = (LinkedHashMap) this.selection.update();
         if (outputset.size()>0) {
             System.out.print("INFO: Behavior " + this.toString() + " found targets: ");
         } 
@@ -175,9 +169,9 @@ public class Behavior implements Observer, Serializable {
             // determine the type of the update
             System.out.println("INFO: Behavior update: "+o.toString()+", "+arg.toString());
             // get the set of elements in the environment; remove bound assembly self from list
-            THashMap inputset = (THashMap) this.context.getElements();
+            LinkedHashMap inputset = (LinkedHashMap) this.context.getElements();
             // filter the list using the user provided rules
-            THashMap outputset = (THashMap) this.selection.update();
+            LinkedHashMap outputset = (LinkedHashMap) this.selection.update();
             // take action based on the user rules
             if (outputset.size()>0) {
                 // do something

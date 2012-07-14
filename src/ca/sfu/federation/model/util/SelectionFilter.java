@@ -21,12 +21,8 @@ package ca.sfu.federation.model.util;
 
 import ca.sfu.federation.model.INamed;
 import com.developer.rose.BeanProxy;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -41,7 +37,7 @@ import java.util.regex.Pattern;
 public class SelectionFilter implements Serializable {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     public static final int BOOLEAN_OPERATOR = 0;
     public static final int COMPARISON_OPERATOR = 1;
@@ -60,7 +56,7 @@ public class SelectionFilter implements Serializable {
     private Object right;    // right operand
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * SelectionFilter constructor.
@@ -113,7 +109,7 @@ public class SelectionFilter implements Serializable {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Filter a collection of objects.
@@ -123,22 +119,22 @@ public class SelectionFilter implements Serializable {
         // if there are no objects to process, return nothing right away
         if (InputSet.size()==0) return InputSet;
         // init
-        THashMap result = new THashMap();
+        LinkedHashMap result = new LinkedHashMap();
         // filtering cases
         switch(this.type) {
             case SelectionFilter.BOOLEAN_OPERATOR:
                 // init
-                THashMap rightSet = new THashMap();
-                THashMap leftSet = new THashMap();
-                THashSet outputset = new THashSet();
+                LinkedHashMap rightSet = new LinkedHashMap();
+                LinkedHashMap leftSet = new LinkedHashMap();
+                HashSet outputset = new HashSet();
                 // solve left and right subparts individually
                 if (this.right instanceof SelectionFilter) {
                     SelectionFilter filter = (SelectionFilter) this.right;
-                    rightSet = (THashMap) filter.filter(InputSet);
+                    rightSet = (LinkedHashMap) filter.filter(InputSet);
                 }
                 if (this.left instanceof SelectionFilter) {
                     SelectionFilter filter = (SelectionFilter) this.left;
-                    leftSet = (THashMap) filter.filter(InputSet);
+                    leftSet = (LinkedHashMap) filter.filter(InputSet);
                 }
                 // perform set operations
                 if (this.operator.equals("AND")) {
@@ -146,7 +142,7 @@ public class SelectionFilter implements Serializable {
                     Iterator iter = rightSet.values().iterator();
                     while (iter.hasNext()) {
                         INamed named = (INamed) iter.next();
-                        if (leftSet.contains(named)) {
+                        if (leftSet.containsValue(named)) {
                             result.put(named.getName(),named);
                         }
                     }

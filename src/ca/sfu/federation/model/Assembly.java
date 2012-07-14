@@ -1,7 +1,4 @@
 /**
- * Assembly.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -16,43 +13,34 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 59
  * Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package ca.sfu.federation.model;
 
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.exception.GraphCycleException;
 import com.developer.rose.BeanProxy;
-import gnu.trove.THashMap;
 import java.awt.Image;
 import java.io.Serializable;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Group;
 import javax.media.j3d.Node;
 import javax.media.j3d.Shape3D;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openide.util.Utilities;
 
 /**
- * A Parametric object.
+ * A parametric object.
  * @author Davis Marques
  * @version 0.1.0
  */
 public class Assembly extends Observable implements IContext, IViewable, IUpdateable, Observer, Serializable {
     
-    //--------------------------------------------------------------------------
-    // FIELDS
-
     private String name;        // unique identifier for this object
     private IContext context;   // the parent context
-    private Vector elements;    // a collection of parts for this object
-    private Vector updateOrder; // the order by which systolic array elements are updated
+    private ArrayList elements;    // a collection of parts for this object
+    private ArrayList updateOrder; // the order by which systolic array elements are updated
 
     // metadata, visual properties
     private String description; // description of this assembly
@@ -60,46 +48,48 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
     private Image icon;         // icon representation of object
     private boolean visible;    // visibility state
 
-    private Vector behaviors;   // behaviors that are bound to this assembly. this is to be removed shortly
+    private ArrayList behaviors;   // behaviors that are bound to this assembly. this is to be removed shortly
+    
+    private static final Logger logger = Logger.getLogger(Assembly.class.getName());
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
     
     /**
      * Assembly constructor. Generates a unique name in context.
-     * @param MyContext The parent Context.
+     * @param Context The parent Context.
      */
-    public Assembly(IContext MyContext) {
+    public Assembly(IContext Context) {
         // init
-        this.elements = new Vector();
-        this.updateOrder = new Vector();
+        this.elements = new ArrayList();
+        this.updateOrder = new ArrayList();
         // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // generate a name for the new scenario
         String basename = "Assembly";
         int index = 0;
         boolean match = false;
         while (!match) {
             String newname = basename + index;
-            if (!MyContext.hasObject(newname)) {
-                this.name = newname;
+            if (!Context.hasObject(newname)) {
+                name = newname;
                 match = true;
             }
             index++;
         }
         // set properties
-        this.context = MyContext;
-        this.behaviors = new Vector();
-        this.description = null;
-        this.icon = Utilities.loadImage(config.getString("assembly-icon"));
-        this.thumbnail = Utilities.loadImage(config.getString("assembly-thumbnail"));
-        this.visible = true;
+        context = Context;
+        behaviors = new ArrayList();
+        description = null;
+        icon = Utilities.loadImage(config.getString("assembly-icon"));
+        thumbnail = Utilities.loadImage(config.getString("assembly-thumbnail"));
+        visible = true;
         // register in the context
-        if (MyContext != null) {
+        if (Context != null) {
             try {
-                MyContext.add(this);
+                Context.add(this);
             } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.SEVERE,"Could not register in context\n\n{0}",stack);
             }
         }
     }
@@ -107,34 +97,35 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
     /**
      * Assembly constructor.
      * @param Name The Assembly name.
-     * @param MyContext The Context to make the Assembly in.
+     * @param Context The Context to make the Assembly in.
      */
-    public Assembly(String Name, IContext MyContext) {
+    public Assembly(String Name, IContext Context) {
         // init
-        this.elements = new Vector();
-        this.updateOrder = new Vector();
+        this.elements = new ArrayList();
+        this.updateOrder = new ArrayList();
         // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // set properties
         this.name = Name;
-        this.context = MyContext;
-        this.behaviors = new Vector();
+        this.context = Context;
+        this.behaviors = new ArrayList();
         this.description = null;
         this.icon = Utilities.loadImage(config.getString("assembly-icon"));
         this.thumbnail = Utilities.loadImage(config.getString("assembly-thumbnail"));
         this.visible = true;
         // register in the context
-        if (MyContext != null) {
+        if (Context != null) {
             try {
-                MyContext.add(this);
+                Context.add(this);
             } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.SEVERE,"Could not register in context\n\n{0}",stack);
             }
         }
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Add a Behavior to this object.
@@ -149,8 +140,9 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * @param Named NamedObject to be added.
      * @throws IllegalArgumentException An object identified by the same name already exists in the Context.
      */
+    @Override
     public void add(INamed Named) throws IllegalArgumentException {
-        THashMap elementsByName = (THashMap) this.getElements();
+        LinkedHashMap elementsByName = (LinkedHashMap) this.getElements();
         if (!elementsByName.containsKey(Named.getName())) {
             // add object
             this.elements.add(Named);
@@ -161,7 +153,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
             }
             // notify observers of change
             this.setChanged();
-            this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_ADD));
+            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_ADD));
         } else {
             throw new IllegalArgumentException("An object identified by the same name already exists in the Context.");
         }
@@ -172,9 +164,9 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      */
     public void clearAll() {
         // stop listening for changes on elements
-        Enumeration e = this.elements.elements();
-        while (e.hasMoreElements()) {
-            INamed named = (INamed) e.nextElement();
+        Iterator it = this.elements.iterator();
+        while (it.hasNext()) {
+            INamed named = (INamed) it.next();
             if (named instanceof Observable) {
                 Observable o = (Observable) named;
                 o.deleteObserver(this);
@@ -185,16 +177,17 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
         this.updateOrder.clear();
         // notify observers
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_DELETE_REQUEST));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST));
     }
 
     /**
      * Clear the Result cache for each Element.
      */
+    @Override
     public void clearResultCache() {
-        Enumeration e = this.updateOrder.elements();
-        while (e.hasMoreElements()) {
-            Object object = e.nextElement();
+        Iterator it = this.updateOrder.iterator();
+        while (it.hasNext()) {
+            Object object = it.next();
             if (object instanceof IUpdateable) {
                 IUpdateable updateable = (IUpdateable) object;
                 updateable.clearResultCache();
@@ -205,17 +198,18 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
     /**
      * Delete the object from its context.
      */
+    @Override
     public void delete() {
-        // tell observers to release me
-        System.out.println("INFO: Assembly signalled Observers to release and delete object.");
+        logger.log(Level.INFO,"Assembly signalled Observers to release and delete object");
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_DELETE_REQUEST));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST));
     }
     
     /**
      * Get canonical name.
      * @return Canonical name.
      */
+    @Override
     public String getCanonicalName() {
         String can = "";
         if (this.context != null) {
@@ -229,6 +223,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Get the Context.
      * @return Context of this object.
      */
+    @Override
     public IContext getContext() {
         return this.context;
     }
@@ -245,11 +240,12 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Get the local Elements.
      * @return Collection of NamedObjects in this context.
      */
+    @Override
     public Map getElements() {
-        THashMap elementsByName = new THashMap();
-        Enumeration e = this.elements.elements();
-        while (e.hasMoreElements()) {
-            INamed named = (INamed) e.nextElement();
+        LinkedHashMap elementsByName = new LinkedHashMap();
+        Iterator it = this.elements.iterator();
+        while (it.hasNext()) {
+            INamed named = (INamed) it.next();
             elementsByName.put(named.getName(),named);
         }
         return elementsByName;
@@ -259,9 +255,9 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Get elements in topological order.
      * @return Elements in order.
      */
-    protected Vector getElementsInTopologicalOrder() throws GraphCycleException {
+    protected ArrayList getElementsInTopologicalOrder() throws GraphCycleException {
         // init
-        Vector sorted = new Vector();
+        ArrayList sorted = new ArrayList();
         // do topological sort
         Iterator iter = this.getElements().values().iterator();
         while (iter.hasNext()) {
@@ -269,7 +265,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
             if (named instanceof IGraphable) {
                 IGraphable graphobject = (IGraphable) named;
                 // get dependancies for the node
-                THashMap deps = (THashMap) graphobject.getDependancies();
+                LinkedHashMap deps = (LinkedHashMap) graphobject.getDependancies();
                 // for each dependancy, do a topological sort on its subgraph
                 Iterator it = deps.values().iterator();
                 while (it.hasNext()) {
@@ -294,13 +290,13 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * @param Sorted List of elements in topological order.
      * @throws GraphCycleException Graph contains a cycle and can not be updated.
      */
-    private void getElementsInTopologicalOrder(INamed Named, Vector Sorted) throws GraphCycleException {
+    private void getElementsInTopologicalOrder(INamed Named, ArrayList Sorted) throws GraphCycleException {
         // if the NamedObject is already in the list, then we expect that its dependancies 
         // are also already represented there and therefore we don't need to do anything
         if (Named instanceof IGraphable && !Sorted.contains(Named)) {
             IGraphable graphobject = (IGraphable) Named;
             // add nodes upon which the object is dependant first
-            THashMap deps = (THashMap) graphobject.getDependancies();
+            LinkedHashMap deps = (LinkedHashMap) graphobject.getDependancies();
             Iterator iter = deps.values().iterator();
             while (iter.hasNext()) {
                 INamed namedDep = (INamed) iter.next();
@@ -320,6 +316,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Get icon.
      * @return Icon.
      */
+    @Override
     public Image getIcon() {
         return this.icon;
     }
@@ -330,16 +327,16 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      */
     public List getIndependantElements() {
         // init
-        Vector independant = new Vector();
+        ArrayList independant = new ArrayList();
         // get list of elements
-        Enumeration e = this.elements.elements();
-        while (e.hasMoreElements()) {
-            Object object = e.nextElement();
-            THashMap dep = null;
+        Iterator it = this.elements.iterator();
+        while (it.hasNext()) {
+            Object object = it.next();
+            LinkedHashMap dep = new LinkedHashMap();
             // if the object can have dependancies
             if (object instanceof IGraphable) {
                 IGraphable graphobject = (IGraphable) object;
-                dep = (THashMap) graphobject.getDependancies();
+                dep = (LinkedHashMap) graphobject.getDependancies();
                 // if the elements has no dependancies, then it is an independant elements
                 if (dep.size()==0) {
                     independant.add(object);
@@ -354,6 +351,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Get the name of this Object.
      * @return The name of this Object.
      */
+    @Override
     public String getName() {
         return this.name;
     }
@@ -364,8 +362,9 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * ParametricModel will always be the first element.
      * @return List of Parent contexts.
      */
+    @Override
     public List getParents() {
-        Vector parents = new Vector();
+        ArrayList parents = new ArrayList();
         // add predecessors first
         if (this.context != null) {
             parents.addAll(this.context.getParents());
@@ -379,6 +378,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Get list of renderable objects.
      * @return List of renderable objects.
      */
+    @Override
     public Node getRenderable() {
         // init
         BranchGroup group = new BranchGroup();
@@ -387,15 +387,16 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
         group.setCapability(Group.ALLOW_CHILDREN_READ);
         group.setCapability(Group.ALLOW_CHILDREN_WRITE);
         group.setCapability(Group.ALLOW_CHILDREN_EXTEND);
-        Vector list = null;
+        ArrayList list = null;
         try {
-            list = (Vector) this.getElementsInTopologicalOrder();
+            list = (ArrayList) this.getElementsInTopologicalOrder();
         } catch (GraphCycleException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get elements in topological order\n\n",stack);
         }
-        Enumeration e = list.elements();
-        while (e.hasMoreElements()) {
-            Object object = e.nextElement();
+        Iterator it = list.iterator();
+        while (it.hasNext()) {
+            Object object = it.next();
             if (object instanceof IViewable) {
                 IViewable displayobject = (IViewable) object;
                 Node node = displayobject.getRenderable();
@@ -410,6 +411,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Subclasses of Assembly should override this method to provide their own thumbnail.
      * @return Thumbnail representation of this Assembly.
      */
+    @Override
     public Image getThumbnail() {
         return this.thumbnail;
     }
@@ -418,6 +420,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Get visibility state.
      * @return True if visible, false otherwise.
      */
+    @Override
     public boolean getVisible() {
         return this.visible;
     }
@@ -426,9 +429,10 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Determine if a NamedObject exists in the Context.
      * @return True if object is in the local collection, false otherwise.
      */
+    @Override
     public boolean hasObject(String Name) {
         boolean result = false;
-        THashMap elementsByName = (THashMap) this.getElements();
+        LinkedHashMap elementsByName = (LinkedHashMap) this.getElements();
         if (elementsByName.containsKey(Name)) {
             result = true;
         }
@@ -440,6 +444,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * @param Query NamedObject reference of the form objectname.propertyname
      * @throws IllegalArgumentException The referenced object could not be located, or the resultant value is null.
      */
+    @Override
     public Object lookup(String Query) throws IllegalArgumentException {
         // initialize
         INamed named = null;
@@ -496,7 +501,8 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
                 try {
                     result = context.lookup(query);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    String stack = ExceptionUtils.getFullStackTrace(ex);
+                    logger.log(Level.SEVERE,"Could not complete lookup\n\n{0}",stack);
                 }
             } else {
                 // the reference is malformed, throw an error
@@ -523,10 +529,11 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * @param Named The NamedObject to be removed.
      * @throws IllegalArgumentException The NamedObject does not exist in the Context.
      */
+    @Override
     public void remove(INamed Named) throws IllegalArgumentException {
-        String name = Named.getName();
-        THashMap elementsByName = (THashMap) this.getElements();
-        if (elementsByName.containsKey(name)) {
+        String childname = Named.getName();
+        LinkedHashMap elementsByName = (LinkedHashMap) this.getElements();
+        if (elementsByName.containsKey(childname)) {
             // stop listening on the NamedObject
             if (Named instanceof Observable) {
                 Observable o = (Observable) Named;
@@ -536,15 +543,16 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
             this.elements.remove(Named);
             // notify observers
             this.setChanged();
-            this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_DELETED));            
+            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETED));            
         } else {
-            throw new IllegalArgumentException("The object '" + name + "' does not exist in the current Context.");
+            throw new IllegalArgumentException("The object '" + childname + "' does not exist in the current Context.");
         }
     }
 
     /**
      * Restore transient and non-serializable objects following deserialization.
      */
+    @Override
     public void restore() {
         Iterator iter = this.getElements().values().iterator();
         while (iter.hasNext()) {
@@ -560,6 +568,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Set the Context for this object.
      * @param MyContext The Context for this object.
      */
+    @Override
     public void setContext(IContext MyContext) {
         this.context = MyContext;
     }
@@ -585,17 +594,19 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * @param Name Name of this object.
      * TODO: need to check that the name is not a reserved word, and that it is unique
      */
+    @Override
     public void setName(String Name) {
         this.name = Name;
         // send rename notification to parent context
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_NAME_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_NAME_CHANGE));
     }
 
     /**
      * Set visibility state.
      * @param Visible True if visible, false otherwise.
      */
+    @Override
     public void setVisible(boolean Visible) {
         this.visible = Visible;
     }
@@ -604,28 +615,32 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Update the state of the AbstractContext.
      * @return True if updated successfully, false otherwise.
      */
+    @Override
     public boolean update() {
         // clearResult the SAE result caches
         this.clearResultCache();
-        Vector elements = null;
+        ArrayList childelements = new ArrayList();
         try {
-            elements = (Vector) this.getElementsInTopologicalOrder();
+            childelements = (ArrayList) this.getElementsInTopologicalOrder();
         } catch (GraphCycleException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"Could not get elements in topological order\n\n{0}",stack);
         }
         // print out the update order for debugging
-        Enumeration en = elements.elements();
-        System.out.print("INFO: " + this.name + " update event. Update sequence is: ");
-        while (en.hasMoreElements()) {
-            INamed named = (INamed) en.nextElement();
-            System.out.print(named.getName() + " ");
+        Iterator it = childelements.iterator();
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name);
+        while (it.hasNext()) {
+            INamed named = (INamed) it.next();
+            sb.append(named.getName());
+            sb.append(" ");
         }
-        System.out.print("\n");        
+        logger.log(Level.FINE,"{0} update event. Update sequence is: ", new Object[]{this.name,sb.toString()});
         // update nodes
         boolean updateSuccessful = true;
-        Enumeration e = elements.elements();
-        while (e.hasMoreElements() && updateSuccessful) {
-            Object object = e.nextElement();
+        Iterator it2 = childelements.iterator();
+        while (it2.hasNext() && updateSuccessful) {
+            Object object = it2.next();
             if (object instanceof IUpdateable) {
                 IUpdateable updateable = (IUpdateable) object;
                 updateSuccessful = updateable.update();
@@ -645,21 +660,22 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * @param o Observable object.
      * @param arg Update argument.
      */
+    @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
             switch (eventId) {
-                case ConfigManager.EVENT_ELEMENT_DELETE_REQUEST:
-                    System.out.println("INFO: Assembly fired element delete.");
+                case ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST:
+                    logger.log(Level.ALL,"Assembly fired element delete");
                     INamed named = (INamed) o;
                     this.remove(named);
                     break;
-                case ConfigManager.EVENT_PROPERTY_CHANGE:
-                case ConfigManager.EVENT_UPDATEMETHOD_CHANGE:
-                    System.out.println("INFO: Assembly fired local update.");
+                case ApplicationContext.EVENT_PROPERTY_CHANGE:
+                case ApplicationContext.EVENT_UPDATEMETHOD_CHANGE:
+                    logger.log(Level.ALL,"Assembly fired local update");
                     this.update();
                     this.setChanged();
-                    this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_CHANGE));
+                    this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_CHANGE));
                     break;
             }
         }

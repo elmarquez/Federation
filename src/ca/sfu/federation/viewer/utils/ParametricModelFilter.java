@@ -31,7 +31,7 @@ import javax.swing.filechooser.FileFilter;
 public class ParametricModelFilter extends FileFilter {
 
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * DirectoryFilter constructor.
@@ -40,7 +40,7 @@ public class ParametricModelFilter extends FileFilter {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Determine whether the file is a directory.

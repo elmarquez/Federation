@@ -45,7 +45,7 @@ import javax.vecmath.Point3f;
 public class Gizmo extends Group {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     public static final int GIZMO_TRANSLATE = 0;
     public static final int GIZMO_ROTATE = 1;
@@ -67,7 +67,7 @@ public class Gizmo extends Group {
     private TransformGroup tg;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Gizmo constructor.
@@ -99,7 +99,7 @@ public class Gizmo extends Group {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * @return Circle.

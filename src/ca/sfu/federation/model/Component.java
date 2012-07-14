@@ -18,19 +18,14 @@
  */
 package ca.sfu.federation.model;
 
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.exception.NonExistantMethodException;
 import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
-import ca.sfu.federation.model.annotations.Update;
 import java.awt.Image;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
-import java.util.Vector;
+import java.util.*;
 import javax.media.j3d.Group;
 import javax.media.j3d.Node;
 import org.openide.util.Utilities;
@@ -81,7 +76,7 @@ import org.openide.util.Utilities;
 public class Component extends Observable implements IViewable, IGraphable, IUpdateable, Observer, Serializable {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private String name;                    // the name for this node
     private String basename;                // default name prefix
@@ -106,7 +101,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      */
     public Component(IContext MyContext) {
         // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // generate a name for the new scenario
         basename = "Component";
         int index = 0;
@@ -145,7 +140,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      */
     public Component(String Name, IContext MyContext) {
         // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // set properties
         this.name = Name;
         this.context = MyContext;
@@ -167,7 +162,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
    
     /**
      * Clear the Result cache.
@@ -183,7 +178,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         // tell observers to release me
         System.out.println("INFO: Component signalled Observers to release and delete object.");
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_DELETE_REQUEST));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST));
     }
     
     /**
@@ -228,7 +223,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * @return Update Method inputs.
      */
     public List getInputKeys() {
-        Vector keys = new Vector();
+        ArrayList keys = new ArrayList();
         Input[] inputs = this.inputTable.getInputs();
         for (int i=0;i<inputs.length;i++) {
             Input input = inputs[i];
@@ -293,7 +288,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      */
     public Method[] getUpdateMethods() {
         // init
-        Vector updatemethods = new Vector();
+        ArrayList updatemethods = new ArrayList();
         Method[] methods = this.getClass().getDeclaredMethods();
         // add update methods to the update methods list
         for (int i=0;i<methods.length;i++) {
@@ -303,7 +298,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         }
         // copy vector into array
         Method[] result = new Method[updatemethods.size()];
-        updatemethods.copyInto(result);
+        updatemethods.addAll(Arrays.asList(result));
         // return result
         return result;
     }
@@ -347,7 +342,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         this.icon = MyIcon;
         // generate change event
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ICON_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ICON_CHANGE));
     }
     
     /**
@@ -384,7 +379,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         this.name = Name;
         // generate change event
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_NAME_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_NAME_CHANGE));
     }
     
     /**
@@ -427,7 +422,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         }
         // notify observers
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_CHANGE));
     }
     
     /**
@@ -438,7 +433,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         this.visible = State;
         // notify observers
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_CHANGE));
     }
     
     /**
@@ -482,11 +477,11 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
             switch (eventId) {
-                case ConfigManager.EVENT_INPUT_CHANGE:
+                case ApplicationContext.EVENT_INPUT_CHANGE:
                     // check to see if our view state parameters should be changed
                     // signal viewers to redraw
                     this.setChanged();
-                    this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_CHANGE));
+                    this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_CHANGE));
                     break;
             }
         }

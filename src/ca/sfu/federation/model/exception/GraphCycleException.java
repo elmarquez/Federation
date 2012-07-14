@@ -27,7 +27,7 @@ package ca.sfu.federation.model.exception;
 public class GraphCycleException extends Exception {
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * GraphCycleException constructor.

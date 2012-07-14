@@ -23,7 +23,7 @@ import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import java.awt.Color;
 import java.util.ResourceBundle;
 import javax.media.j3d.GeometryArray;
@@ -42,7 +42,7 @@ import org.openide.util.Utilities;
 public class CoordinateSystem extends Component implements IPoint {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private static final float ORIGIN_AXIS_LENGTH = 1.0f;
     private static final boolean ORIGIN_NEGATIVE_AXES = false;
@@ -53,7 +53,7 @@ public class CoordinateSystem extends Component implements IPoint {
     private double z;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * CoordinateSystem constructor.
@@ -74,7 +74,7 @@ public class CoordinateSystem extends Component implements IPoint {
             index++;
         }
         // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         this.setIcon(Utilities.loadImage(config.getString("coordinatesystem-icon")));
     }
     
@@ -88,7 +88,7 @@ public class CoordinateSystem extends Component implements IPoint {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Get 3d renderable icon for coordinate system.

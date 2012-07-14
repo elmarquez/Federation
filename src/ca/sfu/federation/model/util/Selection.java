@@ -22,10 +22,10 @@ package ca.sfu.federation.model.util;
 import ca.sfu.federation.model.util.exception.MalformedSelectionRuleException;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
-import gnu.trove.THashMap;
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /**
  * <p>
@@ -53,7 +53,7 @@ import java.util.Vector;
 public class Selection implements Serializable {
 
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private static final String[] REQUIRED_DIRECTIVES = {"SELECT","WHERE"};
     private static final String[] POSTPROCESSING_DIRECTIVES = {"ORDEREDBY","NEAR","LIMIT"};
@@ -62,11 +62,11 @@ public class Selection implements Serializable {
     private IContext context;       // selection input
     private SelectionFilter filter; // selection filter
     private String scope;           // user specified scope
-    private THashMap scopeobjects;  // objects in scope
-    private THashMap result;        // selection result
+    private LinkedHashMap scopeobjects;  // objects in scope
+    private LinkedHashMap result;        // selection result
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /**
      * Selection constructor.
@@ -81,7 +81,7 @@ public class Selection implements Serializable {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Parse the input Query.
@@ -105,7 +105,7 @@ public class Selection implements Serializable {
         // SCOPE (aka context) is second atom; try to get the collection of objects in the scope
         this.scope = atoms[1].trim();
         if (this.scope.equals("*")) {
-            this.scopeobjects = (THashMap) MyContext.getElements();
+            this.scopeobjects = (LinkedHashMap) MyContext.getElements();
         } else {
             // scope not in the current context, so try to get the named context
             int selectall = this.scope.lastIndexOf(".*");
@@ -117,14 +117,14 @@ public class Selection implements Serializable {
                 if (selectall != -1) {
                     if (obj instanceof IContext) {
                         IContext context = (IContext) obj;
-                        this.scopeobjects = (THashMap) context.getElements();
+                        this.scopeobjects = (LinkedHashMap) context.getElements();
                     } else {
                         // TODO: can not do a subselection on this object. throw error
                     }
                 } else {
                     if (obj instanceof INamed) {
                         INamed named = (INamed) obj;
-                        THashMap objs = new THashMap();
+                        LinkedHashMap objs = new LinkedHashMap();
                         objs.put(named.getName(),named);
                         this.scopeobjects = objs;
                     } else {
@@ -140,8 +140,8 @@ public class Selection implements Serializable {
         // The last statement in the input string becomes the root of the tree.
         
         // identify the subsegment of the query that has the conditions and post processing directives
-        Vector conditionsv = new Vector();
-        Vector postprocessingv = new Vector();
+        ArrayList conditionsv = new ArrayList();
+        ArrayList postprocessingv = new ArrayList();
         int index = 3; // start from WHERE directive
         boolean found = false;
         while (!found && index < atoms.length) {
@@ -211,9 +211,9 @@ public class Selection implements Serializable {
      */
     public Map update() {
         // get the list of objects from the context
-        THashMap inputset = (THashMap) this.scopeobjects;
+        LinkedHashMap inputset = (LinkedHashMap) this.scopeobjects;
         // filter the inputset
-        THashMap outputset = (THashMap) this.filter.filter(inputset);
+        LinkedHashMap outputset = (LinkedHashMap) this.filter.filter(inputset);
         // return results
         return outputset;
     }

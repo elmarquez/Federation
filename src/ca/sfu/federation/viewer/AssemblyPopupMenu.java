@@ -21,11 +21,11 @@ package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.model.Assembly;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.viewer.action.ComponentNewInstanceAction;
-import ca.sfu.federation.viewer.action.INamedObjectDeleteAction;
-import ca.sfu.federation.viewer.action.INamedObjectRenameAction;
-import ca.sfu.federation.viewer.action.IContextSetCurrentAction;
-import ca.sfu.federation.viewer.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.ComponentNewInstanceAction;
+import ca.sfu.federation.action.DeleteINamedAction;
+import ca.sfu.federation.action.RenameINamedAction;
+import ca.sfu.federation.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.PropertySheetSetFocusAction;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
@@ -39,12 +39,12 @@ import javax.swing.JSeparator;
 public class AssemblyPopupMenu extends JPopupMenu {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private Assembly target;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * AssemblyPopupMenu constructor.
@@ -63,10 +63,10 @@ public class AssemblyPopupMenu extends JPopupMenu {
         IContextSetCurrentAction vscfa = new IContextSetCurrentAction("Open Assembly",null,"Open Assembly",new Integer(KeyEvent.VK_O),target);
         this.add(vscfa);
         // rename
-        INamedObjectRenameAction inora = new INamedObjectRenameAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R),target);
+        RenameINamedAction inora = new RenameINamedAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R),target);
         this.add(inora);
         // delete
-        INamedObjectDeleteAction inoda = new INamedObjectDeleteAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),target);
+        DeleteINamedAction inoda = new DeleteINamedAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),target);
         this.add(inoda);
         // properties
         PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)this.target);
@@ -74,6 +74,6 @@ public class AssemblyPopupMenu extends JPopupMenu {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class

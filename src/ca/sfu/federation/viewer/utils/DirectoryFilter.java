@@ -30,7 +30,7 @@ import javax.swing.filechooser.FileFilter;
 public class DirectoryFilter extends FileFilter {
 
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * DirectoryFilter constructor.
@@ -39,7 +39,7 @@ public class DirectoryFilter extends FileFilter {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Determine whether the file is a directory.

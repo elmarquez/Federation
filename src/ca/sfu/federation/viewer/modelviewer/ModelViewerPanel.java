@@ -21,7 +21,7 @@ package ca.sfu.federation.viewer.modelviewer;
 
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.viewer.action.ModelViewerUpdateThumbnailAction;
+import ca.sfu.federation.action.ModelViewerUpdateThumbnailAction;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import java.awt.BorderLayout;
 import java.awt.GraphicsConfiguration;
@@ -39,14 +39,14 @@ import javax.swing.JToolBar;
 public class ModelViewerPanel extends JPanel implements MouseListener {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private ParametricModel model;
     private IContext context;
     private ModelViewerCanvas3D canvas;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ModelViewerIContextAdapter constructor.
@@ -74,7 +74,7 @@ public class ModelViewerPanel extends JPanel implements MouseListener {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     public void mouseClicked(MouseEvent e) {
     }

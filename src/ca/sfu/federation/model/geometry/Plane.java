@@ -24,7 +24,7 @@ import ca.sfu.federation.model.geometry.lightweight.LwPoint;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.Primitive;
 import java.util.ResourceBundle;
@@ -43,7 +43,7 @@ import org.openide.util.Utilities;
 public class Plane extends Component implements IPlane, IPoint {
 
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private String basename = "Plane";
     private CoordinateSystem cs;        // embedding space
@@ -58,7 +58,7 @@ public class Plane extends Component implements IPlane, IPoint {
     private double o_z;                 // plane origin z coordinate
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Point constructor.
@@ -79,7 +79,7 @@ public class Plane extends Component implements IPlane, IPoint {
             index++;
         }
         // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         this.setIcon(Utilities.loadImage(config.getString("plane-icon")));
     }
 
@@ -91,12 +91,12 @@ public class Plane extends Component implements IPlane, IPoint {
     public Plane(String Name,IContext MyContext) {
         super(Name,MyContext);
         // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         this.setIcon(Utilities.loadImage(config.getString("plane-icon")));
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Get the plane origin.

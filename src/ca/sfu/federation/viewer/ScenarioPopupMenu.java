@@ -22,12 +22,12 @@ package ca.sfu.federation.viewer;
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.Scenario;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.viewer.action.AssemblyNewInstanceAction;
-import ca.sfu.federation.viewer.action.ComponentNewInstanceAction;
-import ca.sfu.federation.viewer.action.INamedObjectDeleteAction;
-import ca.sfu.federation.viewer.action.INamedObjectRenameAction;
-import ca.sfu.federation.viewer.action.IContextSetCurrentAction;
-import ca.sfu.federation.viewer.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.AssemblyNewInstanceAction;
+import ca.sfu.federation.action.ComponentNewInstanceAction;
+import ca.sfu.federation.action.DeleteINamedAction;
+import ca.sfu.federation.action.RenameINamedAction;
+import ca.sfu.federation.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.PropertySheetSetFocusAction;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
@@ -41,12 +41,12 @@ import javax.swing.JSeparator;
 public class ScenarioPopupMenu extends JPopupMenu {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private Scenario scenario;
 
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ScenarioPopupMenu constructor.
@@ -67,10 +67,10 @@ public class ScenarioPopupMenu extends JPopupMenu {
         IContextSetCurrentAction vscfa = new IContextSetCurrentAction("Open Scenario",null,"Open Scenario",new Integer(KeyEvent.VK_O),this.scenario);
         this.add(vscfa);
         // rename
-        INamedObjectRenameAction inora = new INamedObjectRenameAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R),this.scenario);
+        RenameINamedAction inora = new RenameINamedAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R),this.scenario);
         this.add(inora);
         // delete
-        INamedObjectDeleteAction inoda = new INamedObjectDeleteAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),this.scenario);
+        DeleteINamedAction inoda = new DeleteINamedAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),this.scenario);
         this.add(inoda);
         // properties
         PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)ParametricModel.getInstance());
@@ -78,6 +78,6 @@ public class ScenarioPopupMenu extends JPopupMenu {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class

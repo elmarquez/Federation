@@ -20,7 +20,7 @@
 package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.model.Component;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.IViewable;
 import ca.sfu.federation.model.INamed;
@@ -46,7 +46,7 @@ import org.netbeans.api.visual.widget.Widget;
 public class ComponentVisualWidget extends Widget implements IVisualWidget, Observer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private static final String ACTION_OPEN_SCENARIO = "OPENSCENARIO";
     private static final String ACTION_SET_ACTIVE_SCENARIO = "SETSCENARIOACTIVE";
@@ -59,7 +59,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
     private WidgetAction moveAction = ActionFactory.createMoveAction();
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ContainerVisualWidget constructor.
@@ -77,9 +77,9 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
         }
         // set the widget properties
         this.setLayout(LayoutFactory.createHorizontalLayout(LayoutFactory.SerialAlignment.CENTER,8));
-        Border border = BorderFactory.createRoundedBorder(8,8,8,8,ConfigManager.BACKGROUND_LIGHT,ConfigManager.BACKGROUND_DARK);
+        Border border = BorderFactory.createRoundedBorder(8,8,8,8,ApplicationContext.BACKGROUND_LIGHT,ApplicationContext.BACKGROUND_DARK);
         this.setBorder(border);
-        this.setBackground(ConfigManager.BACKGROUND_LIGHT);
+        this.setBackground(ApplicationContext.BACKGROUND_LIGHT);
         this.setOpaque(true);
         // set thumbnail or icon
         if (Named instanceof IViewable) {
@@ -93,7 +93,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
         Widget labelwidget = new Widget(MyScene);
         labelwidget.setLayout(LayoutFactory.createVerticalLayout(LayoutFactory.SerialAlignment.JUSTIFY,1));
         nameLabelWidget = new LabelWidget(MyScene, Named.getName());
-        nameLabelWidget.setForeground(ConfigManager.TEXT_LIGHT);
+        nameLabelWidget.setForeground(ApplicationContext.TEXT_LIGHT);
         labelwidget.addChild(nameLabelWidget);
         if (Named instanceof Component) {
             Component c = (Component) Named;
@@ -101,7 +101,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
             this.updateMethodLabelWidget = new LabelWidget(MyScene,Named.getCanonicalName());
             Font font = new Font("SansSerif",Font.PLAIN,10);
             this.updateMethodLabelWidget.setFont(font);
-            this.updateMethodLabelWidget.setForeground(ConfigManager.TEXT_LIGHT);
+            this.updateMethodLabelWidget.setForeground(ApplicationContext.TEXT_LIGHT);
             labelwidget.addChild(updateMethodLabelWidget);            
         }
         this.addChild(labelwidget);
@@ -115,7 +115,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Get the target of the widget.
@@ -134,8 +134,8 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
             Integer eventId = (Integer) arg;
             INamed named = (INamed) o;
             switch (eventId) {
-                case ConfigManager.EVENT_DESCRIPTION_CHANGE:
-                case ConfigManager.EVENT_NAME_CHANGE:
+                case ApplicationContext.EVENT_DESCRIPTION_CHANGE:
+                case ApplicationContext.EVENT_NAME_CHANGE:
                     System.out.println("INFO: ComponentVisualWidget fired name or description change event.");
                     this.nameLabelWidget.setLabel(named.getName());
                     this.updateMethodLabelWidget.setLabel(named.getCanonicalName());
@@ -144,7 +144,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
                         this.updateMethodLabelWidget.setLabel(c.getUpdateMethodName());
                     }
                     break;
-                case ConfigManager.EVENT_ELEMENT_CHANGE:
+                case ApplicationContext.EVENT_ELEMENT_CHANGE:
                     System.out.println("INFO: ComponentVisualWidget fired element change event.");
                     this.nameLabelWidget.setLabel(named.getName());
                     this.updateMethodLabelWidget.setLabel(named.getCanonicalName());
@@ -154,7 +154,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
                     }
                     this.iconWidget.setImage(named.getIcon());
                     break;
-                case ConfigManager.EVENT_ICON_CHANGE:
+                case ApplicationContext.EVENT_ICON_CHANGE:
                     System.out.println("INFO: ComponentVisualWidget fired icon change event.");
                     this.iconWidget.setImage(named.getIcon());
                     break;

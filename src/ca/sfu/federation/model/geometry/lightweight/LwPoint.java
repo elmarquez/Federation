@@ -30,14 +30,14 @@ import ca.sfu.federation.model.geometry.IPoint;
 public class LwPoint extends LightWeightObject implements IPoint {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private double x;
     private double y;
     private double z;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * LwPoint constructor.
@@ -59,7 +59,7 @@ public class LwPoint extends LightWeightObject implements IPoint {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     public Double getX() {
         return Double.valueOf(this.x);

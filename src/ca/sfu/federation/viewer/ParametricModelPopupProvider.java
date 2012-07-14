@@ -33,12 +33,12 @@ import org.netbeans.api.visual.widget.Widget;
 public class ParametricModelPopupProvider implements PopupMenuProvider, ActionListener {
     
     //----------------------------------------------------------------------
-    // FIELDS
+
     
     private ParametricModelPopupMenu menu;
     
     //----------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Popup menu provider.
@@ -48,7 +48,7 @@ public class ParametricModelPopupProvider implements PopupMenuProvider, ActionLi
     }
     
     //----------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Get the popup menu.

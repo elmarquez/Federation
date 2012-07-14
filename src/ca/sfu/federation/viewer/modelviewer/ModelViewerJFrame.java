@@ -31,10 +31,10 @@ import javax.swing.JFrame;
 public class ModelViewerJFrame extends JFrame {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ModelViewerJFrame constructor.
@@ -53,6 +53,6 @@ public class ModelViewerJFrame extends JFrame {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class

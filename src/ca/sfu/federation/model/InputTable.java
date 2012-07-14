@@ -19,20 +19,13 @@
 
 package ca.sfu.federation.model;
 
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.exception.DuplicatePropertyException;
 import ca.sfu.federation.model.exception.ParameterCountMismatchException;
-import ca.sfu.federation.model.ConfigManager;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * A table to hold Input arguments for an Update method.  Arguments are stored
@@ -44,28 +37,28 @@ import java.util.Vector;
 public class InputTable extends Observable implements Serializable {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
-    private Vector inputs;       // the inputs, in order
+    private ArrayList inputs;       // the inputs, in order
     private String description;  // description of the update method
     private INamed parent; // the parent object
     private boolean primed;      // all inputs have the required user input values
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * InputTable constructor.
      * @param Parent The parent object.
      */
     public InputTable(INamed Parent) {
-        this.inputs = new Vector();
+        this.inputs = new ArrayList();
         this.description = "";
         this.parent = Parent;
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Add a property to the table.
@@ -79,7 +72,7 @@ public class InputTable extends Observable implements Serializable {
         Input myInput = new Input(Name, Description, Clazz, this.parent.getContext());
         // add the input to the list and index
         String name = myInput.getName();
-        THashMap index = this.getInputIndex();
+        LinkedHashMap index = this.getInputIndex();
         if (!index.containsKey(name)) {
             this.inputs.add(myInput);
         } else {
@@ -132,16 +125,16 @@ public class InputTable extends Observable implements Serializable {
      */
     public Map getDependancies() {
         // init
-        THashSet dep = new THashSet();
+        HashSet dep = new HashSet();
         // add dependancies for each input to the set
-        Enumeration e = this.inputs.elements();
-        while (e.hasMoreElements()) {
-            Input input = (Input) e.nextElement();
-            dep.addAll((THashSet) input.getDependancies());
+        Iterator e = this.inputs.iterator();
+        while (e.hasNext()) {
+            Input input = (Input) e.next();
+            dep.addAll((HashSet) input.getDependancies());
         }
         // convert to map
         // should revisit this at some point .. doesn't make sense any more
-        THashMap result = new THashMap();
+        LinkedHashMap result = new LinkedHashMap();
         Iterator iter = dep.iterator();
         while(iter.hasNext()) {
             INamed named = (INamed) iter.next();
@@ -156,8 +149,8 @@ public class InputTable extends Observable implements Serializable {
      * @param InputName The input name.
      */
     public List getDependancies(String InputName) {
-        Vector deps = new Vector();
-        THashMap index = this.getInputIndex();
+        ArrayList deps = new ArrayList();
+        LinkedHashMap index = this.getInputIndex();
         Input input = (Input) index.get(InputName);
         if (input != null) {
             deps.addAll(input.getDependancies());
@@ -173,7 +166,7 @@ public class InputTable extends Observable implements Serializable {
         // init
         Input result = null;
         // if the named Input exists in the table
-        THashMap index = this.getInputIndex();
+        LinkedHashMap index = this.getInputIndex();
         if (index.containsKey(Name)) {
             result = (Input) index.get(Name);
         }
@@ -185,13 +178,13 @@ public class InputTable extends Observable implements Serializable {
      * Create an index by name for the current inputs.
      * @return Map.
      */
-    private THashMap getInputIndex() {
+    private LinkedHashMap getInputIndex() {
         // init
-        THashMap index = new THashMap();
+        LinkedHashMap index = new LinkedHashMap();
         // add all inputs to the index
-        Enumeration e = this.inputs.elements();
-        while (e.hasMoreElements()) {
-            Input input = (Input) e.nextElement();
+        Iterator e = this.inputs.iterator();
+        while (e.hasNext()) {
+            Input input = (Input) e.next();
             index.put(input.getName(),input);
         }
         // return result
@@ -203,10 +196,10 @@ public class InputTable extends Observable implements Serializable {
      * @return List of keys.
      */
     public List getInputKeys() {
-        Vector keys = new Vector();
-        Enumeration e = this.inputs.elements();
-        while (e.hasMoreElements()) {
-            Input input = (Input) e.nextElement();
+        ArrayList keys = new ArrayList();
+        Iterator e = this.inputs.iterator();
+        while (e.hasNext()) {
+            Input input = (Input) e.next();
             keys.add(input.getName());
         }
         return keys;
@@ -220,10 +213,10 @@ public class InputTable extends Observable implements Serializable {
         // init
         Input[] inputs = new Input[this.inputs.size()];
         // copy inputs into array
-        Enumeration e = this.inputs.elements();
+        Iterator e = this.inputs.iterator();
         int count = 0;
-        while (e.hasMoreElements()) {
-            inputs[count] = (Input) e.nextElement();
+        while (e.hasNext()) {
+            inputs[count] = (Input) e.next();
             count++;
         }
         // return result
@@ -235,10 +228,10 @@ public class InputTable extends Observable implements Serializable {
      * @param Name
      */
     public Object getInputValue(String Name) {
-        Enumeration e = this.inputs.elements();
+        Iterator e = this.inputs.iterator();
         boolean found = false;
-        while (e.hasMoreElements()) {
-            Input input = (Input) e.nextElement();
+        while (e.hasNext()) {
+            Input input = (Input) e.next();
             if (Name.equals(input.getName())) {
                 return input.getUserInput();
             }
@@ -252,16 +245,16 @@ public class InputTable extends Observable implements Serializable {
      */
     public Object[] getInputValues() {
         // init
-        Vector values = new Vector();
+        ArrayList values = new ArrayList();
         // put Input result values in vector
-        Enumeration e = this.inputs.elements();
-        while (e.hasMoreElements()) {
-            Input myInput = (Input) e.nextElement();
+        Iterator e = this.inputs.iterator();
+        while (e.hasNext()) {
+            Input myInput = (Input) e.next();
             values.add(myInput.getResult());
         }
         // copy result values into an array
         Object[] result = new Object[values.size()];
-        values.copyInto(result);
+        values.addAll(Arrays.asList(result));
         // return result
         return result;
     }
@@ -272,17 +265,17 @@ public class InputTable extends Observable implements Serializable {
      */
     public Class[] getInputClass() {
         // init
-        Vector inputclass = new Vector();
+        ArrayList inputclass = new ArrayList();
         Class[] result = null;
         // add class for each input to the list
-        Enumeration e = this.inputs.elements();
-        while (e.hasMoreElements()) {
-            Input input = (Input) e.nextElement();
+        Iterator e = this.inputs.iterator();
+        while (e.hasNext()) {
+            Input input = (Input) e.next();
             inputclass.add(input.getInputClass());
         }
         // copy results into a class array
         result = new Class[inputclass.size()];
-        inputclass.copyInto(result);
+        inputclass.addAll(Arrays.asList(result));
         // return results
         return result;
     }
@@ -303,7 +296,7 @@ public class InputTable extends Observable implements Serializable {
         // init
         boolean result = false;
         // check if index contains propertyname
-        THashMap index = this.getInputIndex();
+        LinkedHashMap index = this.getInputIndex();
         if (index.containsKey(PropertyName)) {
             result = true;
         }
@@ -318,9 +311,9 @@ public class InputTable extends Observable implements Serializable {
      */
     public boolean isPrimed() {
         boolean inputIsPrimed = true;
-        Enumeration e = this.inputs.elements();
-        while (e.hasMoreElements()) {
-            Input input = (Input) e.nextElement();
+        Iterator e = this.inputs.iterator();
+        while (e.hasNext()) {
+            Input input = (Input) e.next();
             if (!input.isPrimed()) {
                 return false;
             }
@@ -334,7 +327,7 @@ public class InputTable extends Observable implements Serializable {
      * @param UserInputValue The user specified input value.
      */
     public void setInput(String InputName, String UserInputValue) {
-        THashMap index = this.getInputIndex();
+        LinkedHashMap index = this.getInputIndex();
         Input myInput = (Input) index.get(InputName);
         try {
             myInput.setUserInput(UserInputValue);
@@ -343,7 +336,7 @@ public class InputTable extends Observable implements Serializable {
         }
         // notify parent object of change
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_INPUT_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_INPUT_CHANGE));
     }
     
 } // end class

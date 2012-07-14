@@ -29,10 +29,10 @@ import java.awt.PopupMenu;
 public class Canvas3DPopupMenu extends PopupMenu {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Canvas3DPopupMenu constructor.
@@ -43,6 +43,6 @@ public class Canvas3DPopupMenu extends PopupMenu {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class

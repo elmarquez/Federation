@@ -19,76 +19,35 @@
 
 package ca.sfu.federation.viewer.modelviewer;
 
-import ca.sfu.federation.model.ConfigManager;
-import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.IViewable;
-import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.model.IUpdateable;
+import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.*;
 import com.sun.j3d.utils.behaviors.vp.OrbitBehavior;
 import com.sun.j3d.utils.picking.PickCanvas;
 import com.sun.j3d.utils.picking.PickResult;
 import com.sun.j3d.utils.universe.SimpleUniverse;
-import gnu.trove.THashMap;
 import java.awt.Color;
 import java.awt.GraphicsConfiguration;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
-import javax.media.j3d.BoundingSphere;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Canvas3D;
-import javax.media.j3d.GeometryArray;
-import javax.media.j3d.LineArray;
-import javax.media.j3d.Node;
-import javax.media.j3d.Shape3D;
-import javax.media.j3d.TransformGroup;
+import javax.media.j3d.*;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Point3f;
 
 /**
  * IContext 3D viewer panel. 
- * @author Davis Marques, Sun Microsystems
+ * @author Davis Marques
  * @version 0.1.0
- * 
- * Portions of code excerpted from: http://www.java2s.com/Code/Java/3D/PrintCanvas3D.htm
- * Copyright (c) 1996-2002 Sun Microsystems, Inc. All Rights Reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met: -
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer. - Redistribution in binary
- * form must reproduce the above copyright notice, this list of conditions and
- * the following disclaimer in the documentation and/or other materials provided
- * with the distribution.
- *
- * Neither the name of Sun Microsystems, Inc. or the names of contributors may
- * be used to endorse or promote products derived from this software without
- * specific prior written permission.
- *
- * This software is provided "AS IS," without a warranty of any kind. ALL
- * EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
- * IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
- * NON-INFRINGEMENT, ARE HEREBY EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE
- * LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING, MODIFYING
- * OR DISTRIBUTING THE SOFTWARE OR ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS
- * LICENSORS BE LIABLE FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT,
- * INDIRECT, SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
- * CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF
- * OR INABILITY TO USE SOFTWARE, EVEN IF SUN HAS BEEN ADVISED OF THE POSSIBILITY
- * OF SUCH DAMAGES.
- *
- * You acknowledge that Software is not designed, licensed or intended for use in
- * the design, construction, operation or maintenance of any nuclear facility.
  */
 public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Observer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private static final float ORIGIN_AXIS_LENGTH = 1.0f;
     private static final boolean ORIGIN_NEGATIVE_AXES = false;
@@ -109,7 +68,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
     private BufferedImage screenshot;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * ModelViewerIContextAdapter constructor.
@@ -168,7 +127,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Build an origin axis to represent the model world origin.
@@ -223,7 +182,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
      */
     private void buildScene() {
         // get the context
-        this.context = (IContext) this.model.getViewState(ConfigManager.VIEWER_CURRENT_CONTEXT);
+        this.context = (IContext) this.model.getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
         // clear the current scene, if it has already been initialized
         if (!init) {
             this.scene.removeAllChildren();
@@ -238,7 +197,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
         group.addChild(buildOriginAxis());
         // add context objects
         if (this.context != null) {
-            THashMap elements = (THashMap) this.context.getElements();
+            LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
             Iterator iter = elements.values().iterator();
             while (iter.hasNext()) {
                 Object object = iter.next();
@@ -261,7 +220,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
         pickCanvas.setMode(PickCanvas.GEOMETRY);
 
         // set the scene thumbnail
-//        THashMap thumbnails = (THashMap) this.model.getViewState(ConfigManager.VIEWER_ICONTEXT_THUMBNAILS);
+//        LinkedHashMap thumbnails = (LinkedHashMap) this.model.getViewState(ConfigManager.VIEWER_ICONTEXT_THUMBNAILS);
 //        if (!thumbnails.containsKey(this.context.getCanonicalName())) {
 //            this.setThumbnail();
 //        }
@@ -327,10 +286,10 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
     public void setThumbnail() {
         System.out.println("INFO: ModelViewer3D fired scene thumbnail update button.");
         BufferedImage image = this.getThumbnail();
-        THashMap thumbnails = (THashMap) this.model.getViewState(ConfigManager.VIEWER_ICONTEXT_THUMBNAILS);
+        LinkedHashMap thumbnails = (LinkedHashMap) this.model.getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
         thumbnails.put(this.context.getCanonicalName(),image);
         // this will force an update event from the model
-        this.model.setViewState(ConfigManager.VIEWER_ICONTEXT_THUMBNAILS,thumbnails);
+        this.model.setViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS,thumbnails);
     }
     
     /**
@@ -343,12 +302,12 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
             Integer eventId = (Integer) arg;
             System.out.println("INFO: ModelViewerCanvas3D received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_CHANGE:
-                case ConfigManager.EVENT_CONTEXT_CHANGE:
-                case ConfigManager.EVENT_ELEMENT_ADD:
-                case ConfigManager.EVENT_ELEMENT_CHANGE:
-                case ConfigManager.EVENT_ELEMENT_DELETE_REQUEST:
-                case ConfigManager.EVENT_ELEMENT_RENAME:
+                case ApplicationContext.EVENT_CHANGE:
+                case ApplicationContext.EVENT_CONTEXT_CHANGE:
+                case ApplicationContext.EVENT_ELEMENT_ADD:
+                case ApplicationContext.EVENT_ELEMENT_CHANGE:
+                case ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST:
+                case ApplicationContext.EVENT_ELEMENT_RENAME:
                     System.out.println("INFO: ModelViewer3D fired scene update update.");
                     this.buildScene();
                     break;

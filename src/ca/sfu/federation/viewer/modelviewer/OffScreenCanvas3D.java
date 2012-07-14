@@ -37,12 +37,12 @@ import javax.media.j3d.Screen3D;
 class OffScreenCanvas3D extends Canvas3D {
     
     //-------------------------------------------------------------------------
-    // FIELDS
+
     
     private BufferedImage bImage;
 
     //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     public OffScreenCanvas3D(GraphicsConfiguration graphicsConfiguration,boolean offScreen, int width, int height) {
         super(graphicsConfiguration, offScreen);
@@ -57,7 +57,7 @@ class OffScreenCanvas3D extends Canvas3D {
     }
 
     //-------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Render off screen image.

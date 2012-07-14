@@ -21,9 +21,9 @@ package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.viewer.action.GraphViewerAddAnnotationAction;
-import ca.sfu.federation.viewer.action.PropertySheetSetFocusAction;
-import ca.sfu.federation.viewer.action.ScenarioNewInstanceAction;
+import ca.sfu.federation.action.GraphViewerAddAnnotationAction;
+import ca.sfu.federation.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.ScenarioNewInstanceAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -40,13 +40,13 @@ import org.netbeans.api.visual.widget.Widget;
 public class MutableSceneModelPopupProvider implements PopupMenuProvider, ActionListener {
     
     //----------------------------------------------------------------------
-    // FIELDS
+
     
     private MutableSceneModel scene;
     private JPopupMenu menu;
     
     //----------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Popup menu provider.
@@ -71,7 +71,7 @@ public class MutableSceneModelPopupProvider implements PopupMenuProvider, Action
     }
     
     //----------------------------------------------------------------------
-    // METHODS
+
     
     public JPopupMenu getPopupMenu(Widget widget) {
         return menu;

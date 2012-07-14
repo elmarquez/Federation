@@ -25,7 +25,7 @@ import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import java.util.ResourceBundle;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.ColoringAttributes;
@@ -43,7 +43,7 @@ import org.openide.util.Utilities;
 public class Point extends Component implements IPoint {
 
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private CoordinateSystem cs;
     private double x;
@@ -51,7 +51,7 @@ public class Point extends Component implements IPoint {
     private double z;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * Point constructor.
@@ -72,7 +72,7 @@ public class Point extends Component implements IPoint {
             index++;
         }
         // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         this.setIcon(Utilities.loadImage(config.getString("point-icon")));
     }
 
@@ -84,12 +84,12 @@ public class Point extends Component implements IPoint {
     public Point(String Name,IContext MyContext) {
         super(Name,MyContext);
         // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         this.setIcon(Utilities.loadImage(config.getString("point-icon")));
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Add Point2 to Point1.
@@ -164,7 +164,7 @@ public class Point extends Component implements IPoint {
     public void setX(Double X) {
         this.x = X.doubleValue();
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_PROPERTY_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_PROPERTY_CHANGE));
     }
     
     /**
@@ -174,7 +174,7 @@ public class Point extends Component implements IPoint {
     public void setY(Double Y) {
         this.y = Y.doubleValue();
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_PROPERTY_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_PROPERTY_CHANGE));
     }
 
     /**
@@ -184,7 +184,7 @@ public class Point extends Component implements IPoint {
     public void setZ(Double Z) {
         this.z = Z.doubleValue();
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_PROPERTY_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_PROPERTY_CHANGE));
     }
     
     /**

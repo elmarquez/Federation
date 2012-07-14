@@ -27,10 +27,10 @@ package ca.sfu.federation.model.exception;
 public class NonExistantMethodException extends Exception {
     
     //-------------------------------------------------------------------------
-    // FIELDS
+
     
     //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     public NonExistantMethodException() {
     }
@@ -40,6 +40,6 @@ public class NonExistantMethodException extends Exception {
     }
 
     //-------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class NonExistantPropertyException

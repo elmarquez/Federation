@@ -22,10 +22,10 @@ package ca.sfu.federation.model.util.exception;
 public class MalformedSelectionRuleException extends Exception {
     
     //-------------------------------------------------------------------------
-    // FIELDS
+
     
     //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /** 
      * Creates a new instance of MalformedObjectReferenceException 

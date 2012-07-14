@@ -30,10 +30,10 @@ import javax.swing.JFrame;
 public class AbstractTreeExplorerJFrame extends JFrame {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * AbstractTreeExplorerJFrame constructor.
@@ -51,6 +51,6 @@ public class AbstractTreeExplorerJFrame extends JFrame {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class

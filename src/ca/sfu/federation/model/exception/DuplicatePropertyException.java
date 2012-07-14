@@ -27,10 +27,10 @@ package ca.sfu.federation.model.exception;
 public class DuplicatePropertyException extends Exception {
     
     //-------------------------------------------------------------------------
-    // FIELDS
+
     
     //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /**
      * DuplicatePropertyException constructor.
@@ -46,6 +46,6 @@ public class DuplicatePropertyException extends Exception {
     }
 
     //-------------------------------------------------------------------------
-    // METHODS
+
     
 } // end class NamedObjectStorageDuplicateObjectException

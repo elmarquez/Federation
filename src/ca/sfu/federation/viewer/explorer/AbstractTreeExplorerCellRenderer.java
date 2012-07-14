@@ -45,10 +45,10 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 public class AbstractTreeExplorerCellRenderer extends DefaultTreeCellRenderer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * AbstractTreeExplorerCellRenderer constructor.
@@ -57,7 +57,7 @@ public class AbstractTreeExplorerCellRenderer extends DefaultTreeCellRenderer {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Get the cell renderer component.

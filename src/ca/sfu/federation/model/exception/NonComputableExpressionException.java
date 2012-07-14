@@ -27,10 +27,10 @@ package ca.sfu.federation.model.exception;
 public class NonComputableExpressionException extends Exception {
     
     //-------------------------------------------------------------------------
-    // FIELDS
+
     
     //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     public NonComputableExpressionException() {
     }
@@ -40,7 +40,7 @@ public class NonComputableExpressionException extends Exception {
     }
 
     //-------------------------------------------------------------------------
-    // METHODS
+
 
 } // end class NonComputableExpressionException
 

@@ -33,13 +33,13 @@ import javax.swing.JTextField;
 public class InputTextField extends JTextField implements Observer {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private InputTable inputTable;
     private String inputKey;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * InputTextField constructor.
@@ -59,7 +59,7 @@ public class InputTextField extends JTextField implements Observer {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Set the input value.

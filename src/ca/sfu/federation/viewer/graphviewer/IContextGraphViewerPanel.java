@@ -19,14 +19,13 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Assembly;
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.Scenario;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.viewer.action.ScenarioNewInstanceAction;
-import gnu.trove.THashMap;
+import ca.sfu.federation.action.ScenarioNewInstanceAction;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -34,10 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Enumeration;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Vector;
+import java.util.*;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -59,7 +55,7 @@ import org.netbeans.api.visual.widget.Widget;
 public class IContextGraphViewerPanel extends JPanel implements MouseListener, Observer {
     
     //-------------------------------------------------------------------------
-    // FIELDS
+
     
     // view components
     private JScrollPane jScrollPane;
@@ -68,11 +64,11 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     // scene
     private ParametricModel model;
     private IContext context;
-    private THashMap scenes;
+    private LinkedHashMap scenes;
     private MutableSceneModel scene;
     
     //-------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * IContextGraphViewerPanel constructor.
@@ -80,8 +76,8 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     public IContextGraphViewerPanel() {
         // init
         this.model = ParametricModel.getInstance();
-        this.context = (IContext) this.model.getViewState(ConfigManager.VIEWER_CURRENT_CONTEXT);
-        this.scenes = (THashMap) this.model.getViewState(ConfigManager.VIEWER_ICONTEXTVIEWER_SCENES);
+        this.context = (IContext) this.model.getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
+        this.scenes = (LinkedHashMap) this.model.getViewState(ApplicationContext.VIEWER_ICONTEXTVIEWER_SCENES);
         // add scene view to scrollpane, scrollpane to panel
         this.addMouseListener(this);
         this.setLayout(new BorderLayout());
@@ -98,7 +94,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     }
     
     //-------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Build the default toolbar.
@@ -118,7 +114,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
         });
         btnNewAssembly.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
-                IContext context = (IContext) ParametricModel.getInstance().getViewState(ConfigManager.VIEWER_CURRENT_CONTEXT);
+                IContext context = (IContext) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
                 Assembly assembly = new Assembly(context);
             }
         });
@@ -134,7 +130,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
      */
     private void buildGraph() {
         // get the current context
-        this.context = (IContext) this.model.getViewState(ConfigManager.VIEWER_CURRENT_CONTEXT);
+        this.context = (IContext) this.model.getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
         System.out.println("INFO: IContextGraphViewerPanel set to " + this.context.getCanonicalName());
         if (this.context == null) {
             return;
@@ -180,33 +176,33 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
      * Build the Navigation panel.
      */
     public void buildNavPanel() {
-        Vector elements = new Vector();
+        ArrayList elements = new ArrayList();
         if (this.context instanceof ParametricModel) {
             // just add a widget for the model
             JButton btn = new JButton(this.context.getName());
-            btn.setBackground(ConfigManager.BACKGROUND_BRIGHT);
-            btn.setForeground(ConfigManager.TEXT_DARK);
+            btn.setBackground(ApplicationContext.BACKGROUND_BRIGHT);
+            btn.setForeground(ApplicationContext.TEXT_DARK);
             // this.add(btn,BorderLayout.SOUTH);
             // this.navpanel.add(btn);
         } else {
-            Vector parents = (Vector) this.context.getParents();
+            ArrayList parents = (ArrayList) this.context.getParents();
             // add a widget for each element
-            Enumeration e = parents.elements();
+            Iterator e = parents.iterator();
             JButton btn = null;
-            while (e.hasMoreElements()) {
-                Object object = e.nextElement();
+            while (e.hasNext()) {
+                Object object = e.next();
                 if (object instanceof INamed) {
                     INamed named = (INamed) object;
                     btn = new JButton(named.getName());
                     // JButton btn = new JButton("Named");
-                    btn.setBackground(ConfigManager.BACKGROUND_LIGHT);
-                    btn.setForeground(ConfigManager.TEXT_DARK);
+                    btn.setBackground(ApplicationContext.BACKGROUND_LIGHT);
+                    btn.setForeground(ApplicationContext.TEXT_DARK);
                     // this.add(btn,BorderLayout.SOUTH);
                     // this.navpanel.add(btn);
                 }
             }
-            btn.setBackground(ConfigManager.BACKGROUND_BRIGHT);
-            btn.setForeground(ConfigManager.TEXT_DARK);
+            btn.setBackground(ApplicationContext.BACKGROUND_BRIGHT);
+            btn.setForeground(ApplicationContext.TEXT_DARK);
         }
     }
     
@@ -223,7 +219,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     public void mouseReleased(MouseEvent e) {
         System.out.println("INFO: mouse released " + e.getPoint().getLocation().toString());
         Point p = e.getPoint();
-        this.model.setViewState(ConfigManager.VIEWER_LAST_MOUSERELEASE,p);
+        this.model.setViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE,p);
     }
     
     public void mouseEntered(MouseEvent e) {
@@ -242,7 +238,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
             Integer eventId = (Integer) arg;
             System.out.println("INFO: IContextGraphViewerPanel received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_CONTEXT_CHANGE:
+                case ApplicationContext.EVENT_CONTEXT_CHANGE:
                     System.out.println("INFO: IContextGraphViewerPanel fired context change.");
                     // stop listening on the previous context
                     if (this.context instanceof Observable  && this.context != this.model) {
@@ -252,7 +248,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
                     // update the graph
                     this.buildGraph();
                     break;
-                case ConfigManager.EVENT_STATE_CHANGE:
+                case ApplicationContext.EVENT_STATE_CHANGE:
                     System.err.println("WARNING: IContextGraphViewerPanel state change not implemented.");
                     break;
             }
@@ -268,13 +264,13 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     private final class IContextGraphViewerPanelPopupProvider implements PopupMenuProvider, ActionListener {
         
         //----------------------------------------------------------------------
-        // FIELDS
+    
         
         private JPopupMenu menu;
         private AntialiasedScene scene;
         
         //----------------------------------------------------------------------
-        // CONSTRUCTORS
+    
         
         /**
          * Popup menu provider.
@@ -287,7 +283,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
             menu = new JPopupMenu("Model Object Actions");
             JMenuItem menuitem;
             // menu item - add Scenario
-            IContext context = (IContext) ParametricModel.getInstance().getViewState(ConfigManager.VIEWER_CURRENT_CONTEXT);
+            IContext context = (IContext) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
             if (context instanceof ParametricModel) {
                 ParametricModel model = (ParametricModel) context;
                 menuitem = new JMenuItem("New Scenario");
@@ -304,7 +300,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
         }
         
         //----------------------------------------------------------------------
-        // METHODS
+    
         
         public JPopupMenu getPopupMenu(Widget widget) {
             return menu;

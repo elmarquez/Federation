@@ -19,9 +19,9 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.viewer.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.IContextSetCurrentAction;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,14 +48,14 @@ import org.netbeans.api.visual.widget.Widget;
 public class BreadCrumbWidget extends Widget {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private static final String ACTION_SET_CONTEXT_FOCUS = "OPEN_CONTEXT"; // NOI18N
     
     private IContext target; // the target that this widget points to
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
     
     /**
      * BreadCrumbWidget2 constructor.
@@ -73,7 +73,7 @@ public class BreadCrumbWidget extends Widget {
         
         // set label
         LabelWidget label = new LabelWidget(MyScene, MyContext.getName());
-        label.setForeground(ConfigManager.TEXT_LIGHT);
+        label.setForeground(ApplicationContext.TEXT_LIGHT);
         this.addChild(label);
         
         // add target menu to widget
@@ -83,7 +83,7 @@ public class BreadCrumbWidget extends Widget {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Get the target target of the widget.
@@ -103,14 +103,14 @@ public class BreadCrumbWidget extends Widget {
     private final class MyPopupProvider implements PopupMenuProvider, ActionListener {
 
         //----------------------------------------------------------------------
-        // FIELDS
+    
         
         private JPopupMenu menu;
         private AntialiasedScene scene;
         private BreadCrumbWidget widget;
         
         //----------------------------------------------------------------------
-        // CONSTRUCTORS
+    
 
         /**
          * Popup menu provider.
@@ -130,7 +130,7 @@ public class BreadCrumbWidget extends Widget {
         }
         
         //----------------------------------------------------------------------
-        // METHODS
+    
 
         public JPopupMenu getPopupMenu(Widget widget) {
             return menu;

@@ -19,22 +19,12 @@
 
 package ca.sfu.federation.model;
 
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import com.developer.rose.BeanProxy;
-import gnu.trove.THashMap;
-import gnu.trove.THashSet;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 import javax.media.j3d.Group;
 import javax.media.j3d.Node;
 import org.openide.util.Utilities;
@@ -54,15 +44,15 @@ import org.openide.util.Utilities;
 public class Scenario extends Observable implements IContext, IViewable, IGraphable, IUpdateable, Observer, Serializable {
 
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private String name;            // object name
     private IContext context;       // the parent context
     private boolean isVisible;      // visibility state
     
-    private THashMap contextual;    // collection of objects from external contexts
-    private THashMap transactional; // collection of objects in the local context
-    private Vector updateOrder;     // the order by which objects are updated
+    private LinkedHashMap contextual;    // collection of objects from external contexts
+    private LinkedHashMap transactional; // collection of objects in the local context
+    private ArrayList updateOrder;     // the order by which objects are updated
     
     // metadata
     private String description;     // description of this scenario
@@ -70,7 +60,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     private Image thumbnail;        // generated thumbnail
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /**
      * Scenario constructor.
@@ -78,7 +68,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      */
     public Scenario(IContext MyContext) {
         // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // generate a name for the new scenario
         String basename = "Scenario";
         int index = 0;
@@ -93,9 +83,9 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         }
         // set properties
         this.context = MyContext;
-        this.contextual = new THashMap();
-        this.transactional = new THashMap();
-        this.updateOrder = new Vector();
+        this.contextual = new LinkedHashMap();
+        this.transactional = new LinkedHashMap();
+        this.updateOrder = new ArrayList();
         this.description = "Empty Scenario description.";
         this.icon = Utilities.loadImage(config.getString("scenario-icon"));
         this.thumbnail = Utilities.loadImage(config.getString("scenario-thumbnail"));
@@ -114,13 +104,13 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      */
     public Scenario(String Name, IContext MyContext) {
         // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ConfigManager.APPLICATION_PROPERTIES);
+        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // set properties
         this.name = Name;
         this.context = MyContext;
-        this.contextual = new THashMap();
-        this.transactional = new THashMap();
-        this.updateOrder = new Vector();
+        this.contextual = new LinkedHashMap();
+        this.transactional = new LinkedHashMap();
+        this.updateOrder = new ArrayList();
         this.description = "Empty Scenario description.";
         this.icon = Utilities.loadImage(config.getString("scenario-icon"));
         this.thumbnail = Utilities.loadImage(config.getString("scenario-thumbnail"));
@@ -133,7 +123,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
     
     /**
      * Add a NamedObject to the Scenario.
@@ -156,7 +146,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         }
         // generate change event
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_ADD));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_ADD));
     }
 
     /**
@@ -181,7 +171,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         }
         // generate change event
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_ADD));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_ADD));
     }
 
     /**
@@ -208,7 +198,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         // tell observers to release me
         System.out.println("INFO: Scenario signalled Observers to release and delete object.");
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_DELETE_REQUEST));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST));
     }
     
     /**
@@ -236,7 +226,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      * Get the collection of Contextual elements in this Scenario.
      * @return Collection of Contextual elements in this Scenario.
      */
-    public THashMap getContextualElements() {
+    public LinkedHashMap getContextualElements() {
         return this.contextual;
     }
 
@@ -246,8 +236,8 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      */
     public Map getDependancies() {
         // init
-        THashMap results = new THashMap();
-        THashSet dependancies = new THashSet();
+        LinkedHashMap results = new LinkedHashMap();
+        HashSet dependancies = new HashSet();
         // scenario dependancies come from contextual object references
         Iterator iter = this.contextual.values().iterator();
         while (iter.hasNext()) {
@@ -278,7 +268,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     */
     public Map getElements() {
         // init
-        THashMap results = new THashMap();
+        LinkedHashMap results = new LinkedHashMap();
         // put all objects into result table
         results.putAll(this.contextual);
         results.putAll(this.transactional);
@@ -292,7 +282,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      */
     private List getElementsInTopologicalOrder() {
         // init
-        Vector ordered = new Vector();
+        ArrayList ordered = new ArrayList();
         // create the update order
         Iterator iter = this.transactional.values().iterator();
         while (iter.hasNext()) {
@@ -300,7 +290,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
             // if the object can have dependancies
             if (object instanceof IGraphable) {
                 IGraphable graphobject = (IGraphable) object;
-                THashMap d = (THashMap) graphobject.getDependancies();
+                LinkedHashMap d = (LinkedHashMap) graphobject.getDependancies();
                 // add dependencies first, then add object
                 Iterator it = d.values().iterator();
                 while (it.hasNext()) {
@@ -345,7 +335,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      * @return List of Parent contexts.
      */
     public List getParents() {
-        Vector parents = new Vector();
+        ArrayList parents = new ArrayList();
         // add predecessors first
         if (this.context != null) {
             parents.addAll(this.context.getParents());
@@ -370,7 +360,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      */
     public Image getThumbnail() {
         ParametricModel model = ParametricModel.getInstance();
-        THashMap thumbnails = (THashMap) model.getViewState(ConfigManager.VIEWER_ICONTEXT_THUMBNAILS);
+        LinkedHashMap thumbnails = (LinkedHashMap) model.getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
         String name = this.getCanonicalName();
         BufferedImage bimage = null;
         if (thumbnails.containsKey(name)) {
@@ -388,7 +378,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      */
     public List getVersions(String Name) {
         // init
-        Vector version = new Vector();
+        ArrayList version = new ArrayList();
         // get versions recursively
         if (this.transactional.containsKey(Name)) {
             version.add(this.transactional.get(Name));
@@ -536,7 +526,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         // notify observers
         if (found) {
             this.setChanged();
-            this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_DELETED));
+            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETED));
         }
     }
 
@@ -573,7 +563,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         this.description = Description;
         // generate change event
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_PROPERTY_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_PROPERTY_CHANGE));
     }
     
     /**
@@ -584,7 +574,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         this.name = Name;
         // generate change event
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_NAME_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_NAME_CHANGE));
     }
 
     /**
@@ -594,7 +584,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         this.isVisible = state;
         // generate change event
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_PROPERTY_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_PROPERTY_CHANGE));
     }
 
     /**
@@ -605,12 +595,12 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         // clearResult the SAE result caches
         this.clearResultCache();
         // get nodes in topological order
-        Vector elements = (Vector) this.getElementsInTopologicalOrder();
+        ArrayList elements = (ArrayList) this.getElementsInTopologicalOrder();
         // update nodes
         boolean updateSuccessful = true;
-        Enumeration e = elements.elements();
-        while (e.hasMoreElements() && updateSuccessful) {
-            Object object = e.nextElement();
+        Iterator e = elements.iterator();
+        while (e.hasNext() && updateSuccessful) {
+            Object object = e.next();
             if (object instanceof IUpdateable) {
                 IUpdateable updateable = (IUpdateable) object;
                 updateSuccessful = updateable.update();
@@ -618,7 +608,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         }
         // generate change event
         this.setChanged();
-        this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_CHANGE));
+        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_CHANGE));
         // return result
         return updateSuccessful;
     }
@@ -634,37 +624,37 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
             Integer eventId = (Integer) arg;
             System.out.println("INFO: Scenario received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_CHANGE:
+                case ApplicationContext.EVENT_CHANGE:
                     break;
-                case ConfigManager.EVENT_DESCRIPTION_CHANGE:
+                case ApplicationContext.EVENT_DESCRIPTION_CHANGE:
                     break;
-                case ConfigManager.EVENT_ELEMENT_ADD:
+                case ApplicationContext.EVENT_ELEMENT_ADD:
                     break;
-                case ConfigManager.EVENT_ELEMENT_CHANGE:
+                case ApplicationContext.EVENT_ELEMENT_CHANGE:
                     this.update();
                     this.setChanged();
-                    this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_CHANGE));
+                    this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_CHANGE));
                     System.out.println("INFO: Scenario fired local update.");
                     break;
-                case ConfigManager.EVENT_ELEMENT_DELETE_REQUEST:
+                case ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST:
                     System.out.println("INFO: Scenario fired element delete.");
                     named = (INamed) o;
                     this.remove(named);
                     break;
-                case ConfigManager.EVENT_ELEMENT_RENAME:
+                case ApplicationContext.EVENT_ELEMENT_RENAME:
                     break;
-                case ConfigManager.EVENT_ICON_CHANGE:
+                case ApplicationContext.EVENT_ICON_CHANGE:
                     break;
-                case ConfigManager.EVENT_NAME_CHANGE:
+                case ApplicationContext.EVENT_NAME_CHANGE:
                     named = (INamed) o;
                     this.updateElementName(named);
                     this.setChanged();
-                    this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_ELEMENT_RENAME));
+                    this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_RENAME));
                     System.out.println("INFO: Scenario fired name change update.");
                     break;
-                case ConfigManager.EVENT_THUMBNAIL_CHANGE:
+                case ApplicationContext.EVENT_THUMBNAIL_CHANGE:
                     this.setChanged();
-                    this.notifyObservers(Integer.valueOf(ConfigManager.EVENT_THUMBNAIL_CHANGE));
+                    this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_THUMBNAIL_CHANGE));
                     System.out.println("INFO: Scenario fired thumbnail change.");
                     break;
                 default:

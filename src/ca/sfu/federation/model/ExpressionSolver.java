@@ -18,8 +18,8 @@
  */
 package ca.sfu.federation.model;
 
-import gnu.trove.THashSet;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -34,16 +34,16 @@ import java.util.Set;
 public class ExpressionSolver implements Serializable {
     
     //--------------------------------------------------------------------------
-    // FIELDS
+
 
     private Expression expressionTree; // expressionTree tree
     private IContext context;          // the collection of NamedObjects accessible by this solver
     private Class  resultClass;        // the class of the expressionTree result object
     private Object resultObj;          // the expressionTree result
-    private THashSet dependancies;     // SystolicArrayElements that the expressionTree is dependant upon
+    private HashSet dependancies;     // SystolicArrayElements that the expressionTree is dependant upon
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /**
      * ExpressionSolver constructor.
@@ -54,7 +54,7 @@ public class ExpressionSolver implements Serializable {
         this.context = null;
         this.resultClass = null;
         this.resultObj = null;
-        this.dependancies = new THashSet();
+        this.dependancies = new HashSet();
     }
 
     /**
@@ -68,7 +68,7 @@ public class ExpressionSolver implements Serializable {
         // build the expression tree
         expressionTree = buildExpressionTree(MyExpression, Context);
         // build the list of unique dependancies for the expression tree
-        this.dependancies = new THashSet();
+        this.dependancies = new HashSet();
         Iterator iter = this.expressionTree.getDependancies().iterator();
         while (iter.hasNext()) {
            this.dependancies.add(iter.next());
@@ -76,7 +76,7 @@ public class ExpressionSolver implements Serializable {
     }
 
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     /**
      * Build an expression tree from the user specified statement.

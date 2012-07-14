@@ -23,7 +23,7 @@ import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.exception.NonExistantMethodException;
 import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
-import ca.sfu.federation.model.ConfigManager;
+import ca.sfu.federation.ApplicationContext;
 import com.developer.rose.BeanProxy;
 import java.beans.IntrospectionException;
 import java.lang.reflect.Method;
@@ -42,7 +42,7 @@ import javax.swing.JTextField;
 public class CoordinateSystemPropertySheet extends JPanel implements Observer {
 
     //--------------------------------------------------------------------------
-    // FIELDS
+
     
     private JScrollPane jScrollPane1;
     private JComboBox jcbUpdateMethod;
@@ -69,7 +69,7 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
     private Component target;
     
     //--------------------------------------------------------------------------
-    // CONSTRUCTORS
+
 
     /** 
      * ParametricModelSheet constructor.
@@ -240,7 +240,7 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
     }
     
     //--------------------------------------------------------------------------
-    // METHODS
+
 
     private void jtfDescriptionActionListener(java.awt.event.ActionEvent evt) {                                              
         String command = evt.getActionCommand();
@@ -324,7 +324,7 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
     
     private void setValues() {
         // target
-        this.target = (Component) this.model.getViewState(ConfigManager.VIEWER_SELECTION);
+        this.target = (Component) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
         // listen for changes on the target
         if (this.target instanceof Observable) {
             Observable o = (Observable) this.target;
@@ -354,7 +354,7 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
             Integer eventId = (Integer) arg;
             System.out.println("INFO: ComponentSheet received event notification id " + eventId);
             switch (eventId) {
-                case ConfigManager.EVENT_PROPERTY_CHANGE:
+                case ApplicationContext.EVENT_PROPERTY_CHANGE:
                     System.out.println("INFO: ComponentSheet fired property change event.");
                     this.setValues();
                     break;
