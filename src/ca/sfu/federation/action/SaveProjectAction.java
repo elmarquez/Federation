@@ -19,22 +19,21 @@
 
 package ca.sfu.federation.action;
 
+import ca.sfu.federation.Application;
+import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.ParametricModel;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
 
 /**
- *
+ * Save the project state to persistent storage.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class SaveProjectAction extends AbstractAction {
-    
-    //--------------------------------------------------------------------------
-
-    
-    //--------------------------------------------------------------------------
-
+        
+    private static final Logger logger = Logger.getLogger(SaveProjectAction.class.getName());
     
     /**
      * AssemblyNewInstanceAction constructor.
@@ -47,12 +46,26 @@ public class SaveProjectAction extends AbstractAction {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
+        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control S"));
+        Icon icon = new ImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
+        this.putValue(Action.SMALL_ICON, icon);
     }
     
     //--------------------------------------------------------------------------
 
-    
+    /**
+     * Perform the action.
+     * @param e 
+     */
     public void actionPerformed(ActionEvent e) {
+        ApplicationContext context = Application.getContext();
+        ParametricModel model = context.getModel();
+        if (model != null) {
+            logger.log(Level.INFO,"Saving the project to {0}","path");
+            logger.log(Level.INFO,"Project file saved");
+        } else {
+            logger.log(Level.WARNING,"Could not save the project because no model is currently open");
+        }
     }
     
-} 
+} // end class

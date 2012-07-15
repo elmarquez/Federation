@@ -33,7 +33,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 public class Application implements Runnable {
 
     private static ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    private static ResourceBundle resource = ResourceBundle.getBundle("ca/sfu/federation/resources/Application");
+    private static ResourceBundle resource = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
     private static ApplicationContext context = new ApplicationContext();
     private static ApplicationFrame frame;
 

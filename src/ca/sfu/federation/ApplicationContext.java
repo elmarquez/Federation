@@ -32,7 +32,7 @@ public class ApplicationContext extends Observable {
 
     private static ParametricModel model;
     
-    public static final String APPLICATION_PROPERTIES = "ca/sfu/federation/resources/ParametricModeller";
+    public static final String APPLICATION_PROPERTIES = "ca/sfu/federation/resources/application";
 
     // APPLICATION APPEARANCE 
     public static final Color BACKGROUND_DARK = new Color(40,40,40);

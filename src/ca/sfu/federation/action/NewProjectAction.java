@@ -13,7 +13,6 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 59
  * Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package ca.sfu.federation.action;
 
 import ca.sfu.federation.Application;
@@ -27,8 +26,7 @@ import ca.sfu.federation.model.geometry.Point;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
+import javax.swing.*;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
@@ -50,8 +48,12 @@ public class NewProjectAction extends AbstractAction {
      */
     public NewProjectAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
         super(Name, MyIcon);
-        this.putValue(SHORT_DESCRIPTION,ToolTip);
-        this.putValue(MNEMONIC_KEY,MnemonicId);
+        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control N"));
+        this.putValue(Action.LONG_DESCRIPTION,ToolTip);
+        this.putValue(Action.MNEMONIC_KEY,MnemonicId);
+        this.putValue(Action.SHORT_DESCRIPTION,ToolTip);
+        Icon icon = new ImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
+        this.putValue(Action.SMALL_ICON, icon);
     }
     
     //--------------------------------------------------------------------------
@@ -66,6 +68,7 @@ public class NewProjectAction extends AbstractAction {
         ParametricModel model = initDemoModel();
         Application.getContext().setModel(model);
         // updating the model for the first time
+        logger.log(Level.INFO,"Updating the model state");
         model.update();
     }
     

@@ -13,16 +13,15 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 59
  * Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package ca.sfu.federation.action;
 
 import ca.sfu.federation.model.INamed;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 /**
  * Delete the INamed from the model.
@@ -35,6 +34,16 @@ public class DeleteINamedAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
     
+    public DeleteINamedAction() {
+        super("Delete", null);
+        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
+        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("delete"));
+        this.putValue(Action.LONG_DESCRIPTION, "Delete selected items");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);
+        this.putValue(Action.SHORT_DESCRIPTION, "Delete selected items");
+        this.putValue(Action.SMALL_ICON, icon);
+    }
+
     /**
      * INamedObjectDeleteAction constructor.
      * @param Name Action name that will appear in menus.
