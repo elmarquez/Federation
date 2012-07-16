@@ -21,10 +21,10 @@ package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.SetCurrentIContextAction;
 import ca.sfu.federation.action.DeleteINamedAction;
 import ca.sfu.federation.action.RenameINamedAction;
-import ca.sfu.federation.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.SetPropertySheetFocusAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -62,7 +62,7 @@ public class ScenarioSmallVisualWidgetPopupProvider implements PopupMenuProvider
         // create menu
         menu = new JPopupMenu("Model Object Actions");
         // menu item - set the target as the focus
-        IContextSetCurrentAction setfocus = new IContextSetCurrentAction("Open Scenario",null,"Open Scenario",new Integer(KeyEvent.VK_O),target);
+        SetCurrentIContextAction setfocus = new SetCurrentIContextAction("Open Scenario",null,"Open Scenario",new Integer(KeyEvent.VK_O),target);
         menu.add(setfocus);
         // menu item - rename target object
         RenameINamedAction rename = new RenameINamedAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),(INamed)target);
@@ -73,7 +73,7 @@ public class ScenarioSmallVisualWidgetPopupProvider implements PopupMenuProvider
         // separator
         menu.add(new JSeparator());
         // menu item - properties
-        PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),target);
+        SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),target);
         menu.add(pssfa);
     }
     

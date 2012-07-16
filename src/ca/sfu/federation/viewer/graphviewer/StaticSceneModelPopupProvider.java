@@ -27,11 +27,11 @@ import ca.sfu.federation.model.geometry.CoordinateSystem;
 import ca.sfu.federation.model.geometry.Line;
 import ca.sfu.federation.model.geometry.Plane;
 import ca.sfu.federation.model.geometry.Point;
-import ca.sfu.federation.action.AssemblyNewInstanceAction;
-import ca.sfu.federation.action.ComponentNewInstanceAction;
-import ca.sfu.federation.action.ScenarioNewInstanceAction;
-import ca.sfu.federation.action.GraphViewerAddAnnotationAction;
-import ca.sfu.federation.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.CreateAssemblyAction;
+import ca.sfu.federation.action.CreateComponentAction;
+import ca.sfu.federation.action.CreateScenarioAction;
+import ca.sfu.federation.action.AddGraphViewerAnnotationAction;
+import ca.sfu.federation.action.SetCurrentIContextAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -88,12 +88,12 @@ public class StaticSceneModelPopupProvider implements PopupMenuProvider, ActionL
         
         if (this.context instanceof ParametricModel) {
             // add Annotation
-            GraphViewerAddAnnotationAction vaaa = new GraphViewerAddAnnotationAction("Annotation",null,"Annotation",new Integer(KeyEvent.VK_A),this.scene);
+            AddGraphViewerAnnotationAction vaaa = new AddGraphViewerAnnotationAction("Annotation",null,"Annotation",new Integer(KeyEvent.VK_A),this.scene);
             submenu.add(vaaa);
         }
         if (this.context instanceof Scenario || this.context instanceof Assembly) {
             // add Assembly
-            AssemblyNewInstanceAction ania = new AssemblyNewInstanceAction("Assembly",null,"Assembly",null,this.context);
+            CreateAssemblyAction ania = new CreateAssemblyAction("Assembly",null,"Assembly",null,this.context);
             submenu.add(ania);
         }
         if (this.context instanceof Assembly) {
@@ -105,20 +105,20 @@ public class StaticSceneModelPopupProvider implements PopupMenuProvider, ActionL
             // add Component
             JMenu subsubmenu = new JMenu("Component");
             submenu.setMnemonic(new Integer(KeyEvent.VK_C));
-            ComponentNewInstanceAction cnia = null;
-            cnia = new ComponentNewInstanceAction("CoordinateSystem",null,"CoordinateSystem",null,this.context,CoordinateSystem.class);
+            CreateComponentAction cnia = null;
+            cnia = new CreateComponentAction("CoordinateSystem",null,"CoordinateSystem",null,this.context,CoordinateSystem.class);
             subsubmenu.add(cnia);
-            cnia = new ComponentNewInstanceAction("Point",null,"Point",null,this.context,Point.class);
+            cnia = new CreateComponentAction("Point",null,"Point",null,this.context,Point.class);
             subsubmenu.add(cnia);
-            cnia = new ComponentNewInstanceAction("Line",null,"Line",null,this.context,Line.class);
+            cnia = new CreateComponentAction("Line",null,"Line",null,this.context,Line.class);
             subsubmenu.add(cnia);
-            cnia = new ComponentNewInstanceAction("Plane",null,"Plane",null,this.context,Plane.class);
+            cnia = new CreateComponentAction("Plane",null,"Plane",null,this.context,Plane.class);
             subsubmenu.add(cnia);
             submenu.add(subsubmenu);
         }
         if (this.context instanceof ParametricModel) {
             // add Scenario
-            ScenarioNewInstanceAction snia = new ScenarioNewInstanceAction("Scenario",null,"Scenario",new Integer(KeyEvent.VK_S));
+            CreateScenarioAction snia = new CreateScenarioAction("Scenario",null,"Scenario",new Integer(KeyEvent.VK_S));
             submenu.add(snia);
         }
         menu.add(submenu);
@@ -131,7 +131,7 @@ public class StaticSceneModelPopupProvider implements PopupMenuProvider, ActionL
         while (e.hasNext()) {
             IContext c = (IContext) e.next();
             String name = c.getCanonicalName();
-            IContextSetCurrentAction vscfa = new IContextSetCurrentAction(name,null,name,null,c);
+            SetCurrentIContextAction vscfa = new SetCurrentIContextAction(name,null,name,null,c);
             submenu.add(vscfa);
         }
         menu.add(submenu);

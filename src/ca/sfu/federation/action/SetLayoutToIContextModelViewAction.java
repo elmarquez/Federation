@@ -1,5 +1,5 @@
 /**
- * AbstractTreeExplorerNewInstanceAction.java
+ * ViewerSetLayoutAsScenarioModelView.java
  * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,31 +19,35 @@
 
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.viewer.explorer.AbstractTreeExplorerJFrame;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
+ * Set the application to the Scenario Model View layout.
  * @author Davis Marques
  * @version 0.1.0
  */
-public class AbstractTreeExplorerNewInstanceAction extends AbstractAction {
+public class SetLayoutToIContextModelViewAction extends AbstractAction {
     
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(SetLayoutToIContextModelViewAction.class.getName());
     
     //--------------------------------------------------------------------------
 
     
     /**
-     * AbstractTreeExplorerNewInstanceAction constructor.
+     * SetLayoutToIContextModelViewAction constructor.
+     * 
+     * 
      * @param Name The fully qualified context name to set as the current context.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
      */
-    public AbstractTreeExplorerNewInstanceAction(String Name,Icon MyIcon,String ToolTip,Integer MnemonicId) {
+    public SetLayoutToIContextModelViewAction(String Name,Icon MyIcon,String ToolTip,Integer MnemonicId) {
         super(Name,MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
@@ -56,8 +60,9 @@ public class AbstractTreeExplorerNewInstanceAction extends AbstractAction {
      * Set the current context.
      * @param e Action event.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
-        AbstractTreeExplorerJFrame frame = new AbstractTreeExplorerJFrame();
+        logger.log(Level.INFO,"Change application layout to ScenarioModelView. Not implemented yet.");
     }
     
-} // end class
+} 

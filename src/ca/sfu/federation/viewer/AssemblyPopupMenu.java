@@ -21,11 +21,11 @@ package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.model.Assembly;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.action.ComponentNewInstanceAction;
+import ca.sfu.federation.action.CreateComponentAction;
 import ca.sfu.federation.action.DeleteINamedAction;
 import ca.sfu.federation.action.RenameINamedAction;
-import ca.sfu.federation.action.IContextSetCurrentAction;
-import ca.sfu.federation.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.SetCurrentIContextAction;
+import ca.sfu.federation.action.SetPropertySheetFocusAction;
 import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
@@ -54,13 +54,13 @@ public class AssemblyPopupMenu extends JPopupMenu {
         this.target = MyAssembly;
         // add sub elements
         JMenu submenu = new JMenu("Add");
-        ComponentNewInstanceAction cnia = new ComponentNewInstanceAction("Component",null,"Component",new Integer(KeyEvent.VK_C),target);
+        CreateComponentAction cnia = new CreateComponentAction("Component",null,"Component",new Integer(KeyEvent.VK_C),target);
         submenu.add(cnia);
         this.add(submenu);
         // separator
         this.add(new JSeparator());
         // edit
-        IContextSetCurrentAction vscfa = new IContextSetCurrentAction("Open Assembly",null,"Open Assembly",new Integer(KeyEvent.VK_O),target);
+        SetCurrentIContextAction vscfa = new SetCurrentIContextAction("Open Assembly",null,"Open Assembly",new Integer(KeyEvent.VK_O),target);
         this.add(vscfa);
         // rename
         RenameINamedAction inora = new RenameINamedAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R),target);
@@ -69,7 +69,7 @@ public class AssemblyPopupMenu extends JPopupMenu {
         DeleteINamedAction inoda = new DeleteINamedAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),target);
         this.add(inoda);
         // properties
-        PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)this.target);
+        SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)this.target);
         this.add(pssfa);
     }
     

@@ -1,7 +1,4 @@
 /**
- * ModelViewerCanvas3D.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,6 +16,7 @@
 
 package ca.sfu.federation.viewer.modelviewer;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.*;
 import com.sun.j3d.utils.behaviors.vp.OrbitBehavior;
@@ -30,10 +28,12 @@ import java.awt.GraphicsConfiguration;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.util.LinkedHashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.j3d.*;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
@@ -45,9 +45,8 @@ import javax.vecmath.Point3f;
  * @version 0.1.0
  */
 public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Observer {
-    
-    //--------------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(ModelViewerCanvas3D.class.getName());
     
     private static final float ORIGIN_AXIS_LENGTH = 1.0f;
     private static final boolean ORIGIN_NEGATIVE_AXES = false;
@@ -75,7 +74,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
      */
     public ModelViewerCanvas3D(GraphicsConfiguration Config) {
         super(Config);
-        this.model = ParametricModel.getInstance();
+        this.model = Application.getContext().getModel();
         // update the context before displaying
         if (this.context != null && this.context instanceof IUpdateable) {
             IUpdateable updateable = (IUpdateable) this.context;
@@ -136,7 +135,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
     private Shape3D buildOriginAxis() {
         // axis shape
         LineArray axis = null;
-        if (this.ORIGIN_NEGATIVE_AXES) {
+        if (ORIGIN_NEGATIVE_AXES) {
             // show positive and negative axes
             axis = new LineArray(6,GeometryArray.COORDINATES | GeometryArray.COLOR_3);
             // X-Axis
@@ -182,7 +181,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
      */
     private void buildScene() {
         // get the context
-        this.context = (IContext) this.model.getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
+        this.context = (IContext) Application.getContext().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
         // clear the current scene, if it has already been initialized
         if (!init) {
             this.scene.removeAllChildren();
@@ -238,16 +237,16 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
         pickCanvas.setShapeLocation(e);
         PickResult info = pickCanvas.pickClosest();
         if (info == null) {
-            System.out.println("Nothing picked");
+            logger.log(Level.INFO,"Nothing picked");
         } else {
             Node node = info.getObject();
             if (node instanceof DisplayObject3D) {
                 DisplayObject3D displayobject = (DisplayObject3D) node;
                 IViewable target = displayobject.getTarget();
                 INamed named = (INamed) target;
-                System.out.println("INFO: User picked " + named.getName() + " " + named.toString());
+                logger.log(Level.INFO,"User picked {0} ", named.getName());
             } else {
-                System.out.println("INFO: User picked " + node.getClass().getName());
+                logger.log(Level.INFO,"User picked {0} ", node.getClass().getName());
             }
         }
     }
@@ -284,9 +283,9 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
      * Set the context thumbnail.
      */
     public void setThumbnail() {
-        System.out.println("INFO: ModelViewer3D fired scene thumbnail update button.");
+        logger.log(Level.INFO,"ModelViewer3D fired scene thumbnail update button");
         BufferedImage image = this.getThumbnail();
-        LinkedHashMap thumbnails = (LinkedHashMap) this.model.getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
+        LinkedHashMap thumbnails = (LinkedHashMap) Application.getContext().getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
         thumbnails.put(this.context.getCanonicalName(),image);
         // this will force an update event from the model
         this.model.setViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS,thumbnails);
@@ -300,7 +299,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: ModelViewerCanvas3D received event notification id " + eventId);
+            logger.log(Level.INFO,"ModelViewerCanvas3D received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_CHANGE:
                 case ApplicationContext.EVENT_CONTEXT_CHANGE:
@@ -308,7 +307,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
                 case ApplicationContext.EVENT_ELEMENT_CHANGE:
                 case ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST:
                 case ApplicationContext.EVENT_ELEMENT_RENAME:
-                    System.out.println("INFO: ModelViewer3D fired scene update update.");
+                    logger.log(Level.INFO,"ModelViewer3D fired scene update update");
                     this.buildScene();
                     break;
             }

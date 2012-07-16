@@ -1,7 +1,4 @@
 /**
- * AbstractTree.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -31,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -43,37 +41,34 @@ import javax.swing.tree.TreePath;
  * @version 0.1.0
  */
 public class AbstractTree extends JTree implements ActionListener {
-    
-    //--------------------------------------------------------------------------
 
-    
+    private static final Logger logger = Logger.getLogger(AbstractTree.class.getName());
+
     private JPopupMenu popup;
     private JMenuItem mi;
     private AbstractTree self;
-    
+
     //--------------------------------------------------------------------------
 
-    
     /**
      * AbstractTree constructor.
      */
     public AbstractTree(DefaultMutableTreeNode Node) {
         super(Node);
         self = this;
-        // define the popup
-        popup = new JPopupMenu();
-        mi = new JMenuItem("Insert a children");
-        mi.addActionListener(this);
-        mi.setActionCommand("insert");
-        popup.add(mi);
-        mi = new JMenuItem("Remove this node");
-        mi.addActionListener(this);
-        mi.setActionCommand("remove");
-        popup.add(mi);
-        popup.setOpaque(true);
-        popup.setLightWeightPopupEnabled(true);
-        // add mouse listener
-        addMouseListener(new MouseAdapter() {
+        popup = getPopup();
+        addMouseListener(getMouseAdapter());
+    }
+
+    //--------------------------------------------------------------------------
+
+
+    public void actionPerformed(ActionEvent e) {
+    }
+
+    private MouseAdapter getMouseAdapter() {
+        return new MouseAdapter() {
+            @Override
             public void mouseReleased( MouseEvent e ) {
                 if (e.isPopupTrigger()) {
                     TreePath path = self.getClosestPathForLocation(e.getX(),e.getY());
@@ -93,13 +88,22 @@ public class AbstractTree extends JTree implements ActionListener {
                     menu.show((JComponent)e.getSource(),e.getX(),e.getY());
                 }
             }
-        });
+        };
     }
-    
-    //--------------------------------------------------------------------------
 
-    
-    public void actionPerformed(ActionEvent e) {
+    private JPopupMenu getPopup() {
+        JPopupMenu menu = new JPopupMenu();
+        mi = new JMenuItem("Insert a child");
+        mi.addActionListener(this);
+        mi.setActionCommand("insert");
+        menu.add(mi);
+        mi = new JMenuItem("Remove this node");
+        mi.addActionListener(this);
+        mi.setActionCommand("remove");
+        menu.add(mi);
+        menu.setOpaque(true);
+        menu.setLightWeightPopupEnabled(true);
+        return menu;
     }
-    
+
 } // end class

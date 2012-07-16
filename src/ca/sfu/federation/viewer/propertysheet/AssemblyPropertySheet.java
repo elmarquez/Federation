@@ -16,9 +16,9 @@
 
 package ca.sfu.federation.viewer.propertysheet;
 
-import ca.sfu.federation.model.Assembly;
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
-import ca.sfu.federation.model.ParametricModel;
+import ca.sfu.federation.model.Assembly;
 import com.developer.rose.BeanProxy;
 import java.beans.IntrospectionException;
 import java.util.Observable;
@@ -35,7 +35,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  */
 public class AssemblyPropertySheet extends JPanel implements Observer {
     
-    private ParametricModel model;
     private Assembly target;
 
     private javax.swing.JTextField jtfCanonicalName;
@@ -169,9 +168,6 @@ public class AssemblyPropertySheet extends JPanel implements Observer {
                 .addContainerGap(64, Short.MAX_VALUE))
         );
         
-        // get the current object
-        this.model = ParametricModel.getInstance();
-        
         // disable non editable fields
         this.jtfCanonicalName.setEditable(false);
         this.jtfClass.setEditable(false);
@@ -293,7 +289,7 @@ public class AssemblyPropertySheet extends JPanel implements Observer {
     
     private void setValues() {
         // target
-        this.target = (Assembly) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
+        this.target = (Assembly) Application.getContext().getViewState(ApplicationContext.VIEWER_SELECTION);
         // listen for changes on the target
         if (this.target instanceof Observable) {
             Observable o = (Observable) this.target;

@@ -1,7 +1,4 @@
 /**
- * ScenarioPopupMenu.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,16 +16,12 @@
 
 package ca.sfu.federation.viewer;
 
-import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.Scenario;
+import ca.sfu.federation.Application;
+import ca.sfu.federation.action.*;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.action.AssemblyNewInstanceAction;
-import ca.sfu.federation.action.ComponentNewInstanceAction;
-import ca.sfu.federation.action.DeleteINamedAction;
-import ca.sfu.federation.action.RenameINamedAction;
-import ca.sfu.federation.action.IContextSetCurrentAction;
-import ca.sfu.federation.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.model.Scenario;
 import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
@@ -36,17 +29,14 @@ import javax.swing.JSeparator;
 /**
  * Scenario popup menu.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class ScenarioPopupMenu extends JPopupMenu {
-    
-    //--------------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(ScenarioPopupMenu.class.getName());
     
     private Scenario scenario;
 
     //--------------------------------------------------------------------------
-
     
     /**
      * ScenarioPopupMenu constructor.
@@ -56,15 +46,15 @@ public class ScenarioPopupMenu extends JPopupMenu {
         this.scenario = MyScenario;
         // add sub elements
         JMenu submenu = new JMenu("Add");
-        AssemblyNewInstanceAction ania = new AssemblyNewInstanceAction("Assembly",null,"Assembly",new Integer(KeyEvent.VK_A),this.scenario);
+        CreateAssemblyAction ania = new CreateAssemblyAction("Assembly",null,"Assembly",new Integer(KeyEvent.VK_A),this.scenario);
+        CreateComponentAction cnia = new CreateComponentAction("Component",null,"Component",new Integer(KeyEvent.VK_C),this.scenario);
         submenu.add(ania);
-        ComponentNewInstanceAction cnia = new ComponentNewInstanceAction("Component",null,"Component",new Integer(KeyEvent.VK_C),this.scenario);
         submenu.add(cnia);
         this.add(submenu);
         // separator
         this.add(new JSeparator());
         // edit this scenario
-        IContextSetCurrentAction vscfa = new IContextSetCurrentAction("Open Scenario",null,"Open Scenario",new Integer(KeyEvent.VK_O),this.scenario);
+        SetCurrentIContextAction vscfa = new SetCurrentIContextAction("Open Scenario",null,"Open Scenario",new Integer(KeyEvent.VK_O),this.scenario);
         this.add(vscfa);
         // rename
         RenameINamedAction inora = new RenameINamedAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R),this.scenario);
@@ -73,7 +63,8 @@ public class ScenarioPopupMenu extends JPopupMenu {
         DeleteINamedAction inoda = new DeleteINamedAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),this.scenario);
         this.add(inoda);
         // properties
-        PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)ParametricModel.getInstance());
+        SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),
+                (INamed)Application.getContext().getModel());
         this.add(pssfa);
     }
     

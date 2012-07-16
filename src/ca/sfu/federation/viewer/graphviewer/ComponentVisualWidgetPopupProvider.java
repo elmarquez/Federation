@@ -22,7 +22,7 @@ package ca.sfu.federation.viewer.graphviewer;
 import ca.sfu.federation.model.INamed;
 import ca.sfu.federation.action.DeleteINamedAction;
 import ca.sfu.federation.action.RenameINamedAction;
-import ca.sfu.federation.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.SetPropertySheetFocusAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -74,7 +74,7 @@ public class ComponentVisualWidgetPopupProvider implements PopupMenuProvider, Ac
         // separator
         menu.add(new JSeparator());
         // properties
-        PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),target);
+        SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),target);
         menu.add(pssfa);
         return menu;
     }

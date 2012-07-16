@@ -16,8 +16,9 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
-import ca.sfu.federation.action.ScenarioNewInstanceAction;
+import ca.sfu.federation.action.CreateScenarioAction;
 import ca.sfu.federation.model.*;
 import java.awt.BorderLayout;
 import java.awt.Point;
@@ -57,9 +58,8 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
      */
     public IContextGraphViewerPanel() {
         // init
-        this.model = ParametricModel.getInstance();
-        this.context = (IContext) this.model.getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
-        this.scenes = (LinkedHashMap) this.model.getViewState(ApplicationContext.VIEWER_ICONTEXTVIEWER_SCENES);
+        this.context = (IContext) Application.getContext().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
+        this.scenes = (LinkedHashMap) Application.getContext().getViewState(ApplicationContext.VIEWER_ICONTEXTVIEWER_SCENES);
         // add scene view to scrollpane, scrollpane to panel
         this.addMouseListener(this);
         this.setLayout(new BorderLayout());
@@ -89,13 +89,12 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
         JButton btnNewComponent = new JButton("New Component");
         btnNewScenario.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
-                ParametricModel model = ParametricModel.getInstance();
-                Scenario scenario = new Scenario(model);
+                Scenario scenario = new Scenario(Application.getContext().getModel());
             }
         });
         btnNewAssembly.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
-                IContext context = (IContext) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
+                IContext context = (IContext) Application.getContext().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
                 Assembly assembly = new Assembly(context);
             }
         });
@@ -111,8 +110,8 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
      */
     private void buildGraph() {
         // get the current context
-        this.context = (IContext) this.model.getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
-        System.out.println("INFO: IContextGraphViewerPanel set to " + this.context.getCanonicalName());
+        this.context = (IContext) Application.getContext().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
+        logger.log(Level.INFO,"IContextGraphViewerPanel set to {0}", this.context.getCanonicalName());
         if (this.context == null) {
             return;
         }
@@ -131,11 +130,9 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
             this.removeAll();
             // add the scene view to the scrollpane
             JComponent view = this.scene.createView();
-            JScrollPane jScrollPane = new JScrollPane(view);
-            this.add(jScrollPane);
+            this.add(new JScrollPane(view));
             // revalidate and repaint the panel
             this.validate();
-            return;
         } else {
             logger.log(Level.INFO,"IContextGraphViewerPanel creating new scene for {0}", this.context.getCanonicalName());
             // create a new scene, add it to the scene list
@@ -146,8 +143,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
             // add the scene view to the scrollpane
             JComponent view = this.scene.createView();
             view.addMouseListener(this);
-            JScrollPane jScrollPane = new JScrollPane(view);
-            this.add(jScrollPane);
+            this.add(new JScrollPane(view));
             // revalidate and repaint the panel
             this.validate();
         }
@@ -261,11 +257,11 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
             menu = new JPopupMenu("Model Object Actions");
             JMenuItem menuitem;
             // menu item - add Scenario
-            IContext context = (IContext) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
+            IContext context = (IContext) Application.getContext().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
             if (context instanceof ParametricModel) {
                 ParametricModel model = (ParametricModel) context;
                 menuitem = new JMenuItem("New Scenario");
-                ScenarioNewInstanceAction snia = new ScenarioNewInstanceAction("New Scenario",null,"New Scenario",new Integer(KeyEvent.VK_S));
+                CreateScenarioAction snia = new CreateScenarioAction("New Scenario",null,"New Scenario",new Integer(KeyEvent.VK_S));
                 menuitem.setAction(snia);
                 menu.add(menuitem);
             }

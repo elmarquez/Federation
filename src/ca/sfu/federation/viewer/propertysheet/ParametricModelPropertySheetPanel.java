@@ -1,7 +1,4 @@
 /**
- * ParametricModelSheet.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,24 +16,25 @@
 
 package ca.sfu.federation.viewer.propertysheet;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.ParametricModel;
 import com.developer.rose.BeanProxy;
-import java.beans.IntrospectionException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * @author Davis Marques
- * @version 0.1
  */
 public class ParametricModelPropertySheetPanel extends JPanel implements Observer {
     
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(ParametricModelPropertySheetPanel.class.getName());
 
     private ParametricModel target;
     
@@ -51,7 +49,6 @@ public class ParametricModelPropertySheetPanel extends JPanel implements Observe
     private JLabel lblName;
 
     //--------------------------------------------------------------------------
-
 
     /**
      * ParametricModelPropertySheet constructors.
@@ -126,7 +123,7 @@ public class ParametricModelPropertySheetPanel extends JPanel implements Observe
         );
         
         // get the current object
-        this.target = ParametricModel.getInstance();
+        this.target = Application.getContext().getModel();
         
         // disable non editable fields
         this.jtfCanonicalName.setEditable(false);
@@ -153,28 +150,26 @@ public class ParametricModelPropertySheetPanel extends JPanel implements Observe
     
     private void jtfDescriptionActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfDescriptionActionListener fired. " + command);
+        logger.log(Level.ALL,"ComponentSheet jtfDescriptionActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("description",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         
     }
     
     private void jtfNameActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfNameActionListener fired.");
+        logger.log(Level.INFO,"ComponentSheet jtfNameActionListener fired");
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("name",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }
 
@@ -195,14 +190,14 @@ public class ParametricModelPropertySheetPanel extends JPanel implements Observe
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: ParametricModelSheet received event notification id " + eventId);
+            logger.log(Level.INFO,"ParametricModelSheet received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_PROPERTY_CHANGE:
-                    System.out.println("INFO: ParametricModelSheet fired property change event.");
+                    logger.log(Level.INFO,"ParametricModelSheet fired property change event");
                     this.setValues();
                     break;
             }
         }
     }
                
-} 
+} // end class

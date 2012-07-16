@@ -17,8 +17,11 @@ package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.action.*;
 import java.awt.event.KeyEvent;
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu.Separator;
+import javax.swing.JSeparator;
 
 /**
  * Application menu bar.
@@ -41,7 +44,7 @@ public class ApplicationMenuBar extends JMenuBar {
         JMenu menu = new JMenu("Help");
         menu.setMnemonic(KeyEvent.VK_H);
         menu.add(new JSeparator());
-        ApplicationAboutAction aaa = new ApplicationAboutAction("About this Application",null,"About this Application",KeyEvent.VK_A);
+        ShowAboutWindowAction aaa = new ShowAboutWindowAction("About this Application",null,"About this Application",KeyEvent.VK_A);
         menu.add(aaa);
         // return result
         return menu;
@@ -57,9 +60,9 @@ public class ApplicationMenuBar extends JMenuBar {
         
         UndoAction undo = new UndoAction();
         RedoAction redo = new RedoAction();
-        CutAction cut = new CutAction();
-        CopyAction copy = new CopyAction();
-        PasteAction paste = new PasteAction();
+        CutINamedAction cut = new CutINamedAction();
+        CopyINamedAction copy = new CopyINamedAction();
+        PasteINamedAction paste = new PasteINamedAction();
         DeleteINamedAction delete = new DeleteINamedAction();
 
         JMenuItem selectall = new JMenuItem("Select All", KeyEvent.VK_A);
@@ -101,10 +104,10 @@ public class ApplicationMenuBar extends JMenuBar {
         JMenu menu = new JMenu("File");
         menu.setMnemonic(KeyEvent.VK_F);
         // menu items
-        NewProjectAction np = new NewProjectAction("New Project",null,"New Project",KeyEvent.VK_N);
+        CreateProjectAction np = new CreateProjectAction();
         OpenProjectAction op = new OpenProjectAction("Open Project",null,"Open Project",KeyEvent.VK_O);
         SaveProjectAction sp = new SaveProjectAction("Save Project",null,"Save Project",KeyEvent.VK_S);
-        ApplicationExitAction ax = new ApplicationExitAction("Exit",null,"Exit",KeyEvent.VK_X);
+        ExitApplicationAction ax = new ExitApplicationAction("Exit",null,"Exit",KeyEvent.VK_X);
         menu.add(np);
         menu.add(op);
         menu.add(sp);        
@@ -178,11 +181,11 @@ public class ApplicationMenuBar extends JMenuBar {
         JMenu menu = new JMenu("View");
         menu.setMnemonic(KeyEvent.VK_V);
 
-        IContextGraphViewerNewInstance sv = new IContextGraphViewerNewInstance("Scenario View",null,"Graph View",new Integer(KeyEvent.VK_G));
-        IContextGraphViewerNewInstance gv = new IContextGraphViewerNewInstance("Graph View",null,"Graph View",new Integer(KeyEvent.VK_G));
-        IContextModelViewerNewInstance mv = new IContextModelViewerNewInstance("Model View",null,"Model View",new Integer(KeyEvent.VK_M));
-        IContextStackViewerNewInstance stv = new IContextStackViewerNewInstance("Stack View",null,"Stack View",new Integer(KeyEvent.VK_S));
-        AbstractTreeExplorerNewInstanceAction tv = new AbstractTreeExplorerNewInstanceAction("Tree View",null,"Tree View",new Integer(KeyEvent.VK_A));
+        CreateIContextGraphViewerAction sv = new CreateIContextGraphViewerAction("Scenario View",null,"Graph View",new Integer(KeyEvent.VK_G));
+        CreateIContextGraphViewerAction gv = new CreateIContextGraphViewerAction("Graph View",null,"Graph View",new Integer(KeyEvent.VK_G));
+        CreateIContextModelViewerAction mv = new CreateIContextModelViewerAction("Model View",null,"Model View",new Integer(KeyEvent.VK_M));
+        ShowIContextStackViewerAction stv = new ShowIContextStackViewerAction("Stack View",null,"Stack View",new Integer(KeyEvent.VK_S));
+        ShowExplorerAction tv = new ShowExplorerAction("Tree View",null,"Tree View",new Integer(KeyEvent.VK_A));
         JMenu toolbars = new JMenu("Toolbars");
         JMenuItem projecttoolbar = new JMenuItem("Project");
         JMenuItem modeltoolbar = new JMenuItem("Model");

@@ -1,7 +1,4 @@
 /**
- * ParametricModelRenameAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,24 +16,31 @@
 
 package ca.sfu.federation.action;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.model.ParametricModel;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
-import javax.swing.JOptionPane;
+import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
 
 /**
  * Rename the parametric model.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class RenameProjectAction extends AbstractAction {
+        
+    private static final Logger logger = Logger.getLogger(RenameProjectAction.class.getName());
     
-    //--------------------------------------------------------------------------
-
-    
-    //--------------------------------------------------------------------------
-
+    public RenameProjectAction() {
+        super("Rename Project",null);
+        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
+        this.putValue(Action.LONG_DESCRIPTION, "Rename project");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
+        this.putValue(Action.SHORT_DESCRIPTION, "Rename project");
+        this.putValue(Action.SMALL_ICON, icon);
+    }
     
     /**
      * ParametricModelRenameAction constructor.
@@ -52,15 +56,19 @@ public class RenameProjectAction extends AbstractAction {
     }
     
     //--------------------------------------------------------------------------
-
     
     /**
      * Action performed.
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        String newname = JOptionPane.showInputDialog(null,"Rename Model",ParametricModel.getInstance().getName());
-        ParametricModel.getInstance().setName(newname);
+        ParametricModel model = Application.getContext().getModel();
+        if (model != null) {
+            String newname = JOptionPane.showInputDialog(null,"Rename Model",model.getName());
+            model.setName(newname);
+        } else {
+            logger.log(Level.WARNING,"Could not peform project rename because no project model is currently loaded.");
+        }
     }
     
-} 
+} // end class 

@@ -15,6 +15,7 @@
  */
 package ca.sfu.federation.viewer.explorer;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
 import ca.sfu.federation.model.ParametricModel;
@@ -37,7 +38,6 @@ import javax.swing.tree.TreeSelectionModel;
  */
 public class AbstractTreeExplorerPanel extends JPanel implements ActionListener, TreeSelectionListener {
     
-    private ParametricModel model;
     private AbstractTree tree;
     private JScrollPane scrollPane;
     
@@ -47,8 +47,6 @@ public class AbstractTreeExplorerPanel extends JPanel implements ActionListener,
      * AbstractTreeExplorerPanel constructor.
      */
     public AbstractTreeExplorerPanel() {
-        // init
-        this.model = ParametricModel.getInstance();
         // create tree
         this.tree = new AbstractTree(buildTree());
         this.tree.addTreeSelectionListener(this);
@@ -63,6 +61,9 @@ public class AbstractTreeExplorerPanel extends JPanel implements ActionListener,
     }
     
     //--------------------------------------------------------------------------
+
+    public void actionPerformed(ActionEvent e) {
+    }
 
     /**
      * Build the subtree for the object.
@@ -115,7 +116,8 @@ public class AbstractTreeExplorerPanel extends JPanel implements ActionListener,
      */
     private DefaultMutableTreeNode buildTree() {
         // create tree
-        DefaultMutableTreeNode root = buildSubTree(this.model);
+        ParametricModel model = Application.getContext().getModel();
+        DefaultMutableTreeNode root = buildSubTree(model);
         // return tree
         return root;
     }
@@ -125,9 +127,6 @@ public class AbstractTreeExplorerPanel extends JPanel implements ActionListener,
      * @param e Tree selection event.
      */
     public void valueChanged(TreeSelectionEvent e) {
-    }
-
-    public void actionPerformed(ActionEvent e) {
     }
     
 } // end class

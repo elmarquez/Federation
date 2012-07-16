@@ -18,23 +18,25 @@ package ca.sfu.federation;
 import ca.sfu.federation.model.ParametricModel;
 import java.awt.Color;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.logging.Logger;
 
 /**
- * Run time configuration settings.
+ * Application model, view state and related run time settings.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class ApplicationContext extends Observable {
 
     private static final Logger logger = Logger.getLogger(ApplicationContext.class.getName());
 
     private static ParametricModel model;
-    
+    private static HashMap viewstate = new HashMap();
+
     public static final String APPLICATION_PROPERTIES = "ca/sfu/federation/resources/application";
 
-    // APPLICATION APPEARANCE 
+    // APPLICATION APPEARANCE
     public static final Color BACKGROUND_DARK = new Color(40,40,40);
     public static final Color BACKGROUND_MEDIUM = new Color(48,48,48);
     public static final Color BACKGROUND_MEDIUM2 = new Color(75,75,75);
@@ -42,18 +44,18 @@ public class ApplicationContext extends Observable {
     public static final Color BACKGROUND_LIGHT2 = new Color(135,135,135);
     public static final Color BACKGROUND_WORKSPACE = new Color(93,103,115);
     public static final Color BACKGROUND_BRIGHT = new Color(244,157,28);
-    
-    public static final Color TEXT_DARK = new Color(40,40,40); 
+
+    public static final Color TEXT_DARK = new Color(40,40,40);
     public static final Color TEXT_MEDIUM = new Color(197,200,205);
     public static final Color TEXT_LIGHT = new Color(255,255,255);
-    
+
     private static String home;
 
     //..........................................................................
     // PARAMETER KEYS
 
     // model parameter keys
-    
+
     // viewer parameter keys
     public static final String VIEWER_CURRENT_LAYOUT = "VIEWER_CURRENT_LAYOUT";
     public static final String VIEWER_LAYOUT_PARAMETRICMODELGRAPHVIEW = "VIEWER_LAYOUT_PARAMETRICMODELGRAPHVIEW";
@@ -64,14 +66,14 @@ public class ApplicationContext extends Observable {
     public static final String VIEWER_PROPERTYSHEET = "VIEWER_PROPERTYSHEET";
     public static final String VIEWER_CONSOLE = "VIEWER_CONSOLE";
     public static final String VIEWER_ICONTEXT_THUMBNAILS = "VIEWER_ICONTEXT_THUMBNAILS";
-    
+
     public static final String VIEWER_LAST_MOUSERELEASE = "VIEWER_LAST_MOUSERELEASE"; //
     public static final String VIEWER_LIST = "VIEWER_LIST"; // list of open viewers
     public static final String VIEWER_CURRENT_CONTEXT = "VIEWER_CURRENT_CONTEXT"; // the current context. Not all viewers will respect the global context setting.
-    public static final String VIEWER_PARAMETRICMODEL_SCENE = "VIEWER_PARAMETRICMODEL_SCENE"; // 
+    public static final String VIEWER_PARAMETRICMODEL_SCENE = "VIEWER_PARAMETRICMODEL_SCENE"; //
     public static final String VIEWER_ICONTEXTVIEWER_SCENES = "VIEWER_ICONTEXTVIEWER_SCENES";
     public static final String VIEWER_SELECTION = "VIEWER_SELECTION"; // selected model objects
-    
+
     //..........................................................................
     // EVENT IDS
 
@@ -89,7 +91,7 @@ public class ApplicationContext extends Observable {
     public static final int EVENT_THUMBNAIL_CHANGE = 1005;
     public static final int EVENT_INPUT_CHANGE = 1006;
     public static final int EVENT_UPDATEMETHOD_CHANGE = 1007;
-    
+
     public static final int EVENT_ELEMENT_ADD = 1100;     // used only when element has been added
     public static final int EVENT_ELEMENT_RENAME = 1101;  // used only when element has been renamed
     public static final int EVENT_ELEMENT_DELETE_REQUEST = 1102;  // used by object requesting to be deleted from a context
@@ -101,7 +103,7 @@ public class ApplicationContext extends Observable {
     public static final int EVENT_REPAINT_REQUEST = 2001;
     public static final int EVENT_STATE_CHANGE = 2002;
     public static final int EVENT_SELECTION_CHANGE = 2003;
-    
+
     //--------------------------------------------------------------------------
 
     /**
@@ -110,9 +112,9 @@ public class ApplicationContext extends Observable {
     public ApplicationContext() {
         registerPropertyEditors();
     }
-    
+
     //--------------------------------------------------------------------------
-    
+
     /**
      * Get the current working directory path.
      * @return Path to the application working directory.
@@ -125,9 +127,26 @@ public class ApplicationContext extends Observable {
             return home;
         }
     }
-    
+
     public ParametricModel getModel() {
         return model;
+    }
+
+    /**
+     * Get viewer state parameters.
+     * @return Map of parameters.
+     */
+    public Map getViewState() {
+        return viewstate;
+    }
+
+    /**
+     * Get a viewer parameter by Key value.
+     * @param Key Key value.
+     * @return Parameter value.
+     */
+    public Object getViewState(Object Key) {
+        return viewstate.get(Key);
     }
 
     /**
@@ -137,7 +156,7 @@ public class ApplicationContext extends Observable {
 //        PropertyEditorManager.registerEditor(InputTable.class,InputTableEditor.class);
 //        PropertyEditorManager.registerEditor(Input.class,InputEditor.class);
     }
-    
+
     /**
      * Sets the current working directory path.
      */
@@ -145,7 +164,7 @@ public class ApplicationContext extends Observable {
         // the current working directory
         home = "file:\\\\localhost\\\\" + System.getProperty("user.dir");
     }
-    
+
     /**
      * Sets home to a user specified path.
      * @param Home Local filesystem path.
@@ -160,7 +179,7 @@ public class ApplicationContext extends Observable {
         URL url = ApplicationContext.class.getClassLoader().getResource(Home);
         if(url != null){
             String path = url.getPath();
-            if(path!=null && !path.trim().equals("")){                
+            if(path!=null && !path.trim().equals("")){
                 home = url.getPath();
             } else {
                 throw new RuntimeException("Problem in locating Home directory." +
@@ -171,14 +190,18 @@ public class ApplicationContext extends Observable {
                     "in the classpath. Please check.");
         }
     }
-    
+
     /**
      * Set the model.
-     * @param Model 
+     * @param Model
      */
     public void setModel(ParametricModel Model) {
         model = Model;
         notifyObservers(ApplicationContext.MODEL_LOADED);
     }
     
+    public void setViewState(Object Key, Object Value) {
+        viewstate.put(Key, Value);
+    }
+
 } // end class

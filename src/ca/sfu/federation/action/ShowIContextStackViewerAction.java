@@ -1,5 +1,5 @@
 /**
- * ApplicationAboutAction.java
+ * ShowIContextStackViewerAction.java
  * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,32 +19,32 @@
 
 package ca.sfu.federation.action;
 
+import ca.sfu.federation.viewer.stackviewer.IContextStackViewerJFrame;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import javax.swing.JOptionPane;
 
 /**
- *
+ * Set the application to the Scenario Graph View layout.
  * @author Davis Marques
  * @version 0.1.0
  */
-public class ApplicationAboutAction extends AbstractAction {
+public class ShowIContextStackViewerAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
-    
+
     //--------------------------------------------------------------------------
 
     
     /**
-     * ApplicationAboutAction constructor.
-     * @param Name Action name that will appear in menus.
+     * ShowIContextStackViewerAction constructor.
+     * @param Name The fully qualified context name to set as the current context.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
      */
-    public ApplicationAboutAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
+    public ShowIContextStackViewerAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
@@ -54,11 +54,11 @@ public class ApplicationAboutAction extends AbstractAction {
 
 
     /**
-     * Show About Application dialog.
-     * @param e Event
+     * Set the current context.
+     * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        JOptionPane.showMessageDialog(null,"Parametric Modelling Application\nDavis Marques <dmarques@sfu.ca>\nProf. Robert Woodbury\nProf. John Dill","About this Application",JOptionPane.INFORMATION_MESSAGE);
+        IContextStackViewerJFrame frame = new IContextStackViewerJFrame();
     }
     
-} // end class
+} 

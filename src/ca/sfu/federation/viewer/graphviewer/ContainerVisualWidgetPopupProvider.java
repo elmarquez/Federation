@@ -21,10 +21,10 @@ package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.SetCurrentIContextAction;
 import ca.sfu.federation.action.DeleteINamedAction;
 import ca.sfu.federation.action.RenameINamedAction;
-import ca.sfu.federation.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.SetPropertySheetFocusAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -69,10 +69,10 @@ public class ContainerVisualWidgetPopupProvider implements PopupMenuProvider, Ac
         // open scenario
         if (this.target instanceof IContext) {
             IContext context = (IContext) this.target;
-            IContextSetCurrentAction setfocus = new IContextSetCurrentAction("Set as Current Context",null,"Set as Current Context",new Integer(KeyEvent.VK_S),context);
+            SetCurrentIContextAction setfocus = new SetCurrentIContextAction("Set as Current Context",null,"Set as Current Context",new Integer(KeyEvent.VK_S),context);
             menu.add(setfocus);
         } else {
-            IContextSetCurrentAction setfocus = new IContextSetCurrentAction("Set as Current Context",null,"Set as Current Context",new Integer(KeyEvent.VK_S),null);
+            SetCurrentIContextAction setfocus = new SetCurrentIContextAction("Set as Current Context",null,"Set as Current Context",new Integer(KeyEvent.VK_S),null);
             setfocus.setEnabled(false);
             menu.add(setfocus);
         }
@@ -85,7 +85,7 @@ public class ContainerVisualWidgetPopupProvider implements PopupMenuProvider, Ac
         // separator
         menu.add(new JSeparator());        
         // properties
-        PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),target);
+        SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),target);
         menu.add(pssfa);
         return menu;
     }

@@ -24,18 +24,18 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 /**
- * Cut action.
+ * Copy action.
  * @author dmarques
  */
-public class CutAction extends AbstractAction {
+public class PasteINamedAction extends AbstractAction {
 
-    public CutAction() {
-        super("Cut", null);
+    public PasteINamedAction() {
+        super("Paste", null);
         Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
-        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
-        this.putValue(Action.LONG_DESCRIPTION, "Cut selected item or items");
-        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_T);
-        this.putValue(Action.SHORT_DESCRIPTION, "Cut selected item or items");
+        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
+        this.putValue(Action.LONG_DESCRIPTION, "Paste items from clipboard");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_P);
+        this.putValue(Action.SHORT_DESCRIPTION, "Paste items from clipboard");
         this.putValue(Action.SMALL_ICON, icon);
     }
     

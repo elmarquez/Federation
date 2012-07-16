@@ -21,7 +21,7 @@ package ca.sfu.federation.viewer.modelviewer;
 
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.action.ModelViewerUpdateThumbnailAction;
+import ca.sfu.federation.action.UpdateModelViewerThumbnailAction;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import java.awt.BorderLayout;
 import java.awt.GraphicsConfiguration;
@@ -68,7 +68,7 @@ public class ModelViewerPanel extends JPanel implements MouseListener {
         JToolBar toolbar = new JToolBar("3D Viewer Tools",JToolBar.HORIZONTAL);
         toolbar.setFloatable(true);
         JButton btn = new JButton();
-        btn.setAction(new ModelViewerUpdateThumbnailAction("Set Thumbnail",null,"Set Thumbnail",null,this.canvas));
+        btn.setAction(new UpdateModelViewerThumbnailAction("Set Thumbnail",null,"Set Thumbnail",null,this.canvas));
         toolbar.add(btn);
         this.add(toolbar,BorderLayout.NORTH);
     }

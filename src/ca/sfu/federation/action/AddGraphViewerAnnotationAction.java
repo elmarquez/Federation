@@ -1,7 +1,4 @@
 /**
- * IContextGraphViewerNewInstance.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,45 +16,58 @@
 
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.viewer.graphviewer.IContextGraphViewerJFrame;
+import ca.sfu.federation.Application;
+import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.viewer.graphviewer.MutableSceneModel;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import org.netbeans.api.visual.widget.Scene;
 
 /**
+ * Add an annotation to the Scenario graph.  We assume that for this action to 
+ * occur, an instance of the graph viewer must already be running.
  * @author Davis Marques
  * @version 0.1.0
  */
-public class IContextGraphViewerNewInstance extends AbstractAction {
+public class AddGraphViewerAnnotationAction extends AbstractAction {
+    
+    private static final Logger logger = Logger.getLogger(CreateScenarioAction.class.getName());
+    private Scene scene;       // the scenario graph scene representation
     
     //--------------------------------------------------------------------------
-
-
-    //--------------------------------------------------------------------------
-
     
     /**
-     * IContextGraphViewerNewInstance constructor.
+     * AddGraphViewerAnnotationAction constructor.
+     * 
      * @param Name The fully qualified context name to set as the current context.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
+     * @param MyScene Scene target.
      */
-    public IContextGraphViewerNewInstance(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
+    public AddGraphViewerAnnotationAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, Scene MyScene) {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
+        this.scene = MyScene;
     }
     
     //--------------------------------------------------------------------------
 
-
     /**
      * Set the current context.
-     * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        IContextGraphViewerJFrame frame = new IContextGraphViewerJFrame();
+        String text = JOptionPane.showInputDialog("Enter annotation text");
+        Point location = (Point) Application.getContext().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
+        if (this.scene instanceof MutableSceneModel) {
+            MutableSceneModel myscene = (MutableSceneModel) this.scene;
+            myscene.addAnnotation(text,location);
+        }
     }
     
 } // end class

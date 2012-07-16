@@ -21,7 +21,7 @@ package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.action.IContextSetCurrentAction;
+import ca.sfu.federation.action.SetCurrentIContextAction;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -125,7 +125,7 @@ public class BreadCrumbWidget extends Widget {
             JMenuItem item;
             // menu item - set as current target
             IContext context = this.widget.getTarget();
-            IContextSetCurrentAction action = new IContextSetCurrentAction("Set as Current Context",null,"Set as Current Context",new Integer(KeyEvent.VK_S),context);
+            SetCurrentIContextAction action = new SetCurrentIContextAction("Set as Current Context",null,"Set as Current Context",new Integer(KeyEvent.VK_S),context);
             menu.add(action);
         }
         

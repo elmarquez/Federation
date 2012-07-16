@@ -16,13 +16,11 @@
 
 package ca.sfu.federation.viewer.propertysheet;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.exception.NonExistantMethodException;
-import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
 import com.developer.rose.BeanProxy;
-import java.beans.IntrospectionException;
 import java.lang.reflect.Method;
 import java.util.Observable;
 import java.util.Observer;
@@ -59,7 +57,6 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
     private JLabel lblY;
     private JLabel lblZ;
     
-    private ParametricModel model;
     private Component target;
     
     //--------------------------------------------------------------------------
@@ -188,9 +185,6 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
                 .addContainerGap())
         );
         
-        // get the current object
-        this.model = ParametricModel.getInstance();
-        
         // disable non editable fields
         this.jtfCanonicalName.setEditable(false);
         this.jtfClass.setEditable(false);
@@ -308,7 +302,7 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
     
     private void setValues() {
         // target
-        this.target = (Component) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
+        this.target = (Component) Application.getContext().getViewState(ApplicationContext.VIEWER_SELECTION);
         // listen for changes on the target
         if (this.target instanceof Observable) {
             Observable o = (Observable) this.target;

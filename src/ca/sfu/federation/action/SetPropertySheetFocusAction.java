@@ -1,7 +1,4 @@
 /**
- * ApplicationExitAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,45 +16,54 @@
 
 package ca.sfu.federation.action;
 
+import ca.sfu.federation.Application;
+import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.INamed;
+import ca.sfu.federation.model.ParametricModel;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
 /**
- * Exit the application.
+ * SetPropertySheetFocusAction
  * @author Davis Marques
- * @version 0.1.0
  */
-public class ApplicationExitAction extends AbstractAction {
-    
-    //--------------------------------------------------------------------------
+public class SetPropertySheetFocusAction extends AbstractAction {
 
-    
-    //--------------------------------------------------------------------------
+    private static final Logger logger = Logger.getLogger(SetPropertySheetFocusAction.class.getName());
+    private INamed target;
 
-    
     /**
-     * ApplicationExitAction constructor.
+     * SetPropertySheetFocusAction constructor.
      * @param Name Action name that will appear in menus.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
+     * @param Target Target object.
      */
-    public ApplicationExitAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
+    public SetPropertySheetFocusAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, INamed Target) {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
+        this.target = Target;
     }
-    
+
     //--------------------------------------------------------------------------
 
 
     /**
-     * Confirm application shutdown.
-     * @param e Event.
+     * Set the current context.
      */
     public void actionPerformed(ActionEvent e) {
-        System.exit(1);
+        ParametricModel model = Application.getContext().getModel();
+        if (model != null) {
+            logger.log(Level.ALL,"Set PropertySheet focus to {0}", this.target.getName());
+            model.setViewState(ApplicationContext.VIEWER_SELECTION,this.target);
+        } else {
+            logger.log(Level.WARNING,"Could not set focus. No model loaded.");
+        }
     }
-    
+
 } // end class

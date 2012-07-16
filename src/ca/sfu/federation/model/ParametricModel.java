@@ -22,6 +22,9 @@ import com.developer.rose.BeanProxy;
 import java.awt.Image;
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openide.util.Utilities;
 
 /**
@@ -31,11 +34,11 @@ import org.openide.util.Utilities;
  * @author Davis Marques
  */
 public class ParametricModel extends Observable implements IContext, IUpdateable, Observer, Serializable {
-    
-    private static ParametricModel instance; // singleton instance
+
+    private static final Logger logger = Logger.getLogger(ParametricModel.class.getName());
+
     private LinkedHashMap modelParam;             // model parameters
     private LinkedHashMap viewState;              // view parameters
-    private String path;                     // the path to the model working directory
 
     private String name;        // unique identifier for this object
     private ArrayList elements;    // a collection of parts for this object
@@ -44,9 +47,9 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
     // metadata, visual properties
     private String description;              // model description
     private Image icon;         // icon representation of object
-    
+
     //--------------------------------------------------------------------------
-    
+
     /**
      * ParametricModel constructor
      */
@@ -61,7 +64,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
     public ParametricModel(String Name) {
         init(Name);
     }
-    
+
     //--------------------------------------------------------------------------
 
     /**
@@ -123,20 +126,12 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
     }
 
     /**
-     * Forces single instance only.
-     * @throws CloneNotSupportedException The object can not be copied.
-     */
-    public Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException();
-    }
-    
-    /**
      * Delete the model.
      */
     public void delete() {
-        System.err.println("WARNING: ParametricModel delete method called.  Not implemented yet.");
+        logger.log(Level.WARNING,"ParametricModel delete method called.  Not implemented yet.");
     }
-    
+
     /**
      * Get canonical name.
      * @return Canonical name.
@@ -154,13 +149,13 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
     }
 
     /**
-     * Get the description. 
+     * Get the description.
      * @return Description.
      */
     public String getDescription() {
         return this.description;
     }
-    
+
     /**
      * Get the local Elements.
      * @return Collection of NamedObjects in this context.
@@ -215,7 +210,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
      * @throws GraphCycleException Graph contains a cycle and can not be updated.
      */
     private void getElementsInTopologicalOrder(INamed Named, ArrayList Sorted) throws GraphCycleException {
-        // if the NamedObject is already in the list, then we expect that its dependancies 
+        // if the NamedObject is already in the list, then we expect that its dependancies
         // are also already represented there and therefore we don't need to do anything
         if (Named instanceof IGraphable && !Sorted.contains(Named)) {
             IGraphable graphobject = (IGraphable) Named;
@@ -243,7 +238,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
     public Image getIcon() {
         return this.icon;
     }
-    
+
     /**
      * Get the list of independant Elements.
      * @return Independant Elements of this Systlolic Array.
@@ -255,11 +250,10 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         Iterator e = this.elements.iterator();
         while (e.hasNext()) {
             Object object = e.next();
-            LinkedHashMap dep = null;
             // if the object can have dependancies
             if (object instanceof IGraphable) {
                 IGraphable graphobject = (IGraphable) object;
-                dep = (LinkedHashMap) graphobject.getDependancies();
+                LinkedHashMap dep = (LinkedHashMap) graphobject.getDependancies();
                 // if the elements has no dependancies, then it is an independant elements
                 if (dep.size()==0) {
                     independant.add(object);
@@ -269,18 +263,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         // return results
         return (List) independant;
     }
-    
-    /**
-     * Returns the singleton instance.
-     * @return The instance.
-     */
-    public static synchronized ParametricModel getInstance() {
-        if (instance == null) {
-            instance = new ParametricModel("DefaultModel");
-        }
-        return instance;
-    }
-    
+
     /**
      * Get the name of this Object.
      * @return The name of this Object.
@@ -300,24 +283,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         parents.add(this);
         return (List) parents;
     }
-    
-    /**
-     * Get a viewer parameter by Key value.
-     * @param Key Key value.
-     * @return Parameter value.
-     */
-    public Object getViewState(Object Key) {
-        return this.viewState.get(Key);
-    }
-    
-    /**
-     * Get viewer state parameters.
-     * @return Map of parameters.
-     */
-    public Map getViewState() {
-        return this.viewState;
-    }
-    
+
     /**
      * Determine if a NamedObject exists in the Context.
      * @return True if object is in the local collection, false otherwise.
@@ -329,11 +295,11 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
             result = true;
         }
         return result;
-    } 
+    }
 
     /**
      * Initialize the model.
-     * @param Name 
+     * @param Name
      */
     private void init(String Name) {
         this.elements = new ArrayList();
@@ -341,8 +307,6 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         // load configuration settings
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // set properties
-        this.instance = this;
-        this.path = "";
         this.name = Name;
         this.icon = Utilities.loadImage(config.getString("parametricmodel-icon"));
         // default view state parameters
@@ -351,7 +315,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         this.viewState.put(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS,new LinkedHashMap());
         this.viewState.put(ApplicationContext.VIEWER_ICONTEXTVIEWER_SCENES,new LinkedHashMap());
     }
-    
+
     /**
      * Retrieves a single object, or object property value in the local context.
      * @param Query NamedObject reference of the form objectname.propertyname
@@ -413,7 +377,8 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
                 try {
                     result = context.lookup(query);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    String stack = ExceptionUtils.getFullStackTrace(ex);
+                    logger.log(Level.WARNING,"{0}",stack);
                 }
             } else {
                 // the reference is malformed, throw an error
@@ -426,16 +391,16 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         // return result
         return result;
     }
-    
+
     /**
      * Remove a NamedObject from the Context.
      * @param Named The NamedObject to be removed.
      * @throws IllegalArgumentException The NamedObject does not exist in the Context.
      */
     public void remove(INamed Named) throws IllegalArgumentException {
-        String name = Named.getName();
+        String itemName = Named.getName();
         LinkedHashMap elementsByName = (LinkedHashMap) this.getElements();
-        if (elementsByName.containsKey(name)) {
+        if (elementsByName.containsKey(itemName)) {
             // stop listening on the NamedObject
             if (Named instanceof Observable) {
                 Observable o = (Observable) Named;
@@ -445,9 +410,9 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
             this.elements.remove(Named);
             // notify observers
             this.setChanged();
-            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETED));            
+            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETED));
         } else {
-            throw new IllegalArgumentException("The object '" + name + "' does not exist in the current Context.");
+            throw new IllegalArgumentException("The object '" + itemName + "' does not exist in the current Context.");
         }
     }
 
@@ -456,8 +421,8 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
      */
     public void restore() {
         // for each object, restore values
-        LinkedHashMap elements = (LinkedHashMap) this.getElements();
-        Iterator iter = elements.values().iterator();
+        LinkedHashMap theElements = (LinkedHashMap) this.getElements();
+        Iterator iter = theElements.values().iterator();
         while (iter.hasNext()) {
             Object object = iter.next();
             if (object instanceof IUpdateable) {
@@ -466,7 +431,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
             }
         }
     }
-    
+
     /**
      * Set the current Context.
      * @param MyContext The current working Context.
@@ -474,15 +439,15 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
     public void setContext(IContext MyContext) {
         throw new IllegalArgumentException("ParametricModel does not support this method.");
     }
-    
+
     /**
-     * Set the description. 
+     * Set the description.
      * @param Description Description.
      */
     public void setDescription(String Description) {
         this.description = Description;
     }
-    
+
     /**
      * Set the icon.
      * @param MyIcon Icon.
@@ -517,15 +482,15 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         // changes.firePropertyChange((String) Key, oldValue, Value);
         // fire state change notification
         if (Key.equals(ApplicationContext.VIEWER_CURRENT_CONTEXT)) {
-            System.out.println("INFO: ParametricModel updated view state current context to " + Value.toString());
+            logger.log(Level.INFO,"ParametricModel updated view state current context to {0}", Value.toString());
             this.setChanged();
             this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_CONTEXT_CHANGE));
         } else if (Key.equals(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS)) {
-            System.out.println("INFO: ParametricModel updated IContext thumbnails.");
+            logger.log(Level.INFO,"ParametricModel updated IContext thumbnails");
             this.setChanged();
             this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_THUMBNAIL_CHANGE));
         } else if (Key.equals(ApplicationContext.VIEWER_SELECTION)) {
-            System.out.println("INFO: ParametricModel updated Selection list state.");
+            logger.log(Level.INFO,"ParametricModel updated Selection list state");
             this.setChanged();
             this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_SELECTION_CHANGE));
         }
@@ -538,23 +503,28 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
     public boolean update() {
         // clearResult the SAE result caches
         this.clearResultCache();
-        ArrayList elements = null;
+        ArrayList theelements = null;
         try {
-            elements = (ArrayList) this.getElementsInTopologicalOrder();
+            theelements = (ArrayList) this.getElementsInTopologicalOrder();
         } catch (GraphCycleException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         // print out the update order for debugging
-        Iterator en = elements.iterator();
-        System.out.print("INFO: " + this.name + " update event. Update sequence is: ");
+        Iterator en = theelements.iterator();
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name);
+        sb.append(" update event. Update sequence is: ");
         while (en.hasNext()) {
             INamed named = (INamed) en.next();
-            System.out.print(named.getName() + " ");
+            sb.append(named.getName());
+            sb.append(" ");
         }
-        System.out.print("\n");        
+        sb.append("\n");
+        logger.log(Level.INFO,sb.toString());
         // update nodes
         boolean updateSuccessful = true;
-        Iterator e = elements.iterator();
+        Iterator e = theelements.iterator();
         while (e.hasNext() && updateSuccessful) {
             Object object = e.next();
             if (object instanceof IUpdateable) {
@@ -570,7 +540,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         // return result
         return updateSuccessful;
     }
-    
+
     /**
      * Update event.
      * @param o Observable object.
@@ -581,12 +551,12 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
             Integer eventId = (Integer) arg;
             switch (eventId) {
                 case ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST:
-                    System.out.println("INFO: ParametricModel fired element delete.");
+                    logger.log(Level.INFO,"ParametricModel fired element delete");
                     INamed named = (INamed) o;
                     this.remove(named);
                     break;
             }
         }
     }
-    
+
 } // end class

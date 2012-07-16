@@ -1,7 +1,4 @@
 /**
- * ParametricModelPopupMenu.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,12 +16,14 @@
 
 package ca.sfu.federation.viewer;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.INamed;
 import ca.sfu.federation.action.RenameProjectAction;
-import ca.sfu.federation.action.PropertySheetSetFocusAction;
-import ca.sfu.federation.action.ScenarioNewInstanceAction;
+import ca.sfu.federation.action.SetPropertySheetFocusAction;
+import ca.sfu.federation.action.CreateScenarioAction;
 import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
@@ -36,11 +35,7 @@ import javax.swing.JSeparator;
  */
 public class ParametricModelPopupMenu extends JPopupMenu {
     
-    //--------------------------------------------------------------------------
-
-    
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(ParametricModelPopupMenu.class.getName());
     
     /**
      * ParametricModelPopupMenu constructor.
@@ -50,7 +45,7 @@ public class ParametricModelPopupMenu extends JPopupMenu {
         JMenu submenu = new JMenu("Add");
         submenu.setMnemonic(KeyEvent.VK_A);
         // scenario new instance
-        ScenarioNewInstanceAction snia = new ScenarioNewInstanceAction("New Scenario",null,"New Scenario",new Integer(KeyEvent.VK_N));
+        CreateScenarioAction snia = new CreateScenarioAction("New Scenario",null,"New Scenario",new Integer(KeyEvent.VK_N));
         submenu.add(snia);
         this.add(submenu);
         // menu item - rename        
@@ -59,7 +54,8 @@ public class ParametricModelPopupMenu extends JPopupMenu {
         // menu item - separator
         this.add(new JSeparator());
         // menu item - properties
-        PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)ParametricModel.getInstance());
+        SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),
+                (INamed)Application.getContext().getModel());
         this.add(pssfa);
     }
     

@@ -1,7 +1,4 @@
 /**
- * ViewerSetLayoutAsScenarioModelView.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,50 +16,59 @@
 
 package ca.sfu.federation.action;
 
+import ca.sfu.federation.Application;
+import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.model.ParametricModel;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
- * Set the application to the Scenario Model View layout.
+ * Set the current context of the model.  If the context is an instance of
+ * Parametric Model, then we set the viewer type to 
  * @author Davis Marques
- * @version 0.1.0
  */
-public class ApplicationSetLayoutAsIContextModelView extends AbstractAction {
+public class SetCurrentIContextAction extends AbstractAction {
+
+    private static final Logger logger = Logger.getLogger(SetCurrentIContextAction.class.getName());
     
-    private static final Logger logger = Logger.getLogger(ApplicationSetLayoutAsIContextModelView.class.getName());
-    
+    private IContext context;
+
     //--------------------------------------------------------------------------
 
-    
     /**
-     * ApplicationSetLayoutAsIContextModelView constructor.
-     * 
+     * SetCurrentIContextAction constructor.
      * 
      * @param Name The fully qualified context name to set as the current context.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
+     * @param MyContext Context to set the model to when this action is fired.
      */
-    public ApplicationSetLayoutAsIContextModelView(String Name,Icon MyIcon,String ToolTip,Integer MnemonicId) {
-        super(Name,MyIcon);
+    public SetCurrentIContextAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, IContext MyContext) {
+        super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
+        this.context = MyContext;
     }
     
     //--------------------------------------------------------------------------
-
 
     /**
      * Set the current context.
      * @param e Action event.
      */
-    @Override
     public void actionPerformed(ActionEvent e) {
-        logger.log(Level.INFO,"Change application layout to ScenarioModelView. Not implemented yet.");
+        ParametricModel model = Application.getContext().getModel();
+        if (model != null) {
+            logger.log(Level.INFO,"Set context to {0}", this.context.getCanonicalName());
+            model.setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,this.context);            
+        } else {
+            logger.log(Level.WARNING,"Could not set context. No model loaded.");
+        }
     }
     
 } // end class

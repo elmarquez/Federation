@@ -16,6 +16,7 @@
 
 package ca.sfu.federation.viewer.stackviewer;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.ParametricModel;
@@ -39,7 +40,6 @@ public class IContextStackViewerPanel extends JPanel implements Observer {
     
     private static final Logger logger = Logger.getLogger(IContextStackViewerPanel.class.getName());
 
-    private ParametricModel model;
     private IContext context;
     
     private int backgroundmode;
@@ -47,14 +47,13 @@ public class IContextStackViewerPanel extends JPanel implements Observer {
     
     //--------------------------------------------------------------------------
 
-    
     /**
      * StackViewerPanel constructor.
      */
     public IContextStackViewerPanel() {
         this.setLayout(new BorderLayout());
         // listen for changes on model
-        this.model = ParametricModel.getInstance();
+        ParametricModel model = Application.getContext().getModel();
         if (model instanceof Observable) {
             Observable o = (Observable) model;
             o.addObserver(this);
@@ -134,7 +133,7 @@ public class IContextStackViewerPanel extends JPanel implements Observer {
             }
         }
         // draw thumbnail
-        BufferedImage buffered = this.toBufferedImage(this.thumbnail);
+        BufferedImage buffered = toBufferedImage(this.thumbnail);
         g.drawImage(buffered,null,X+(offset*2),Y+(offset*2));
         // draw label
         Color c = Color.white;
@@ -168,11 +167,12 @@ public class IContextStackViewerPanel extends JPanel implements Observer {
         return cm.hasAlpha();
     }
     
+    @Override
     public void paint(Graphics G) {
         Graphics2D g = (Graphics2D) G;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         // if the current context has changed
-        IContext currentcontext = (IContext) this.model.getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
+        IContext currentcontext = (IContext) Application.getContext().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
         if (this.context != currentcontext) {
             if (this.context != null) {
                 if (this.context instanceof Observable && !(this.context instanceof ParametricModel)) {

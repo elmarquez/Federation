@@ -1,5 +1,5 @@
 /**
- * ScenarioNewInstanceAction.java
+ * ExitApplicationAction.java
  * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,19 +19,16 @@
 
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.Scenario;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import javax.swing.JOptionPane;
 
 /**
- *
+ * Exit the application.
  * @author Davis Marques
  * @version 0.1.0
  */
-public class ScenarioNewInstanceAction extends AbstractAction {
+public class ExitApplicationAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
@@ -40,13 +37,13 @@ public class ScenarioNewInstanceAction extends AbstractAction {
 
     
     /**
-     * ScenarioNewInstanceAction constructor.
+     * ExitApplicationAction constructor.
      * @param Name Action name that will appear in menus.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
      */
-    public ScenarioNewInstanceAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
+    public ExitApplicationAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
@@ -56,13 +53,11 @@ public class ScenarioNewInstanceAction extends AbstractAction {
 
 
     /**
-     * Create a new Scenario instance.
+     * Confirm application shutdown.
      * @param e Event.
      */
     public void actionPerformed(ActionEvent e) {
-        // create a new scenario
-        ParametricModel model = ParametricModel.getInstance();
-        Scenario scenario = new Scenario(model);
+        System.exit(1);
     }
     
-} // end class
+} 

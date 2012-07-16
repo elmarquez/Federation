@@ -1,7 +1,4 @@
 /**
- * MutableSceneModelPopupProvider.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,14 +16,16 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.ParametricModel;
+import ca.sfu.federation.Application;
+import ca.sfu.federation.action.AddGraphViewerAnnotationAction;
+import ca.sfu.federation.action.CreateScenarioAction;
+import ca.sfu.federation.action.SetPropertySheetFocusAction;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.action.GraphViewerAddAnnotationAction;
-import ca.sfu.federation.action.PropertySheetSetFocusAction;
-import ca.sfu.federation.action.ScenarioNewInstanceAction;
+import ca.sfu.federation.model.ParametricModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import org.netbeans.api.visual.action.PopupMenuProvider;
@@ -35,18 +34,15 @@ import org.netbeans.api.visual.widget.Widget;
 /**
  * Popup menu provider.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class MutableSceneModelPopupProvider implements PopupMenuProvider, ActionListener {
-    
-    //----------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(MutableSceneModelPopupProvider.class.getName());
     
     private MutableSceneModel scene;
     private JPopupMenu menu;
     
     //----------------------------------------------------------------------
-
     
     /**
      * Popup menu provider.
@@ -58,15 +54,16 @@ public class MutableSceneModelPopupProvider implements PopupMenuProvider, Action
         // create menu
         menu = new JPopupMenu("Model Object Actions");
         // menu item - add Scenario
-        ScenarioNewInstanceAction snia = new ScenarioNewInstanceAction("New Scenario",null,"New Scenario",new Integer(KeyEvent.VK_N));
+        CreateScenarioAction snia = new CreateScenarioAction("New Scenario",null,"New Scenario",new Integer(KeyEvent.VK_N));
         menu.add(snia);
         // menu item - add Annotation
-        GraphViewerAddAnnotationAction vaaa = new GraphViewerAddAnnotationAction("New Annotation",null,"New Annotation",new Integer(KeyEvent.VK_A),MyScene);
+        AddGraphViewerAnnotationAction vaaa = new AddGraphViewerAnnotationAction("New Annotation",null,"New Annotation",new Integer(KeyEvent.VK_A),MyScene);
         menu.add(vaaa);
         // menu item - separator
         menu.add(new JSeparator());
         // menu item - properties
-        PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)ParametricModel.getInstance());
+        SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),
+                (INamed)Application.getContext().getModel());
         menu.add(pssfa);
     }
     

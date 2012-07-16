@@ -15,6 +15,7 @@
  */
 package ca.sfu.federation.viewer.propertysheet;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.InputTable;
@@ -39,7 +40,6 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
 
     private static final Logger logger = Logger.getLogger(LinePropertySheet.class.getName());
     
-    private ParametricModel model;
     private Component target;
 
     private JPanel jspUpdateMethodInputs;
@@ -219,9 +219,6 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
                 .addContainerGap())
         );
         
-        // get the current object
-        this.model = ParametricModel.getInstance();
-        
         // disable non editable fields
         this.jtfCanonicalName.setEditable(false);
         this.jtfClass.setEditable(false);
@@ -289,7 +286,7 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
 
     private void jcbUpdateMethodActionListener(java.awt.event.ActionEvent evt) {
         String item = (String) this.jcbUpdateMethod.getSelectedItem();
-        System.out.println("INFO: ComponentSheet jcbUpdateMethodActionListener fired.");
+        logger.log(Level.INFO,"ComponentSheet jcbUpdateMethodActionListener fired");
         try {
             // set the update method
             this.target.setUpdateMethod(item);
@@ -303,7 +300,7 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
     
     private void jtfDescriptionActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfDescriptionActionListener fired. " + command);
+        logger.log(Level.INFO,"ComponentSheet jtfDescriptionActionListener fired {0}",command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("description",evt.getActionCommand());
@@ -316,7 +313,7 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
     
     private void jtfNameActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfNameActionListener fired. " + command);
+        logger.log(Level.INFO,"ComponentSheet jtfNameActionListener fired {0}",command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("name",evt.getActionCommand());
@@ -328,7 +325,7 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
     
     private void setValues() {
         // target
-        this.target = (Line) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
+        this.target = (Line) Application.getContext().getViewState(ApplicationContext.VIEWER_SELECTION);
         // set field values
         this.lblINamedObject.setText(this.target.getName());
         this.jtfClass.setText(this.target.getClass().toString());

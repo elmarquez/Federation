@@ -1,7 +1,4 @@
 /**
- * Scenario.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,14 +16,18 @@
 
 package ca.sfu.federation.model;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import com.developer.rose.BeanProxy;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.j3d.Group;
 import javax.media.j3d.Node;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openide.util.Utilities;
 
 /**
@@ -39,12 +40,10 @@ import org.openide.util.Utilities;
  * referenced and modified by local objects.
  *
  * @author Davis Marques
- * @version 0.0.2
  */
 public class Scenario extends Observable implements IContext, IViewable, IGraphable, IUpdateable, Observer, Serializable {
 
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(Scenario.class.getName());
     
     private String name;            // object name
     private IContext context;       // the parent context
@@ -60,7 +59,6 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     private Image thumbnail;        // generated thumbnail
     
     //--------------------------------------------------------------------------
-
 
     /**
      * Scenario constructor.
@@ -93,7 +91,8 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         try {
             MyContext.add(this);
         } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }
     
@@ -118,7 +117,8 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         try {
             MyContext.add(this);
         } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }
     
@@ -196,7 +196,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      */
     public void delete() {
         // tell observers to release me
-        System.out.println("INFO: Scenario signalled Observers to release and delete object.");
+        logger.log(Level.INFO,"Scenario signalled Observers to release and delete object");
         this.setChanged();
         this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST));
     }
@@ -359,12 +359,11 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      * @return Thumbnail image.
      */
     public Image getThumbnail() {
-        ParametricModel model = ParametricModel.getInstance();
-        LinkedHashMap thumbnails = (LinkedHashMap) model.getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
-        String name = this.getCanonicalName();
+        LinkedHashMap thumbnails = (LinkedHashMap) Application.getContext().getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
+        String canonicalname = this.getCanonicalName();
         BufferedImage bimage = null;
-        if (thumbnails.containsKey(name)) {
-            return (Image) thumbnails.get(name);
+        if (thumbnails.containsKey(canonicalname)) {
+            return (Image) thumbnails.get(canonicalname);
         }
         // return default thumbnail
         return this.thumbnail;
@@ -458,8 +457,8 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
             if (result == null) {
                 if (named instanceof IContext) {
                     // try to lookup the subpart
-                    IContext context = (IContext) named;
-                    result = context.lookup(path[1]);
+                    IContext thecontext = (IContext) named;
+                    result = thecontext.lookup(path[1]);
                 }
             }
             if (result == null) {
@@ -478,10 +477,10 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
                     }
                 }
                 // cast object as IContext
-                IContext context = (IContext) named;
+                IContext thecontext = (IContext) named;
                 // try to get the object value
                 try {
-                    result = context.lookup(query);
+                    result = thecontext.lookup(query);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -622,7 +621,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         INamed named = null;
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: Scenario received event notification id " + eventId);
+            logger.log(Level.INFO,"Scenario received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_CHANGE:
                     break;
@@ -634,10 +633,10 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
                     this.update();
                     this.setChanged();
                     this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_CHANGE));
-                    System.out.println("INFO: Scenario fired local update.");
+                    logger.log(Level.INFO,"Scenario fired local update");
                     break;
                 case ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST:
-                    System.out.println("INFO: Scenario fired element delete.");
+                    logger.log(Level.INFO,"Scenario fired element delete");
                     named = (INamed) o;
                     this.remove(named);
                     break;
@@ -650,12 +649,12 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
                     this.updateElementName(named);
                     this.setChanged();
                     this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_RENAME));
-                    System.out.println("INFO: Scenario fired name change update.");
+                    logger.log(Level.INFO,"Scenario fired name change update");
                     break;
                 case ApplicationContext.EVENT_THUMBNAIL_CHANGE:
                     this.setChanged();
                     this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_THUMBNAIL_CHANGE));
-                    System.out.println("INFO: Scenario fired thumbnail change.");
+                    logger.log(Level.INFO,"Scenario fired thumbnail change");
                     break;
                 default:
                     // TODO: this is temporary and should be removed

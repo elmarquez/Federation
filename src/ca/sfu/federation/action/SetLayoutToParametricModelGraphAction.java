@@ -1,7 +1,4 @@
 /**
- * ApplicationAboutAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,50 +16,53 @@
 
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.viewer.modelviewer.ModelViewerCanvas3D;
+import ca.sfu.federation.Application;
+import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.ParametricModel;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
 /**
- *
+ * Set the application to the Parametric Model Graph layout.
  * @author Davis Marques
- * @version 0.1.0
  */
-public class ModelViewerUpdateThumbnailAction extends AbstractAction {
+public class SetLayoutToParametricModelGraphAction extends AbstractAction {
+    
+    private static final Logger logger = Logger.getLogger(SetLayoutToParametricModelGraphAction.class.getName());
     
     //--------------------------------------------------------------------------
-
-    
-    private ModelViewerCanvas3D canvas;
-    
-    //--------------------------------------------------------------------------
-
     
     /**
-     * ApplicationAboutAction constructor.
-     * @param Name Action name that will appear in menus.
+     * SetLayoutToParametricModelGraphAction constructor.
+     * 
+     * @param Name The fully qualified context name to set as the current context.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
-     * @param MyCanvas Canvas.
      */
-    public ModelViewerUpdateThumbnailAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, ModelViewerCanvas3D MyCanvas) {
+    public SetLayoutToParametricModelGraphAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
-        this.canvas = MyCanvas;
     }
     
     //--------------------------------------------------------------------------
 
 
     /**
-     * Show About Application dialog.
-     * @param e Event
+     * Set the current context.
+     * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        this.canvas.setThumbnail();
+        ParametricModel model = Application.getContext().getModel();
+        if (model != null) {
+            model.setViewState(ApplicationContext.VIEWER_CURRENT_LAYOUT,ApplicationContext.VIEWER_LAYOUT_PARAMETRICMODELGRAPHVIEW);
+        } else {
+            logger.log(Level.WARNING,"Could not set layout. No model loaded.");
+        }
     }
     
 } // end class

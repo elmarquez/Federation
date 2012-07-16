@@ -16,6 +16,7 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
@@ -171,8 +172,7 @@ public class ContainerVisualWidget extends Widget implements IVisualWidget, Obse
      */
     protected void updateThumbnail() {
         // get thumbnails
-        ParametricModel model = ParametricModel.getInstance();
-        LinkedHashMap thumbnails = (LinkedHashMap) model.getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
+        LinkedHashMap thumbnails = (LinkedHashMap) Application.getContext().getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
         // set thumbnail
         BufferedImage image = (BufferedImage) thumbnails.get(this.target.getCanonicalName());
         if (image != null) {

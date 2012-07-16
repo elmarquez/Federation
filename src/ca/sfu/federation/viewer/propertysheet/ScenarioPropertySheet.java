@@ -1,7 +1,4 @@
 /**
- * ScenarioSheet.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,24 +16,24 @@
 
 package ca.sfu.federation.viewer.propertysheet;
 
-import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.Scenario;
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.Scenario;
 import com.developer.rose.BeanProxy;
-import java.beans.IntrospectionException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * @author  Davis Marques
- * @version 0.1
  */
 public class ScenarioPropertySheet extends javax.swing.JPanel implements Observer {
     
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(ScenarioPropertySheet.class.getName());
     
     private javax.swing.JTextField jtfCanonicalName;
     private javax.swing.JTextField jtfClass;
@@ -50,7 +47,6 @@ public class ScenarioPropertySheet extends javax.swing.JPanel implements Observe
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblParentContext;
 
-    private ParametricModel model;
     private Scenario target;
     
     //--------------------------------------------------------------------------
@@ -138,9 +134,6 @@ public class ScenarioPropertySheet extends javax.swing.JPanel implements Observe
                 .addContainerGap(142, Short.MAX_VALUE))
         );
         
-        // get the current object
-        this.model = ParametricModel.getInstance();
-        
         // disable non editable fields
         this.jtfCanonicalName.setEditable(false);
         this.jtfClass.setEditable(false);
@@ -167,33 +160,31 @@ public class ScenarioPropertySheet extends javax.swing.JPanel implements Observe
 
     private void jtfDescriptionActionListener(java.awt.event.ActionEvent evt) {                                              
         String command = evt.getActionCommand();
-        System.out.println("INFO: ScenarioSheet jtfDescriptionInputMethodTextChanged fired. " + command);
+        logger.log(Level.INFO,"ScenarioSheet jtfDescriptionInputMethodTextChanged fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("description",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }                                             
 
     private void jtfNameActionListener(java.awt.event.ActionEvent evt) {                                       
         String command = evt.getActionCommand();
-        System.out.println("INFO: ScenarioSheet jtfDescriptionInputMethodTextChanged fired. " + command);
+        logger.log(Level.INFO,"ScenarioSheet jtfDescriptionInputMethodTextChanged fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("name",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }                                      
 
     private void setValues() {
         // target
-        this.target = (Scenario) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
+        this.target = (Scenario) Application.getContext().getViewState(ApplicationContext.VIEWER_SELECTION);
         // listen for changes on the target
         if (this.target instanceof Observable) {
             Observable o = (Observable) this.target;
@@ -216,10 +207,10 @@ public class ScenarioPropertySheet extends javax.swing.JPanel implements Observe
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: ScenarioSheet received event notification id " + eventId);
+            logger.log(Level.INFO,"ScenarioSheet received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_PROPERTY_CHANGE:
-                    System.out.println("INFO: ScenarioSheet fired property change event.");
+                    logger.log(Level.INFO,"ScenarioSheet fired property change event");
                     this.setValues();
                     break;
             }

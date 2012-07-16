@@ -16,6 +16,7 @@
 
 package ca.sfu.federation.viewer.propertysheet;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Assembly;
 import ca.sfu.federation.model.ParametricModel;
@@ -35,7 +36,6 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
 
     private static final Logger logger = Logger.getLogger(BehaviorPropertySheet.class.getName());
     
-    private ParametricModel model;
     private Assembly target;
 
     private javax.swing.JTextField jtfAction;
@@ -133,8 +133,6 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
                     .add(jtfAction, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(72, Short.MAX_VALUE))
         );
-        // get the current object
-        this.model = ParametricModel.getInstance();
         // set field values
         this.setValues();
         // add action listeners
@@ -185,7 +183,7 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
     
     private void setValues() {
         // target
-        this.target = (Assembly) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
+        this.target = (Assembly) Application.getContext().getViewState(ApplicationContext.VIEWER_SELECTION);
         // listen for changes on the target
         if (this.target instanceof Observable) {
             Observable o = (Observable) this.target;

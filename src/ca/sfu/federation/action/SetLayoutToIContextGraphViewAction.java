@@ -16,44 +16,34 @@
 
 package ca.sfu.federation.action;
 
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
-import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.ParametricModel;
 import java.awt.event.ActionEvent;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
 /**
- * Set the current context of the model.  If the context is an instance of
- * Parametric Model, then we set the viewer type to 
+ * Set the application to the Scenario Graph View layout.
  * @author Davis Marques
+ * @version 0.1.0
  */
-public class IContextSetCurrentAction extends AbstractAction {
-
-    private static final Logger logger = Logger.getLogger(IContextSetCurrentAction.class.getName());
+public class SetLayoutToIContextGraphViewAction extends AbstractAction {
     
-    private ParametricModel model;
-    private IContext context;
-
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(SetLayoutToIContextGraphViewAction.class.getName());
+    
     /**
-     * IContextSetCurrentAction constructor.
-     * 
+     * SetLayoutToIContextGraphViewAction constructor.
      * @param Name The fully qualified context name to set as the current context.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
-     * @param MyContext Context to set the model to when this action is fired.
      */
-    public IContextSetCurrentAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, IContext MyContext) {
+    public SetLayoutToIContextGraphViewAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
-        this.context = MyContext;
-        this.model = ParametricModel.getInstance();
     }
     
     //--------------------------------------------------------------------------
@@ -63,8 +53,8 @@ public class IContextSetCurrentAction extends AbstractAction {
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        logger.log(Level.INFO,"IContextSetCurrentAction performed action. Set context to {0}", this.context.getCanonicalName());
-        model.setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,this.context);
+        ParametricModel model = Application.getContext().getModel();
+        model.setViewState(ApplicationContext.VIEWER_CURRENT_LAYOUT,ApplicationContext.VIEWER_LAYOUT_ICONTEXTGRAPHVIEW);
     }
     
 } // end class

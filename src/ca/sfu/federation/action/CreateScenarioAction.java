@@ -1,7 +1,4 @@
 /**
- * IContextModelViewerNewInstance.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -16,48 +13,53 @@
  * with this program; if not, write to the Free Software Foundation, Inc., 59
  * Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.viewer.modelviewer.ModelViewerJFrame;
+import ca.sfu.federation.Application;
+import ca.sfu.federation.model.ParametricModel;
+import ca.sfu.federation.model.Scenario;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
 /**
+ * Create scenario action.
  * @author Davis Marques
- * @version 0.1.0
  */
-public class IContextModelViewerNewInstance extends AbstractAction {
+public class CreateScenarioAction extends AbstractAction {
+    
+    private static final Logger logger = Logger.getLogger(CreateScenarioAction.class.getName());
     
     //--------------------------------------------------------------------------
-
-    
-    //--------------------------------------------------------------------------
-
     
     /**
-     * IContextModelViewerNewInstance constructor.
-     * @param Name The fully qualified context name to set as the current context.
+     * CreateScenarioAction constructor.
+     * @param Name Action name that will appear in menus.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
      */
-    public IContextModelViewerNewInstance(String Name,Icon MyIcon,String ToolTip,Integer MnemonicId) {
-        super(Name,MyIcon);
+    public CreateScenarioAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
+        super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
     }
     
     //--------------------------------------------------------------------------
 
-
     /**
-     * Set the current context.
-     * @param e Action event.
+     * Perform action.
+     * @param e Event.
      */
     public void actionPerformed(ActionEvent e) {
-        ModelViewerJFrame frame = new ModelViewerJFrame();
+        ParametricModel model = Application.getContext().getModel();
+        if (model != null) {
+            Scenario scenario = new Scenario(model);
+        } else {
+            logger.log(Level.WARNING,"Could not create new scenario because model does not exist");
+        }
     }
     
 } // end class

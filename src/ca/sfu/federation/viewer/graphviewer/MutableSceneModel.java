@@ -1,7 +1,4 @@
 /**
- * MutableSceneModel.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,15 +16,18 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.ParametricModel;
+import ca.sfu.federation.Application;
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.IGraphable;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.ParametricModel;
 import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.anchor.AnchorFactory;
@@ -44,12 +44,10 @@ import org.netbeans.api.visual.widget.Widget;
  * TODO: when restoring an existing scene from disk or otherwise, we need to make sure we have restablish listeners on model objects otherwise we can't delete, etc. objects
  *
  * @author Davis Marques
- * @version 0.1.0
  */
 public class MutableSceneModel extends Scene implements Observer {
-    
-    //--------------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(MutableSceneModel.class.getName());
     
     private IContext context;             // the context we are representing
     
@@ -75,7 +73,6 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     public MutableSceneModel(IContext MyContext) {
         // init
-        ParametricModel model = ParametricModel.getInstance();
         this.context = MyContext;
         this.nodes = new ArrayList();
         this.edges = new ArrayList();
@@ -99,6 +96,7 @@ public class MutableSceneModel extends Scene implements Observer {
         // initialize the scene
         this.initScene();
         // observe the model for changes
+        ParametricModel model = Application.getContext().getModel();
         if (model instanceof Observable) {
             Observable o = (Observable) model;
             o.addObserver(this);
@@ -136,7 +134,7 @@ public class MutableSceneModel extends Scene implements Observer {
         // add the annotation to the index
         this.annotations.put(annotation.getId(),annotation);
         // set the annotation location
-        Point p = (Point) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
+        Point p = (Point) Application.getContext().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
         annotation.setPreferredLocation(p);
         // revalidate the scene model
         this.validate();
@@ -202,7 +200,7 @@ public class MutableSceneModel extends Scene implements Observer {
                 node.setPreferredLocation(new Point(this.x,this.y));
                 this.x += 180;
             } else {
-                Point p = (Point) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
+                Point p = (Point) Application.getContext().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
                 node.setPreferredLocation(p);
             }
         } else {
@@ -213,7 +211,7 @@ public class MutableSceneModel extends Scene implements Observer {
                 node.setPreferredLocation(new Point(this.x,this.y));
                 this.x += 180;
             } else {
-                Point p = (Point) ParametricModel.getInstance().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
+                Point p = (Point) Application.getContext().getViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE);
                 node.setPreferredLocation(p);
             }
         }
@@ -396,6 +394,7 @@ public class MutableSceneModel extends Scene implements Observer {
      * Paint canvas.
      * TODO: the validity check is a crutch for a proper implementation. Need to look at the processing of adding and removing objects to ensure that the scene is revalidated following all major update events.
      */
+    @Override
     public void paintChildren() {
         if (this.isValidated()) {
             Object anti = getGraphics().getRenderingHint(RenderingHints.KEY_ANTIALIASING);
@@ -406,7 +405,7 @@ public class MutableSceneModel extends Scene implements Observer {
             getGraphics().setRenderingHint(RenderingHints.KEY_ANTIALIASING, anti);
             getGraphics().setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, textAnti);
         } else {
-            System.err.println("WARNING: SceneModel invalidated. Validating before repainting.");
+            logger.log(Level.WARNING,"SceneModel invalidated. Validating before repainting.");
             this.validate();
             Object anti = getGraphics().getRenderingHint(RenderingHints.KEY_ANTIALIASING);
             Object textAnti = getGraphics().getRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING);
@@ -450,30 +449,30 @@ public class MutableSceneModel extends Scene implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: MutableSceneModel received event notification id " + eventId);
+            logger.log(Level.INFO,"MutableSceneModel received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_ELEMENT_ADD:
-                    System.out.println("INFO: MutableSceneModel fired element add.");
+                    logger.log(Level.INFO,"MutableSceneModel fired element add");
                     this.updateAddElements();
                     break;
                 case ApplicationContext.EVENT_ELEMENT_CHANGE:
-                    System.out.println("INFO: MutableSceneModel fired element change.");
+                    logger.log(Level.INFO,"MutableSceneModel fired element change");
                     // update object visual state
 
                     // update edges
                     this.updateEdges();
                     break;
                 case ApplicationContext.EVENT_ELEMENT_DELETED:
-                    System.out.println("INFO: MutableSceneModel fired element deleted event.");
+                    logger.log(Level.INFO,"MutableSceneModel fired element deleted event");
                     this.updateDeleteElements();
                     break;
                 case ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST:
-                    System.out.println("INFO: MutableSceneModel fired element delete.");
+                    logger.log(Level.INFO,"MutableSceneModel fired element delete");
                     INamed named = (INamed) o;
                     this.updateDeleteElement(named);
                     break;
                 case ApplicationContext.EVENT_THUMBNAIL_CHANGE:
-                    System.out.println("INFO: MutableSceneModel fired thumbnail change event.");
+                    logger.log(Level.INFO,"MutableSceneModel fired thumbnail change event");
                     this.updateThumbnails();
                     break;
             }
@@ -600,7 +599,7 @@ public class MutableSceneModel extends Scene implements Observer {
      * with the model object state.
      */
     private void updateVisualState() {
-        System.err.println("WARNING: updateVisualState not implemented.");
+        logger.log(Level.WARNING,"updateVisualState not implemented");
     }
     
 } // end class

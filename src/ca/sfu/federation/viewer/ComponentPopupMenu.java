@@ -21,7 +21,7 @@ package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.SetPropertySheetFocusAction;
 import java.awt.event.KeyEvent;
 import javax.swing.JPopupMenu;
 
@@ -48,7 +48,7 @@ public class ComponentPopupMenu extends JPopupMenu {
         // init
         this.target = MyComponent;
         // menu item - properties
-        PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)this.target);
+        SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)this.target);
         this.add(pssfa);
     }
     

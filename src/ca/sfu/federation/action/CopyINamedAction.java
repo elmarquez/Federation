@@ -27,15 +27,15 @@ import javax.swing.KeyStroke;
  * Copy action.
  * @author dmarques
  */
-public class PasteAction extends AbstractAction {
+public class CopyINamedAction extends AbstractAction {
 
-    public PasteAction() {
-        super("Paste", null);
+    public CopyINamedAction() {
+        super("Copy", null);
         Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
-        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
-        this.putValue(Action.LONG_DESCRIPTION, "Paste items from clipboard");
-        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_P);
-        this.putValue(Action.SHORT_DESCRIPTION, "Paste items from clipboard");
+        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control C"));
+        this.putValue(Action.LONG_DESCRIPTION, "Copy selected item or items");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_Y);
+        this.putValue(Action.SHORT_DESCRIPTION, "Copy selected item or items");
         this.putValue(Action.SMALL_ICON, icon);
     }
     

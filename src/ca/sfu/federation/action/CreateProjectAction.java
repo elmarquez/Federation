@@ -23,7 +23,9 @@ import ca.sfu.federation.model.Scenario;
 import ca.sfu.federation.model.geometry.CoordinateSystem;
 import ca.sfu.federation.model.geometry.Line;
 import ca.sfu.federation.model.geometry.Point;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -33,20 +35,30 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  * Action to create a new parametric model.
  * @author Davis Marques
  */
-public class NewProjectAction extends AbstractAction {
+public class CreateProjectAction extends AbstractAction {
 
-    private static final Logger logger = Logger.getLogger(NewProjectAction.class.getName());
+    private static final Logger logger = Logger.getLogger(CreateProjectAction.class.getName());
     
     //--------------------------------------------------------------------------
     
+    public CreateProjectAction() {
+        super("New Project", null);
+        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
+        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift N"));
+        this.putValue(Action.LONG_DESCRIPTION, "Create a new project");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_N);
+        this.putValue(Action.SHORT_DESCRIPTION, "Create a new project");
+        this.putValue(Action.SMALL_ICON, icon);
+    }
+    
     /**
-     * NewProjectAction constructor.
+     * CreateProjectAction constructor.
      * @param Name Action name that will appear in menus.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
      */
-    public NewProjectAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
+    public CreateProjectAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
         super(Name, MyIcon);
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control N"));
         this.putValue(Action.LONG_DESCRIPTION,ToolTip);

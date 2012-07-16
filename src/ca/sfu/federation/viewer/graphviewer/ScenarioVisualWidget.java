@@ -1,7 +1,4 @@
 /**
- * ScenarioVisualWidget.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,16 +16,13 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.Scenario;
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
-import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.IViewable;
-import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.action.IContextSetCurrentAction;
 import ca.sfu.federation.action.DeleteINamedAction;
 import ca.sfu.federation.action.RenameINamedAction;
-import ca.sfu.federation.action.PropertySheetSetFocusAction;
+import ca.sfu.federation.action.SetCurrentIContextAction;
+import ca.sfu.federation.action.SetPropertySheetFocusAction;
+import ca.sfu.federation.model.*;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,6 +31,8 @@ import java.awt.image.BufferedImage;
 import java.util.LinkedHashMap;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import org.netbeans.api.visual.action.ActionFactory;
@@ -56,9 +52,7 @@ import org.netbeans.api.visual.widget.Widget;
  */
 public class ScenarioVisualWidget extends Widget implements Observer {
     
-    //--------------------------------------------------------------------------
-
-    
+    private static final Logger logger = Logger.getLogger(ScenarioVisualWidget.class.getName());
     private static final String ACTION_OPEN_SCENARIO = "OPENSCENARIO";
     private static final String ACTION_SET_ACTIVE_SCENARIO = "SETSCENARIOACTIVE";
     private static final String ACTION_MOVE = "MOVE";
@@ -73,7 +67,6 @@ public class ScenarioVisualWidget extends Widget implements Observer {
     
     //--------------------------------------------------------------------------
 
-    
     /**
      * ScenarioVisualWidget constructor.
      * @param MyScene Scene.
@@ -140,21 +133,21 @@ public class ScenarioVisualWidget extends Widget implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: ScenarioVisualWidget received event notification id " + eventId);
+            logger.log(Level.INFO,"ScenarioVisualWidget received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_NAME_CHANGE:
                     INamed named = (INamed) o;
                     this.labelWidget.setLabel(named.getName());
-                    System.out.println("INFO: ScenarioVisualWidget fired label update.");
+                    logger.log(Level.INFO,"ScenarioVisualWidget fired label update");
                     break;
                 case ApplicationContext.EVENT_DESCRIPTION_CHANGE:
-                    System.out.println("ERROR: Not implemented. VisualWidget.update:DescriptionChange");
+                    logger.log(Level.WARNING,"Not implemented");
                     break;
                 case ApplicationContext.EVENT_ICON_CHANGE:
-                    System.out.println("ERROR: Not implemented. VisualWidget.update:Icon Change");
+                    logger.log(Level.WARNING,"Not implemented");
                     break;
                 case ApplicationContext.EVENT_THUMBNAIL_CHANGE:
-                    System.out.println("INFO: ScenarioVisualWidget fired thumbnail update.");
+                    logger.log(Level.INFO,"ScenarioVisualWidget fired thumbnail update");
                     this.updateThumbnail();
                     break;
             }
@@ -168,8 +161,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
      */
     protected void updateThumbnail() {
         // get thumbnails 
-        ParametricModel model = ParametricModel.getInstance();
-        LinkedHashMap thumbnails = (LinkedHashMap) model.getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
+        LinkedHashMap thumbnails = (LinkedHashMap) Application.getContext().getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
         // set thumbnail
         BufferedImage image = (BufferedImage) thumbnails.get(this.target.getCanonicalName());
         if (image != null) {
@@ -209,7 +201,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
             menu = new JPopupMenu("Model Object Actions");
             // menu item - set the target as the focus
             IContext context = (IContext) scenario;
-            IContextSetCurrentAction setfocus = new IContextSetCurrentAction("Open Scenario",null,"Open Scenario",new Integer(KeyEvent.VK_O),context);
+            SetCurrentIContextAction setfocus = new SetCurrentIContextAction("Open Scenario",null,"Open Scenario",new Integer(KeyEvent.VK_O),context);
             menu.add(setfocus);
             // menu item - rename context object
             RenameINamedAction rename = new RenameINamedAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),target);
@@ -220,7 +212,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
             // separator
             menu.add(new JSeparator());
             // menu item - properties
-            PropertySheetSetFocusAction pssfa = new PropertySheetSetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),MyWidget.target);
+            SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),MyWidget.target);
             menu.add(pssfa);
         }
         
@@ -234,7 +226,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
         public void actionPerformed(ActionEvent e) {
             if (this.widget.target instanceof IContext) {
                 IContext context = (IContext) this.widget.getTarget();
-                ParametricModel.getInstance().setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,context);
+                Application.getContext().setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,context);
                 this.scene.setActiveTool(e.getActionCommand());
             }
         }

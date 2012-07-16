@@ -1,5 +1,5 @@
 /**
- * AssemblyNewInstanceAction.java
+ * CreateComponentAction.java
  * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -19,21 +19,23 @@
 
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.model.Assembly;
+import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.IContext;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Constructor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * @author Davis Marques
  * @version 0.1.0
  */
-public class AssemblyNewInstanceAction extends AbstractAction {
+public class CreateComponentAction extends AbstractAction {
     
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(CreateComponentAction.class.getName());
     
     private IContext context;
     private Class clazz;
@@ -43,14 +45,14 @@ public class AssemblyNewInstanceAction extends AbstractAction {
 
     
     /**
-     * AssemblyNewInstanceAction constructor.
+     * CreateComponentAction constructor.
      * @param Name Action name that will appear in menus.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
      * @param MyContext Context.
      */
-    public AssemblyNewInstanceAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, IContext MyContext) {
+    public CreateComponentAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, IContext MyContext) {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
@@ -59,21 +61,21 @@ public class AssemblyNewInstanceAction extends AbstractAction {
     }
     
     /**
-     * AssemblyNewInstanceAction constructor.
+     * CreateComponentAction constructor.
      * @param Name Action name that will appear in menus.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
      * @param MnemonicId Key mnemonic.
      * @param MyContext Context.
-     * @param MyClass Assembly class to instantiate.
+     * @param MyClass Class.
      */
-    public AssemblyNewInstanceAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, IContext MyContext, Class MyClass) {
+    public CreateComponentAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, IContext MyContext, Class MyClass) {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
         this.context = MyContext;
         this.byClass = false;
-        if (Assembly.class.isAssignableFrom(MyClass)) {
+        if (Component.class.isAssignableFrom(MyClass)) {
             this.clazz = MyClass;
             this.byClass = true;
         }
@@ -93,12 +95,13 @@ public class AssemblyNewInstanceAction extends AbstractAction {
                     Constructor constructor = this.clazz.getConstructor(IContext.class);
                     constructor.newInstance(this.context);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    String stack = ExceptionUtils.getFullStackTrace(ex);
+                    logger.log(Level.WARNING,"{0}",stack);
                 }
+                return;
             }
-            return;
-        } 
-        Assembly assembly = new Assembly(this.context);
+        }
+        Component component = new Component(this.context);
     }
     
-} // end class
+} 

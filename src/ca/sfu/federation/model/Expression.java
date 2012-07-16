@@ -534,7 +534,8 @@ public class Expression implements Serializable {
             try {
                 assign(lhs,rhs);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"{0}",stack);
             }
         } else {
             // the number of parameters does not match the operator requirements
@@ -694,7 +695,8 @@ public class Expression implements Serializable {
                     throw new IllegalArgumentException("The assignment operation could not be performed because the objects provided are not of the same type.");
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"{0}",stack);
             }
         } else if (isReference((String) lhs)) {
             // do something else

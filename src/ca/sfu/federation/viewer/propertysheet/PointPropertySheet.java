@@ -1,7 +1,4 @@
 /**
- * ComponentPointSheet.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,32 +16,27 @@
 
 package ca.sfu.federation.viewer.propertysheet;
 
-import ca.sfu.federation.model.Component;
-import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.exception.NonExistantMethodException;
-import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
-import ca.sfu.federation.model.geometry.Point;
-import ca.sfu.federation.model.InputTable;
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.Component;
+import ca.sfu.federation.model.InputTable;
+import ca.sfu.federation.model.geometry.Point;
 import com.developer.rose.BeanProxy;
 import java.awt.BorderLayout;
-import java.beans.IntrospectionException;
 import java.lang.reflect.Method;
 import java.util.*;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import se.datadosen.component.RiverLayout;
 
 /**
  * @author  Davis Marques
  */
 public class PointPropertySheet extends javax.swing.JPanel implements Observer {
-    
-    //--------------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(PointPropertySheet.class.getName());
     
     private JComboBox jcbUpdateMethod;
     private JPanel jspUpdateMethodInputs;
@@ -67,7 +59,6 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
     private JLabel lblY;
     private JLabel lblZ;
     
-    private ParametricModel model;
     private Component target;
     
     //--------------------------------------------------------------------------
@@ -203,8 +194,6 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
                 .addContainerGap())
                 );
         
-        // get the current object
-        this.model = ParametricModel.getInstance();
         // set field values
         this.setValues();
         // add action listeners
@@ -242,7 +231,6 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
     }
     
     //-------------------------------------------------------------------------
-
     
     /**
      * Build an Update Method user input panel.
@@ -280,90 +268,84 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
     
     private void jtfZActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfZActionListener fired. " + command);
+        logger.log(Level.INFO,"ComponentSheet jtfZActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("Z",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }
     
     private void jtfYActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfYActionListener fired. " + command);
+        logger.log(Level.INFO,"ComponentSheet jtfYActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("Y",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         
     }
     
     private void jtfXActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfXActionListener fired. " + command);
+        logger.log(Level.INFO,"ComponentSheet jtfXActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("X",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         
     }
     
     private void jtfDescriptionActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfDescriptionActionListener fired. " + command);
+        logger.log(Level.INFO,"ComponentSheet jtfDescriptionActionListener fired {0}", command);
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("description",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         
     }
     
     private void jtfNameActionListener(java.awt.event.ActionEvent evt) {
         String command = evt.getActionCommand();
-        System.out.println("INFO: ComponentSheet jtfNameActionListener fired.");
+        logger.log(Level.INFO,"ComponentSheet jtfNameActionListener fired");
         try {
             BeanProxy proxy = new BeanProxy(this.target);
             proxy.set("name",evt.getActionCommand());
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }
     
     private void jcbUpdateMethodActionListener(java.awt.event.ActionEvent evt) {
         String item = (String) this.jcbUpdateMethod.getSelectedItem();
-        System.out.println("INFO: ComponentSheet jcbUpdateMethodActionListener fired.");
+        logger.log(Level.INFO,"ComponentSheet jcbUpdateMethodActionListener fired");
         try {
             // set the update method
             this.target.setUpdateMethod(item);
             // update the input arguments panel
             this.buildUpdateMethodInputsPanel();
-        } catch (NonExistantMethodException ex) {
-            ex.printStackTrace();
-        } catch (NonExistantUpdateAnnotationException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
     }
     
     private void setValues() {
         // target
-        this.target = (Point) this.model.getViewState(ApplicationContext.VIEWER_SELECTION);
+        this.target = (Point) Application.getContext().getViewState(ApplicationContext.VIEWER_SELECTION);
         // set field values
         this.lblINamedObject.setText(this.target.getName());
         this.jtfClass.setText(this.target.getClass().toString());
@@ -378,10 +360,9 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
             this.jtfX.setText(String.valueOf(x));
             this.jtfY.setText(String.valueOf(y));
             this.jtfZ.setText(String.valueOf(z));
-        } catch (IntrospectionException ex) {
-            ex.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         
         Method[] methods = this.target.getUpdateMethods();
@@ -413,10 +394,10 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            System.out.println("INFO: ComponentSheet received event notification id " + eventId);
+            logger.log(Level.INFO,"ComponentSheet received event notification id {0}", eventId);
             switch (eventId) {
                 case ApplicationContext.EVENT_PROPERTY_CHANGE:
-                    System.out.println("INFO: ComponentSheet fired property change event.");
+                    logger.log(Level.INFO,"ComponentSheet fired property change event");
                     this.setValues();
                     break;
             }

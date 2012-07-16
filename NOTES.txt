@@ -16,9 +16,13 @@ Versions
 . Component classes that implement 2D graphics drawing
 . Open 2D model views from Scenario view
 . Viewers should observe model, maintain proper state
+. Move anything related to view state into the ApplicationContext class
+. Consider moving action to register an object in a particular context out of the constructor
 
 0.2.1
 * Replace all System.out.println calls to logging framework calls >> in progress
+* Removed code for singleton implementation of ParametricModel
+* All viewers watch the application context for changes in the model
 . Basic test suite for core model and utility classes
 . Component constructor methods should throw exceptions
 

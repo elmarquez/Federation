@@ -1,7 +1,4 @@
 /**
- * IContextGraphViewerJFrame.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,14 +16,13 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.ParametricModel;
-import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.model.ParametricModel;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Toolkit;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.JFrame;
 
 /**
@@ -51,11 +47,10 @@ public class IContextGraphViewerJFrame extends JFrame {
         contentpane.setLayout(new BorderLayout());
         IContextGraphViewerPanel panel = new IContextGraphViewerPanel();
         contentpane.add(panel,BorderLayout.CENTER);
-        this.model = ParametricModel.getInstance();
-        if (!this.model.getViewState().containsKey(ApplicationContext.VIEWER_CURRENT_CONTEXT)) {
+        if (!Application.getContext().getViewState().containsKey(ApplicationContext.VIEWER_CURRENT_CONTEXT)) {
             this.model.setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,this.model);
         }
-        IContext context = (IContext) this.model.getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
+        IContext context = (IContext) Application.getContext().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
         this.setTitle("IContext Graph Viewer - " + context.getName());
         this.pack();
         this.setVisible(true);
