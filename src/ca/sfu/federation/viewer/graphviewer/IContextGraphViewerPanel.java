@@ -18,24 +18,23 @@ package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
-import ca.sfu.federation.action.CreateScenarioAction;
 import ca.sfu.federation.model.*;
 import java.awt.BorderLayout;
 import java.awt.Point;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-import org.netbeans.api.visual.action.PopupMenuProvider;
-import org.netbeans.api.visual.widget.Widget;
 
 /**
  * Displays dependancy graph for an IContext.  Some display objects may
  * provide thumbnails or icon views which are then rendered in the graph.
  * TODO: need a proper set of controls on the toolbar, and key mappings to zoom/pan actions
  * @author  Davis Marques
- * @version 0.1.0
  */
 public class IContextGraphViewerPanel extends JPanel implements MouseListener, Observer {
 
@@ -46,7 +45,6 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     private JToolBar toolBar;
     
     // scene
-    private ParametricModel model;
     private IContext context;
     private LinkedHashMap scenes;
     private MutableSceneModel scene;
@@ -54,7 +52,7 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     //-------------------------------------------------------------------------
     
     /**
-     * IContextGraphViewerPanel constructor.
+     * IContextGraphViewerPanel default constructor.
      */
     public IContextGraphViewerPanel() {
         // init
@@ -66,13 +64,8 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
         // create the toolbar, add it to the panel
         this.toolBar = buildDefaultToolbar();
         // this.add(toolBar,BorderLayout.NORTH);
-        // build the graph
-        this.buildGraph();
         // observe the model for changes
-        if (this.model instanceof Observable) {
-            Observable o = (Observable) this.model;
-            o.addObserver(this);
-        }
+        Application.getContext().addObserver(this);
     }
     
     //-------------------------------------------------------------------------
@@ -81,9 +74,9 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
      * Build the default toolbar.
      * @return JToolBar with default configuration.
      */
-    public JToolBar buildDefaultToolbar() {
-        JToolBar toolBar = new JToolBar("Default Toolbar",JToolBar.HORIZONTAL);
-        toolBar.setFloatable(true);
+    private JToolBar buildDefaultToolbar() {
+        JToolBar theToolBar = new JToolBar("Default Toolbar",JToolBar.HORIZONTAL);
+        theToolBar.setFloatable(true);
         JButton btnNewScenario = new JButton("New Scenario");
         JButton btnNewAssembly = new JButton("New Assembly");
         JButton btnNewComponent = new JButton("New Component");
@@ -98,11 +91,11 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
                 Assembly assembly = new Assembly(context);
             }
         });
-        toolBar.add(btnNewScenario);
-        toolBar.add(btnNewAssembly);
-        toolBar.add(btnNewComponent);
+        theToolBar.add(btnNewScenario);
+        theToolBar.add(btnNewAssembly);
+        theToolBar.add(btnNewComponent);
         // return result
-        return toolBar;
+        return theToolBar;
     }
     
     /**
@@ -111,10 +104,10 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     private void buildGraph() {
         // get the current context
         this.context = (IContext) Application.getContext().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
-        logger.log(Level.INFO,"IContextGraphViewerPanel set to {0}", this.context.getCanonicalName());
         if (this.context == null) {
             return;
         }
+        logger.log(Level.INFO,"IContextGraphViewerPanel set to {0}", this.context.getCanonicalName());
         // observe the context for changes
         if (this.context instanceof Observable) {
             Observable o = (Observable) this.context;
@@ -184,19 +177,28 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     }
     
     /**
-     * Get the coordinates for the last mouse release event.
+     * Handle mouse clicked event. Get the coordinates for the last mouse 
+     * release event.
      * @param e Mouse event.
      */
     public void mouseClicked(MouseEvent e) {
     }
     
+    /**
+     * Handle mouse pressed event.
+     * @param e 
+     */
     public void mousePressed(MouseEvent e) {
     }
-    
+
+    /**
+     * Handle mouse released event.
+     * @param e 
+     */
     public void mouseReleased(MouseEvent e) {
         logger.log(Level.INFO,"mouse released {0}", e.getPoint().getLocation().toString());
         Point p = e.getPoint();
-        this.model.setViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE,p);
+        Application.getContext().setViewState(ApplicationContext.VIEWER_LAST_MOUSERELEASE,p);
     }
     
     public void mouseEntered(MouseEvent e) {
@@ -213,12 +215,17 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            logger.log(Level.INFO,"IContextGraphViewerPanel received event notification id {0}", eventId);
             switch (eventId) {
+                case ApplicationContext.MODEL_LOADED:
+                    buildGraph();
+                    break;
+                case ApplicationContext.MODEL_CLOSED:
+                    break;
                 case ApplicationContext.EVENT_CONTEXT_CHANGE:
                     logger.log(Level.INFO,"IContextGraphViewerPanel fired context change");
                     // stop listening on the previous context
-                    if (this.context instanceof Observable  && this.context != this.model) {
+                    ParametricModel model = Application.getContext().getModel();
+                    if (this.context instanceof Observable  && this.context != model) {
                         Observable ob = (Observable) this.context;
                         ob.deleteObserver(this);
                     }
@@ -230,60 +237,6 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
                     break;
             }
         }
-    }
-    
-    //--------------------------------------------------------------------------
-    // PRIVATE CLASSES
-    
-    /**
-     * Popup menu provider.
-     */
-    private final class IContextGraphViewerPanelPopupProvider implements PopupMenuProvider, ActionListener {
-        
-        private JPopupMenu menu;
-        private AntialiasedScene scene;
-        
-        //----------------------------------------------------------------------
-    
-        
-        /**
-         * Popup menu provider.
-         * @param MyScene
-         */
-        public IContextGraphViewerPanelPopupProvider(AntialiasedScene MyScene) {
-            // init
-            this.scene = MyScene;
-            // create menu
-            menu = new JPopupMenu("Model Object Actions");
-            JMenuItem menuitem;
-            // menu item - add Scenario
-            IContext context = (IContext) Application.getContext().getViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT);
-            if (context instanceof ParametricModel) {
-                ParametricModel model = (ParametricModel) context;
-                menuitem = new JMenuItem("New Scenario");
-                CreateScenarioAction snia = new CreateScenarioAction("New Scenario",null,"New Scenario",new Integer(KeyEvent.VK_S));
-                menuitem.setAction(snia);
-                menu.add(menuitem);
-            }
-            
-            menu.add(new JSeparator());
-            
-            // menu item - properties
-            menuitem = new JMenuItem("Properties");
-            menu.add(menuitem);
-        }
-        
-        //----------------------------------------------------------------------
-    
-        
-        public JPopupMenu getPopupMenu(Widget widget) {
-            return menu;
-        }
-        
-        public void actionPerformed(ActionEvent e) {
-            this.scene.setActiveTool(e.getActionCommand());
-        }
-        
     }
     
 } 

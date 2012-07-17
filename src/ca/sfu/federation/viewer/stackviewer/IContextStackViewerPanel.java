@@ -33,8 +33,9 @@ import javax.swing.JPanel;
 import org.openide.util.Utilities;
 
 /**
+ * Renders an order list of predecessor IContext's for the current context in 
+ * focus.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class IContextStackViewerPanel extends JPanel implements Observer {
     
@@ -54,15 +55,12 @@ public class IContextStackViewerPanel extends JPanel implements Observer {
         this.setLayout(new BorderLayout());
         // listen for changes on model
         ParametricModel model = Application.getContext().getModel();
-        if (model instanceof Observable) {
-            Observable o = (Observable) model;
-            o.addObserver(this);
-        }
+        model.addObserver(this);
         // styles
         this.backgroundmode = 1;
         // load thumbnail
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        String path = config.getString("stackviewer-thumbnail");
+        String path = config.getString("view-stackviewer-thumbnail");
         this.thumbnail = Utilities.loadImage(path);
     }
     
@@ -183,28 +181,30 @@ public class IContextStackViewerPanel extends JPanel implements Observer {
             this.context = currentcontext;
         }
         // draw background
-        this.drawBackground(g);
+        // this.drawBackground(g);
         // draw model objects
-        ArrayList parents = (ArrayList) this.context.getParents();
-        IContext[] pa = new IContext[parents.size()];
-        parents.addAll(Arrays.asList(pa));
-        int y = 0;
-        boolean leading = false;
-        boolean fill = false;
-        boolean trailing = false;
-        int leadingBlock = -1;
-        for (int i=0;i<pa.length;i++) {
-            IContext parent = pa[i];
-            if (i+1==pa.length) {
-                leading = false;
-                fill = true;
-                trailing = false;
+        if (this.context != null) {
+            ArrayList parents = (ArrayList) this.context.getParents();
+            IContext[] pa = new IContext[parents.size()];
+            parents.addAll(Arrays.asList(pa));
+            int y = 0;
+            boolean leading = false;
+            boolean fill = false;
+            boolean trailing = false;
+            int leadingBlock = -1;
+            for (int i=0;i<pa.length;i++) {
+                IContext parent = pa[i];
+                if (i+1==pa.length) {
+                    leading = false;
+                    fill = true;
+                    trailing = false;
+                }
+                this.drawScenarioBlock(g,0,y,60,parent.getName(),leading,fill,trailing);
+                y += 60;
+                leading = true;
+                fill = false;
+                trailing = true;
             }
-            this.drawScenarioBlock(g,0,y,60,parent.getName(),leading,fill,trailing);
-            y += 60;
-            leading = true;
-            fill = false;
-            trailing = true;
         }
     }
     

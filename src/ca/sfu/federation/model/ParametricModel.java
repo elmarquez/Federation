@@ -18,14 +18,14 @@ package ca.sfu.federation.model;
 
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.exception.GraphCycleException;
+import ca.sfu.federation.utils.ImageIconUtils;
 import com.developer.rose.BeanProxy;
-import java.awt.Image;
 import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.openide.util.Utilities;
 
 /**
  * Parametric Model is the top level model object and acts as a container for
@@ -37,16 +37,16 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
 
     private static final Logger logger = Logger.getLogger(ParametricModel.class.getName());
 
-    private LinkedHashMap modelParam;             // model parameters
-    private LinkedHashMap viewState;              // view parameters
+    private LinkedHashMap modelParam;   // model parameters
+    private LinkedHashMap viewState;    // view parameters
 
-    private String name;        // unique identifier for this object
-    private ArrayList elements;    // a collection of parts for this object
-    private ArrayList updateOrder; // the order by which systolic array elements are updated
+    private String name;                // unique identifier for this object
+    private ArrayList elements;         // a collection of parts for this object
+    private ArrayList updateOrder;      // the order by which systolic array elements are updated
 
     // metadata, visual properties
-    private String description;              // model description
-    private Image icon;         // icon representation of object
+    private String description;         // model description
+    private ImageIcon icon;             // icon representation of object
 
     //--------------------------------------------------------------------------
 
@@ -235,7 +235,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
      * Get icon.
      * @return Icon.
      */
-    public Image getIcon() {
+    public ImageIcon getIcon() {
         return this.icon;
     }
 
@@ -308,7 +308,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         // set properties
         this.name = Name;
-        this.icon = Utilities.loadImage(config.getString("parametricmodel-icon"));
+        this.icon = ImageIconUtils.loadIconById("parametricmodel-icon");
         // default view state parameters
         this.viewState = new LinkedHashMap();
         this.viewState.put(ApplicationContext.VIEWER_CURRENT_CONTEXT,this);
@@ -452,7 +452,7 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
      * Set the icon.
      * @param MyIcon Icon.
      */
-    public void setIcon(Image MyIcon) {
+    public void setIcon(ImageIcon MyIcon) {
         this.icon = MyIcon;
     }
 

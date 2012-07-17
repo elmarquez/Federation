@@ -36,7 +36,7 @@ public class EditDeleteAction extends AbstractAction {
     
     public EditDeleteAction() {
         super("Delete", null);
-        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/16x16/actions/edit-delete.png");
+        Icon icon = ImageIconUtils.loadIconById("edit-delete-icon");
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("delete"));
         this.putValue(Action.LONG_DESCRIPTION, "Delete selected items");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_D);

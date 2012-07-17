@@ -1,7 +1,4 @@
 /**
- * ExitApplicationAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -26,15 +23,8 @@ import javax.swing.Icon;
 /**
  * Exit the application.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class ExitApplicationAction extends AbstractAction {
-    
-    //--------------------------------------------------------------------------
-
-    
-    //--------------------------------------------------------------------------
-
     
     /**
      * ExitApplicationAction constructor.
@@ -51,12 +41,12 @@ public class ExitApplicationAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
-
     /**
      * Confirm application shutdown.
      * @param e Event.
      */
     public void actionPerformed(ActionEvent e) {
+        // todo@ check if there is an existing model, prompt to save the model, exit after saving
         System.exit(1);
     }
     

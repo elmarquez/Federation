@@ -1,7 +1,4 @@
 /**
- * CoordinateSystem.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,11 +16,12 @@
 
 package ca.sfu.federation.model.geometry;
 
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
+import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
-import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.Color;
 import java.util.ResourceBundle;
 import javax.media.j3d.GeometryArray;
@@ -32,7 +30,6 @@ import javax.media.j3d.Node;
 import javax.media.j3d.Shape3D;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3f;
-import org.openide.util.Utilities;
 
 /**
  * Coordinate System in 3D space.
@@ -40,9 +37,6 @@ import org.openide.util.Utilities;
  * @version 0.0.2
  */
 public class CoordinateSystem extends Component implements IPoint {
-    
-    //--------------------------------------------------------------------------
-
     
     private static final float ORIGIN_AXIS_LENGTH = 1.0f;
     private static final boolean ORIGIN_NEGATIVE_AXES = false;
@@ -54,7 +48,6 @@ public class CoordinateSystem extends Component implements IPoint {
     
     //--------------------------------------------------------------------------
 
-    
     /**
      * CoordinateSystem constructor.
      * @param MyContext The parent Context.
@@ -75,7 +68,7 @@ public class CoordinateSystem extends Component implements IPoint {
         }
         // set the icon
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(Utilities.loadImage(config.getString("coordinatesystem-icon")));
+        this.setIcon(ImageIconUtils.loadIconById("coordinatesystem-icon"));
     }
     
     /**
@@ -98,7 +91,7 @@ public class CoordinateSystem extends Component implements IPoint {
     public Node getRenderable() {
         // axis shape
         LineArray axis = null;
-        if (this.ORIGIN_NEGATIVE_AXES) {
+        if (ORIGIN_NEGATIVE_AXES) {
             // show positive and negative axes
             axis = new LineArray(6,GeometryArray.COORDINATES | GeometryArray.COLOR_3);
             // X-Axis

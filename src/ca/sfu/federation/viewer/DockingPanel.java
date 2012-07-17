@@ -13,11 +13,18 @@
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
 package ca.sfu.federation.viewer;
 
+import ca.sfu.federation.utils.ImageIconUtils;
 import ca.sfu.federation.viewer.console.ConsolePanel;
+import ca.sfu.federation.viewer.graphviewer.IContextGraphViewerPanel;
 import ca.sfu.federation.viewer.projectexplorer.ProjectExplorerPanel;
 import ca.sfu.federation.viewer.propertysheet.PropertySheetPanel;
+import ca.sfu.federation.viewer.stackviewer.StackViewerPanel;
+import ca.sfu.federation.viewer.toolbars.EditToolbar;
+import ca.sfu.federation.viewer.toolbars.ProjectToolbar;
+import ca.sfu.federation.viewer.toolbars.ViewToolbar;
 import com.javadocking.DockingManager;
 import com.javadocking.dock.*;
 import com.javadocking.dock.docker.BorderDocker;
@@ -39,7 +46,10 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Iterator;
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Application docking panel.
@@ -76,29 +86,29 @@ public class DockingPanel extends JPanel {
         DockingManager.setDockModel(dockModel);
 
         // create the application viewers
-        JButton button1 = new JButton("Scenario");
+        IContextGraphViewerPanel projectGraphView = new IContextGraphViewerPanel();
+        StackViewerPanel stackViewer = new StackViewerPanel();
         JButton button2 = new JButton("Graph View 1");
         JButton button3 = new JButton("Graph View 2");
         JButton button4 = new JButton("Model View 1");
         JButton button5 = new JButton("Model View 2");
-        JButton button6 = new JButton("Stack View");
         ProjectExplorerPanel explorerPanel = new ProjectExplorerPanel();
         PropertySheetPanel propertysheetPanel = new PropertySheetPanel();
         ConsolePanel consolePanel = new ConsolePanel();
 
         // create the dockables around the content components
-        Dockable scenarioViewDockable = createDockable("Project", button1, "Project", new ImageIcon(getClass().getResource("/com/javadocking/resources/images/text12.gif")), "Project");
-        Dockable graphView1Dockable = createDockable("Graph View 1", button2, "Graph View 1", new ImageIcon(getClass().getResource("/com/javadocking/resources/images/text12.gif")), "Graph View 1");
-        Dockable graphView2Dockable = createDockable("Graph View 2", button3, "Graph View 2", new ImageIcon(getClass().getResource("/com/javadocking/resources/images/text12.gif")), "Graph View 2");
-        Dockable modelView1Dockable = createDockable("Model View 1", button4, "Model View 1", new ImageIcon(getClass().getResource("/com/javadocking/resources/images/text12.gif")), "Model View 1");
-        Dockable modelView2Dockable = createDockable("Model View 2", button5, "Model View 2", new ImageIcon(getClass().getResource("/com/javadocking/resources/images/text12.gif")), "Model View 2");
-        Dockable stackViewDockable = createDockable("Stack", button6, "Stack", new ImageIcon(getClass().getResource("/com/javadocking/resources/images/text12.gif")), "Stack Panel");
-        Dockable explorerDockable = createDockable("Project", explorerPanel, "Project", new ImageIcon(getClass().getResource("/com/javadocking/resources/images/table12.gif")), "Project");
-        Dockable outputDockable = createDockable("Output", consolePanel, "Command", new ImageIcon(getClass().getResource("/com/javadocking/resources/images/graph12.gif")), "Command");
-        Dockable propertySheetDockable = createDockable("Properties", propertysheetPanel, "Properties", new ImageIcon(getClass().getResource("/com/javadocking/resources/images/table12.gif")), "Properties");
+        Dockable projectGraphDockable = createDockable("Project", projectGraphView, "Project", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Project");
+        Dockable graphView1Dockable = createDockable("Graph View 1", button2, "Graph View 1", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Graph View 1");
+        Dockable graphView2Dockable = createDockable("Graph View 2", button3, "Graph View 2", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Graph View 2");
+        Dockable modelView1Dockable = createDockable("Model View 1", button4, "Model View 1", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Model View 1");
+        Dockable modelView2Dockable = createDockable("Model View 2", button5, "Model View 2", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Model View 2");
+        Dockable stackViewDockable = createDockable("Stack", stackViewer, "Stack", ImageIconUtils.loadIconById("view-stackviewer-icon"), "Context Dependency Stack");
+        Dockable explorerDockable = createDockable("Project", explorerPanel, "Project", ImageIconUtils.loadIconById("view-explorer-icon"), "Project Explorer");
+        Dockable outputDockable = createDockable("Output", consolePanel, "Command", ImageIconUtils.loadIconById("view-commandwindow-icon"), "Command Output");
+        Dockable propertySheetDockable = createDockable("Properties", propertysheetPanel, "Properties", ImageIconUtils.loadIconById("view-propertysheet-icon"), "Properties");
 
         // add dockables to list
-        dockables.add(scenarioViewDockable);
+        dockables.add(projectGraphDockable);
         dockables.add(graphView1Dockable);
         dockables.add(graphView2Dockable);
         dockables.add(modelView1Dockable);
@@ -114,34 +124,6 @@ public class DockingPanel extends JPanel {
             addAllActions(dockables.get(index));
         }
 
-        // Create the buttons with a dockable around.
-        buttonDockables[0] = createButtonDockable("ButtonDockableAdd", "Add", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/add.png")), "Add!");
-        buttonDockables[1] = createButtonDockable("ButtonDockableAccept", "Accept", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/accept.png")), "Accept!");
-        buttonDockables[2] = createButtonDockable("ButtonDockableCancel", "Cancel", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/cancel.png")), "Cancel!");
-        buttonDockables[3] = createButtonDockable("ButtonDockableUndo", "Undo", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/undo.png")), "Undo!");
-        buttonDockables[4] = createButtonDockable("ButtonDockableRedo", "Redo", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/redo.png")), "Redo!");
-        buttonDockables[5] = createButtonDockable("ButtonDockableRefresh", "Refresh", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/refresh.png")), "Refresh!");
-        buttonDockables[6] = createButtonDockable("ButtonDockableBin", "Bin", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/bin.png")), "Bin!");
-        buttonDockables[7] = createButtonDockable("ButtonDockableIcons", "Icons", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/icons.png")), "Icons!");
-        buttonDockables[8] = createButtonDockable("ButtonDockableList", "List", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/list.png")), "List!");
-        buttonDockables[9] = createButtonDockable("ButtonDockableImages", "Images", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/images.png")), "Images!");
-        buttonDockables[10] = createButtonDockable("ButtonDockableDivide", "Divide", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/divide.png")), "Divide!");
-        buttonDockables[11] = createButtonDockable("ButtonDockableJoin", "Join", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/join.png")), "Join!");
-        buttonDockables[12] = createButtonDockable("ButtonDockableSwitch", "Switch", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/switch.png")), "Switch!");
-        buttonDockables[13] = createButtonDockable("ButtonDockableAsterisk", "Asterisk", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/asterisk.png")), "Asterisk!");
-        buttonDockables[14] = createButtonDockable("ButtonDockableAnchor", "Anchor", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/anchor.png")), "Anchor!");
-        buttonDockables[15] = createButtonDockable("ButtonDockableTerminal", "Terminal", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/terminal.png")), "Terminal!");
-        buttonDockables[16] = createButtonDockable("ButtonDockableStar", "Well Done", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/star.png")), "Well Done!");
-        buttonDockables[17] = createButtonDockable("ButtonDockableWakeUp", "Wake Up", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/wake_up.png")), "Wake up!");
-        buttonDockables[18] = createButtonDockable("ButtonDockableAddToBasket", "Add to Basket", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/add_to_basket.png")), "Add to Basket!");
-        buttonDockables[19] = createButtonDockable("ButtonDockableRemoveFromBasket", "Remove from Basket", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/remove_from_basket.png")), "Remove from Basket!");
-        
-        buttonDockables[37] = createButtonDockable("ButtonDockableChartBar", "Bar Chart", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/chart_bar.png")), "Bar Chart!");
-        buttonDockables[38] = createButtonDockable("ButtonDockableChartCurve", "Curve Chart", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/chart_curve.png")), "Curve Chart!");
-        buttonDockables[39] = createButtonDockable("ButtonDockableChartLine", "Line Chart", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/chart_line.png")), "Chart!");
-        buttonDockables[40] = createButtonDockable("ButtonDockableChartOrganisation", "Organisation Chart", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/chart_organisation.png")), "Oraganisation Chart!");
-        buttonDockables[41] = createButtonDockable("ButtonDockableChartPie", "Pie Chart", new ImageIcon(getClass().getResource("/com/javadocking/resources/icons/chart_pie.png")), "Pie Chart!");
-
         // Give the float dock a different child dock factory.
         // We don't want the floating docks to be splittable.
         FloatDock floatDock = dockModel.getFloatDock(ParentFrame);
@@ -154,7 +136,7 @@ public class DockingPanel extends JPanel {
         TabDock rightTabbedDock = new TabDock();
 
         // Add the dockables to these tab docks.
-        centerTabbedDock.addDockable(scenarioViewDockable, new Position(0));
+        centerTabbedDock.addDockable(projectGraphDockable, new Position(0));
         centerTabbedDock.addDockable(graphView1Dockable, new Position(1));
         centerTabbedDock.addDockable(graphView2Dockable, new Position(2));
         centerTabbedDock.addDockable(modelView1Dockable, new Position(3));
@@ -165,7 +147,7 @@ public class DockingPanel extends JPanel {
         rightTabbedDock.addDockable(propertySheetDockable, new Position(0));
         
         leftTabbedDock.setSelectedDockable(explorerDockable);
-        centerTabbedDock.setSelectedDockable(scenarioViewDockable);
+        centerTabbedDock.setSelectedDockable(projectGraphDockable);
 
         // define the four screen regions: center, center/right, center/bottom, left
         SplitDock centerSplitDock = new SplitDock();
@@ -224,49 +206,10 @@ public class DockingPanel extends JPanel {
         // add the tool bar border dock to this panel
         this.add(toolBarBorderDock, BorderLayout.CENTER);
 
-        // The line docks and one grid dock for the buttons.
-        LineDock toolBarDock1 = new LineDock(LineDock.ORIENTATION_HORIZONTAL, false, DockingMode.HORIZONTAL_TOOLBAR, DockingMode.VERTICAL_TOOLBAR);
-        LineDock toolBarDock2 = new LineDock(LineDock.ORIENTATION_HORIZONTAL, false, DockingMode.HORIZONTAL_TOOLBAR, DockingMode.VERTICAL_TOOLBAR);
-        LineDock toolBarDock3 = new LineDock(LineDock.ORIENTATION_HORIZONTAL, false, DockingMode.HORIZONTAL_TOOLBAR, DockingMode.VERTICAL_TOOLBAR);
-        LineDock toolBarDock4 = new LineDock(LineDock.ORIENTATION_HORIZONTAL, false, DockingMode.HORIZONTAL_TOOLBAR, DockingMode.VERTICAL_TOOLBAR);
-        LineDock toolBarDock5 = new LineDock(LineDock.ORIENTATION_VERTICAL, false, DockingMode.HORIZONTAL_TOOLBAR, DockingMode.VERTICAL_TOOLBAR);
-        LineDock toolBarDock6 = new LineDock(LineDock.ORIENTATION_VERTICAL, false, DockingMode.HORIZONTAL_TOOLBAR, DockingMode.VERTICAL_TOOLBAR);
-        GridDock toolGridDock = new GridDock(DockingMode.TOOL_GRID);
-
-        // Add the button dockables to the line docks.
-        toolBarDock1.addDockable(buttonDockables[0], new Position(0));
-        toolBarDock1.addDockable(buttonDockables[1], new Position(1));
-        toolBarDock1.addDockable(buttonDockables[2], new Position(2));
-        toolBarDock1.addDockable(buttonDockables[3], new Position(3));
-        toolBarDock1.addDockable(buttonDockables[4], new Position(4));
-        toolBarDock1.addDockable(buttonDockables[5], new Position(5));
-        toolBarDock1.addDockable(buttonDockables[6], new Position(6));
-        toolBarDock2.addDockable(buttonDockables[7], new Position(0));
-        toolBarDock2.addDockable(buttonDockables[8], new Position(1));
-        toolBarDock2.addDockable(buttonDockables[9], new Position(2));
-        toolBarDock3.addDockable(buttonDockables[10], new Position(0));
-        toolBarDock3.addDockable(buttonDockables[11], new Position(1));
-        toolBarDock3.addDockable(buttonDockables[12], new Position(2));
-        toolBarDock4.addDockable(buttonDockables[13], new Position(0));
-        toolBarDock4.addDockable(buttonDockables[14], new Position(1));
-        toolBarDock4.addDockable(buttonDockables[15], new Position(2));
-        toolBarDock4.addDockable(buttonDockables[16], new Position(3));
-        toolBarDock4.addDockable(buttonDockables[17], new Position(4));
-        toolBarDock5.addDockable(buttonDockables[18], new Position(0));
-        toolBarDock5.addDockable(buttonDockables[19], new Position(1));
-        toolBarDock6.addDockable(buttonDockables[37], new Position(0));
-        toolBarDock6.addDockable(buttonDockables[38], new Position(1));
-        toolBarDock6.addDockable(buttonDockables[39], new Position(2));
-        toolBarDock6.addDockable(buttonDockables[40], new Position(3));
-        toolBarDock6.addDockable(buttonDockables[41], new Position(4));
-
-        // Add the line docks to their composite parents.
-        compositeToolBarDock1.addChildDock(toolBarDock1, new Position(0));
-        compositeToolBarDock1.addChildDock(toolBarDock2, new Position(1));
-        compositeToolBarDock1.addChildDock(toolBarDock3, new Position(2));
-        compositeToolBarDock1.addChildDock(toolBarDock4, new Position(3));
-        compositeToolBarDock2.addChildDock(toolBarDock5, new Position(0));
-        compositeToolBarDock2.addChildDock(toolBarDock6, new Position(1));
+        // add top edge horizontal toolbars
+        compositeToolBarDock1.addChildDock(new ProjectToolbar(), new Position(0));
+        compositeToolBarDock1.addChildDock(new EditToolbar(), new Position(1));
+        compositeToolBarDock1.addChildDock(new ViewToolbar(), new Position(2));
 
         // minimize the output panel
         minimizer.visualizeDockable(outputDockable);

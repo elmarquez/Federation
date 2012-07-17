@@ -38,7 +38,8 @@ public class ApplicationContext extends Observable {
     // STRINGS
     public static final String APPLICATION_PROPERTIES = "ca/sfu/federation/resources/application";
 
-    public static final String APPLICATION_HELP_WEBSITE_URL = "http://www.davismarques.com";
+    public static final String PROJECT_WEBSITE_URL = "https://github.com/elmarquez/Federation";
+    public static final String PROJECT_HELP_WEBSITE_URL = "https://github.com/elmarquez/Federation";
     
     // APPLICATION APPEARANCE
     public static final Color BACKGROUND_DARK = new Color(40,40,40);

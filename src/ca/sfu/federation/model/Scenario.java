@@ -18,6 +18,7 @@ package ca.sfu.federation.model;
 
 import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.utils.ImageIconUtils;
 import com.developer.rose.BeanProxy;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -27,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.media.j3d.Group;
 import javax.media.j3d.Node;
+import javax.swing.ImageIcon;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openide.util.Utilities;
 
@@ -45,18 +47,18 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
 
     private static final Logger logger = Logger.getLogger(Scenario.class.getName());
     
-    private String name;            // object name
-    private IContext context;       // the parent context
-    private boolean isVisible;      // visibility state
+    private String name;                    // object name
+    private IContext context;               // the parent context
+    private boolean isVisible;              // visibility state
     
-    private LinkedHashMap contextual;    // collection of objects from external contexts
-    private LinkedHashMap transactional; // collection of objects in the local context
-    private ArrayList updateOrder;     // the order by which objects are updated
+    private LinkedHashMap contextual;       // collection of objects from external contexts
+    private LinkedHashMap transactional;    // collection of objects in the local context
+    private ArrayList updateOrder;          // the order by which objects are updated
     
     // metadata
-    private String description;     // description of this scenario
-    private Image icon;             // icon
-    private Image thumbnail;        // generated thumbnail
+    private String description;             // description of this scenario
+    private ImageIcon icon;                 // icon
+    private Image thumbnail;                // generated thumbnail
     
     //--------------------------------------------------------------------------
 
@@ -85,7 +87,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         this.transactional = new LinkedHashMap();
         this.updateOrder = new ArrayList();
         this.description = "Empty Scenario description.";
-        this.icon = Utilities.loadImage(config.getString("scenario-icon"));
+        this.icon = ImageIconUtils.loadIconById("view-scenario-icon");
         this.thumbnail = Utilities.loadImage(config.getString("scenario-thumbnail"));
         // register in the context
         try {
@@ -111,7 +113,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         this.transactional = new LinkedHashMap();
         this.updateOrder = new ArrayList();
         this.description = "Empty Scenario description.";
-        this.icon = Utilities.loadImage(config.getString("scenario-icon"));
+        this.icon = ImageIconUtils.loadIconById("scenario-icon");
         this.thumbnail = Utilities.loadImage(config.getString("scenario-thumbnail"));
         // register in the context
         try {
@@ -123,7 +125,6 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     }
     
     //--------------------------------------------------------------------------
-
     
     /**
      * Add a NamedObject to the Scenario.
@@ -316,7 +317,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      * Get an icon representing this object.
      * @return Image.
      */
-    public Image getIcon() {
+    public ImageIcon getIcon() {
         return this.icon;
     }
 

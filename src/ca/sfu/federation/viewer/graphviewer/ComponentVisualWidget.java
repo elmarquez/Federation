@@ -80,7 +80,7 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
         // set thumbnail or icon
         if (Named instanceof IViewable) {
             IViewable displayobject = (IViewable) Named;
-            Image icon = displayobject.getIcon();
+            Image icon = displayobject.getIcon().getImage();
             this.iconWidget = new ImageWidget(MyScene,icon);
             // image.setBorder(BorderFactory.createLineBorder(1,ConfigManager.BACKGROUND_LIGHT));
             this.addChild(iconWidget);
@@ -147,11 +147,11 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
                         Component c = (Component) named;
                         this.updateMethodLabelWidget.setLabel(c.getUpdateMethodName());
                     }
-                    this.iconWidget.setImage(named.getIcon());
+                    this.iconWidget.setImage(named.getIcon().getImage());
                     break;
                 case ApplicationContext.EVENT_ICON_CHANGE:
                     logger.log(Level.INFO,"ComponentVisualWidget fired icon change event");
-                    this.iconWidget.setImage(named.getIcon());
+                    this.iconWidget.setImage(named.getIcon().getImage());
                     break;
             }
         }

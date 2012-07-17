@@ -32,7 +32,7 @@ public class AboutJPanel extends javax.swing.JPanel {
      */
     public AboutJPanel() {
         initComponents();
-        ImageIcon image = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/about.jpg");
+        ImageIcon image = ImageIconUtils.loadIconFromPath("/ca/sfu/federation/resources/about.jpg");
         JLabel label = new JLabel("", image, JLabel.CENTER);
         this.setLayout(new BorderLayout());
         this.add(label,BorderLayout.CENTER);

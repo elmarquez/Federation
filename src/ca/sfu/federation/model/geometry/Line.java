@@ -1,7 +1,4 @@
 /**
- * Line.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,23 +16,18 @@
 
 package ca.sfu.federation.model.geometry;
 
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
-import ca.sfu.federation.viewer.modelviewer.DisplayObject3D;
+import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
-import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
-import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.utils.ImageIconUtils;
+import ca.sfu.federation.viewer.modelviewer.DisplayObject3D;
 import java.util.ResourceBundle;
-import javax.media.j3d.Appearance;
-import javax.media.j3d.ColoringAttributes;
-import javax.media.j3d.LineArray;
-import javax.media.j3d.LineAttributes;
-import javax.media.j3d.Node;
-import javax.media.j3d.Shape3D;
+import javax.media.j3d.*;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
-import org.openide.util.Utilities;
 
 /**
  * A Line in 3D space.
@@ -43,9 +35,6 @@ import org.openide.util.Utilities;
  * @version 0.1.0
  */
 public class Line extends Component implements ILine {
-    
-    //--------------------------------------------------------------------------
-
     
     private IPoint startPoint;
     private IPoint midPoint;
@@ -76,7 +65,7 @@ public class Line extends Component implements ILine {
         }
         // set the icon
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(Utilities.loadImage(config.getString("line-icon")));
+        this.setIcon(ImageIconUtils.loadIconById("line-icon"));
     }
     
     /**
@@ -88,7 +77,7 @@ public class Line extends Component implements ILine {
         super(Name,MyContext);
         // set the icon
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(Utilities.loadImage(config.getString("line-icon")));
+        this.setIcon(ImageIconUtils.loadIconById("line-icon"));
     }
     
     //--------------------------------------------------------------------------
@@ -143,6 +132,7 @@ public class Line extends Component implements ILine {
      * Get a Java3D renderable object.
      * @return Java3D renderable object.
      */
+    @Override
     public Node getRenderable() {
         // create a new shape3d node
         DisplayObject3D shape = new DisplayObject3D(this);

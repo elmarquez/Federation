@@ -15,32 +15,17 @@
  */
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.KeyStroke;
 
 /**
- * Copy action.
+ *
  * @author dmarques
  */
-public class EditPasteAction extends AbstractAction {
+public class ExportFileAction extends AbstractAction {
 
-    public EditPasteAction() {
-        super("Paste", null);
-        Icon icon = ImageIconUtils.loadIconById("edit-paste-icon");
-        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
-        this.putValue(Action.LONG_DESCRIPTION, "Paste items from clipboard");
-        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_P);
-        this.putValue(Action.SHORT_DESCRIPTION, "Paste items from clipboard");
-        this.putValue(Action.SMALL_ICON, icon);
-    }
-    
     public void actionPerformed(ActionEvent ae) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-} 
+}

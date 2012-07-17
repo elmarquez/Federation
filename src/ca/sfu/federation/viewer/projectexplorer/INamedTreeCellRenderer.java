@@ -71,13 +71,13 @@ public class INamedTreeCellRenderer extends DefaultTreeCellRenderer {
                     this.setToolTipText(named.getName());
                     if (named instanceof ParametricModel) {
                         ParametricModel obj = (ParametricModel) named;
-                        ImageIcon icon = new ImageIcon(obj.getIcon());
+                        ImageIcon icon = obj.getIcon();
                         this.setIcon(icon);
                         this.setLeafIcon(icon);
                         this.setClosedIcon(icon);
                     } else if (named instanceof Scenario) {
                         Scenario obj = (Scenario) named;
-                        ImageIcon icon = new ImageIcon(obj.getIcon());
+                        ImageIcon icon = obj.getIcon();
                         this.add(new ScenarioPopupMenu(obj));
                         this.setBackground(Color.LIGHT_GRAY);
                         this.setClosedIcon(icon);
@@ -85,25 +85,25 @@ public class INamedTreeCellRenderer extends DefaultTreeCellRenderer {
                         this.setLeafIcon(icon);
                     } else if (named instanceof Assembly) {
                         Assembly obj = (Assembly) named;
-                        ImageIcon icon = new ImageIcon(obj.getIcon());
+                        ImageIcon icon = obj.getIcon();
                         this.setIcon(icon);
                         this.setLeafIcon(icon);
                         this.setClosedIcon(icon);
                     } else if (named instanceof Component) {
                         Component obj = (Component) named;
-                        ImageIcon icon = new ImageIcon(obj.getIcon());
+                        ImageIcon icon = obj.getIcon();
                         this.setIcon(icon);
                         this.setLeafIcon(icon);
                         this.setClosedIcon(icon);
                     } else if (named instanceof IContext) {
                         IContext obj = (IContext) named;
-                        ImageIcon icon = new ImageIcon(obj.getIcon());
+                        ImageIcon icon = obj.getIcon();
                         this.setIcon(icon);
                         this.setLeafIcon(icon);
                         this.setClosedIcon(icon);
                     } else {
                         INamed obj = (INamed) named;
-                        ImageIcon icon = new ImageIcon(obj.getIcon());
+                        ImageIcon icon = obj.getIcon();
                         this.setIcon(icon);
                         this.setLeafIcon(icon);
                         this.setClosedIcon(icon);

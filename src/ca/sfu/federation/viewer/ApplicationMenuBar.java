@@ -21,7 +21,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu.Separator;
-import javax.swing.JSeparator;
 
 /**
  * Application menu bar.
@@ -44,11 +43,13 @@ public class ApplicationMenuBar extends JMenuBar {
         JMenu menu = new JMenu("Help");
         menu.setMnemonic(KeyEvent.VK_H);
 
-        ShowHelpWebSiteAction showweb = new ShowHelpWebSiteAction();
+        ShowWebSiteAction showweb = new ShowWebSiteAction();
+        ShowHelpWebSiteAction showhelp = new ShowHelpWebSiteAction();
         ShowAboutWindowAction showabout = new ShowAboutWindowAction();
 
         menu.add(showweb);
-        menu.add(new JSeparator());
+        menu.add(showhelp);
+        menu.add(new Separator());
         menu.add(showabout);
         
         return menu;
@@ -65,9 +66,10 @@ public class ApplicationMenuBar extends JMenuBar {
         EditUndoAction undo = new EditUndoAction();
         EditRedoAction redo = new EditRedoAction();
         EditCutAction cut = new EditCutAction();
-        CopyINamedAction copy = new CopyINamedAction();
+        EditCopyAction copy = new EditCopyAction();
         EditPasteAction paste = new EditPasteAction();
         EditDeleteAction delete = new EditDeleteAction();
+        EditFindAction find = new EditFindAction();
 
         JMenuItem selectall = new JMenuItem("Select All", KeyEvent.VK_A);
         JMenu selectby = new JMenu("Select");
@@ -76,7 +78,6 @@ public class ApplicationMenuBar extends JMenuBar {
         JMenuItem context = new JMenuItem("Contextual");
         JMenuItem trans = new JMenuItem("Transactional");
         JMenuItem property = new JMenuItem("Property");
-        JMenuItem find = new JMenuItem("Find", KeyEvent.VK_F);
 
         undo.setEnabled(false);
         
@@ -112,10 +113,18 @@ public class ApplicationMenuBar extends JMenuBar {
         OpenProjectAction op = new OpenProjectAction();
         SaveProjectAction sp = new SaveProjectAction();
         ExitApplicationAction ax = new ExitApplicationAction("Exit",null,"Exit",KeyEvent.VK_X);
+        JMenuItem export = new JMenuItem("Export");
+        JMenuItem pagesetup = new JMenuItem("Page Setup");
+        PrintDocumentAction print = new PrintDocumentAction();
         menu.add(np);
         menu.add(op);
         menu.add(sp);        
-        menu.add(new JSeparator());
+        menu.add(new Separator());
+        menu.add(export);
+        menu.add(new Separator());
+        menu.add(pagesetup);
+        menu.add(print);
+        menu.add(new Separator());
         menu.add(ax);        
         // return result
         return menu;

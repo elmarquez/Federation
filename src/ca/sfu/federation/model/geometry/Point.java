@@ -1,7 +1,4 @@
 /**
- * Point.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,21 +16,17 @@
 
 package ca.sfu.federation.model.geometry;
 
+import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
-import ca.sfu.federation.viewer.modelviewer.DisplayObject3D;
+import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
-import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
-import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.utils.ImageIconUtils;
+import ca.sfu.federation.viewer.modelviewer.DisplayObject3D;
 import java.util.ResourceBundle;
-import javax.media.j3d.Appearance;
-import javax.media.j3d.ColoringAttributes;
-import javax.media.j3d.Node;
-import javax.media.j3d.PointArray;
-import javax.media.j3d.Shape3D;
+import javax.media.j3d.*;
 import javax.vecmath.Color3f;
-import org.openide.util.Utilities;
 
 /**
  * A Point in 3D space.
@@ -51,7 +44,6 @@ public class Point extends Component implements IPoint {
     private double z;
     
     //--------------------------------------------------------------------------
-
     
     /**
      * Point constructor.
@@ -73,7 +65,7 @@ public class Point extends Component implements IPoint {
         }
         // set the icon
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(Utilities.loadImage(config.getString("point-icon")));
+        this.setIcon(ImageIconUtils.loadIconById("point-icon"));
     }
 
     /**
@@ -85,7 +77,7 @@ public class Point extends Component implements IPoint {
         super(Name,MyContext);
         // set the icon
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(Utilities.loadImage(config.getString("point-icon")));
+        this.setIcon(ImageIconUtils.loadIconById("point-icon"));
     }
     
     //--------------------------------------------------------------------------
@@ -113,6 +105,7 @@ public class Point extends Component implements IPoint {
      * Get renderable objects.
      * @return List of renderable objects.
      */
+    @Override
     public Node getRenderable() {
         // create a new shape3d node
         DisplayObject3D shape = new DisplayObject3D(this);

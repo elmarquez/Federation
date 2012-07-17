@@ -24,23 +24,23 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 /**
- * Copy action.
+ *
  * @author dmarques
  */
-public class EditPasteAction extends AbstractAction {
+public class PrintDocumentAction extends AbstractAction {
 
-    public EditPasteAction() {
-        super("Paste", null);
-        Icon icon = ImageIconUtils.loadIconById("edit-paste-icon");
-        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
-        this.putValue(Action.LONG_DESCRIPTION, "Paste items from clipboard");
+    public PrintDocumentAction() {
+        super("Print", null);
+        Icon icon = ImageIconUtils.loadIconById("file-print-icon");
+        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift P"));
+        this.putValue(Action.LONG_DESCRIPTION, "Print");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_P);
-        this.putValue(Action.SHORT_DESCRIPTION, "Paste items from clipboard");
+        this.putValue(Action.SHORT_DESCRIPTION, "Print");
         this.putValue(Action.SMALL_ICON, icon);
     }
-    
+
     public void actionPerformed(ActionEvent ae) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-} 
+}

@@ -45,10 +45,7 @@ public class ApplicationFrame extends JFrame implements Observer {
      * ApplicationFrame default constructor.
      */
     public ApplicationFrame() {
-        // define the layout and add content
-        Container contentpane = getContentPane();
-        contentpane.setLayout(new BorderLayout());
-        contentpane.add(new DockingPanel(this),BorderLayout.CENTER);
+        // set frame properties
         setTitle(Application.getResource().getString("application-title"));
         setJMenuBar(new ApplicationMenuBar());
         addWindowListener(new WindowAdapter() {
@@ -57,6 +54,11 @@ public class ApplicationFrame extends JFrame implements Observer {
                 System.exit(0);
             }
         });
+        // set frame content
+        Container contentpane = getContentPane();
+        contentpane.setLayout(new BorderLayout());
+        contentpane.add(new DockingPanel(this),BorderLayout.CENTER);
+        contentpane.add(new StatusBarPanel(),BorderLayout.SOUTH);
         // listen for changes on the application context
         Application.getContext().addObserver(this);
         // pack the frame, then set the starting size to screen dimensions

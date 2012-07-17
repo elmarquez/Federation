@@ -31,7 +31,7 @@ public class EditRedoAction extends AbstractAction {
 
     public EditRedoAction() {
         super("Redo", null);
-        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/16x16/actions/edit-redo.png");
+        Icon icon = ImageIconUtils.loadIconById("edit-redo-icon");
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control Y"));
         this.putValue(Action.LONG_DESCRIPTION, "Redo previous action");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);

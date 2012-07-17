@@ -1,7 +1,4 @@
 /**
- * Plane.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,12 +16,13 @@
 
 package ca.sfu.federation.model.geometry;
 
-import ca.sfu.federation.model.Component;
-import ca.sfu.federation.model.geometry.lightweight.LwPoint;
-import ca.sfu.federation.model.annotations.Update;
-import ca.sfu.federation.model.annotations.Default;
-import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.Component;
+import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.model.annotations.Default;
+import ca.sfu.federation.model.annotations.Update;
+import ca.sfu.federation.model.geometry.lightweight.LwPoint;
+import ca.sfu.federation.utils.ImageIconUtils;
 import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.Primitive;
 import java.util.ResourceBundle;
@@ -33,7 +31,6 @@ import javax.media.j3d.ColoringAttributes;
 import javax.media.j3d.Node;
 import javax.media.j3d.Shape3D;
 import javax.vecmath.Color3f;
-import org.openide.util.Utilities;
 
 /**
  * A Plane in 3D space, defined by 4 points.  Also known as a 'Quad'.
@@ -42,9 +39,6 @@ import org.openide.util.Utilities;
  */
 public class Plane extends Component implements IPlane, IPoint {
 
-    //--------------------------------------------------------------------------
-
-    
     private String basename = "Plane";
     private CoordinateSystem cs;        // embedding space
     
@@ -67,7 +61,6 @@ public class Plane extends Component implements IPlane, IPoint {
     public Plane(IContext MyContext) {
         super(MyContext);
         // generate a name for the new scenario
-        String basename = "Plane";
         int index = 0;
         boolean match = false;
         while (!match) {
@@ -80,7 +73,7 @@ public class Plane extends Component implements IPlane, IPoint {
         }
         // set the icon
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(Utilities.loadImage(config.getString("plane-icon")));
+        this.setIcon(ImageIconUtils.loadIconById("plane-icon"));
     }
 
     /**
@@ -92,7 +85,7 @@ public class Plane extends Component implements IPlane, IPoint {
         super(Name,MyContext);
         // set the icon
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(Utilities.loadImage(config.getString("plane-icon")));
+        this.setIcon(ImageIconUtils.loadIconById("plane-icon"));
     }
     
     //--------------------------------------------------------------------------
@@ -120,6 +113,7 @@ public class Plane extends Component implements IPlane, IPoint {
      * Get Java3D renderable object.
      * @return Java3D renderable node.
      */
+    @Override
     public Node getRenderable() {
         // set appearance
         ColoringAttributes colorAtt = new ColoringAttributes();

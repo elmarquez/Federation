@@ -21,6 +21,7 @@ package ca.sfu.federation.model;
 
 import java.awt.Image;
 import javax.media.j3d.Node;
+import javax.swing.ImageIcon;
 
 /**
  * An object that can be displayed in a 2D or 3D viewer.
@@ -33,7 +34,7 @@ public interface IViewable extends INamed {
      * Get an icon representation of the object.
      * @return Image.
      */
-    public abstract Image getIcon();
+    public abstract ImageIcon getIcon();
     
     /**
      * Get a Java3D renderable object.

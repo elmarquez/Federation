@@ -1,7 +1,4 @@
 /**
- * AssemblyNewInstanceAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -40,7 +37,7 @@ public class OpenProjectAction extends AbstractAction {
 
     public OpenProjectAction() {
         super("Open Project", null);
-        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/16x16/actions/document-open.png");
+        Icon icon = ImageIconUtils.loadIconById("file-open-project-icon");
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift O"));
         this.putValue(Action.LONG_DESCRIPTION, "Open an existing project");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_O);

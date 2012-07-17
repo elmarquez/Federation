@@ -28,7 +28,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.KeyStroke;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
@@ -46,11 +49,11 @@ public class CreateProjectAction extends AbstractAction {
      */
     public CreateProjectAction() {
         super("New Project", null);
-        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/16x16/actions/document-new.png");
+        Icon icon = ImageIconUtils.loadIconById("file-new-project-icon");
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift N"));
-        this.putValue(Action.LONG_DESCRIPTION, "Create a New Project");
+        this.putValue(Action.LONG_DESCRIPTION, "Create a new project");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_N);
-        this.putValue(Action.SHORT_DESCRIPTION, "Create a New Project");
+        this.putValue(Action.SHORT_DESCRIPTION, "Create a new project");
         this.putValue(Action.SMALL_ICON, icon);
     }
     
@@ -67,8 +70,7 @@ public class CreateProjectAction extends AbstractAction {
         this.putValue(Action.LONG_DESCRIPTION,ToolTip);
         this.putValue(Action.MNEMONIC_KEY,MnemonicId);
         this.putValue(Action.SHORT_DESCRIPTION,ToolTip);
-        Icon icon = new ImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
-        this.putValue(Action.SMALL_ICON, icon);
+        this.putValue(Action.SMALL_ICON, MyIcon);
     }
     
     //--------------------------------------------------------------------------

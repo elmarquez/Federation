@@ -24,18 +24,18 @@ import javax.swing.Icon;
 import javax.swing.KeyStroke;
 
 /**
- * Copy action.
+ * Find action.
  * @author dmarques
  */
-public class EditPasteAction extends AbstractAction {
+public class EditFindAction extends AbstractAction {
 
-    public EditPasteAction() {
-        super("Paste", null);
-        Icon icon = ImageIconUtils.loadIconById("edit-paste-icon");
-        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control V"));
-        this.putValue(Action.LONG_DESCRIPTION, "Paste items from clipboard");
-        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_P);
-        this.putValue(Action.SHORT_DESCRIPTION, "Paste items from clipboard");
+    public EditFindAction() {
+        super("Find", null);
+        Icon icon = ImageIconUtils.loadIconById("edit-find-icon");
+        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control F"));
+        this.putValue(Action.LONG_DESCRIPTION, "Find items");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_Y);
+        this.putValue(Action.SHORT_DESCRIPTION, "Find items");
         this.putValue(Action.SMALL_ICON, icon);
     }
     

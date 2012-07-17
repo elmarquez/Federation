@@ -31,7 +31,7 @@ public class EditCutAction extends AbstractAction {
 
     public EditCutAction() {
         super("Cut", null);
-        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/16x16/actions/edit-cut.png");
+        Icon icon = ImageIconUtils.loadIconById("edit-cut-icon");
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
         this.putValue(Action.LONG_DESCRIPTION, "Cut selected item or items");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_T);

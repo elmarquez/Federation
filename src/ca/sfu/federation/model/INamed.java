@@ -19,7 +19,7 @@
 
 package ca.sfu.federation.model;
 
-import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  * A model object that is identified by a unique name.
@@ -53,7 +53,7 @@ public interface INamed {
      * Get an icon representation of the object.
      * @return Image.
      */
-    public abstract Image getIcon();
+    public abstract ImageIcon getIcon();
     
     /*
      * Retreives name value.

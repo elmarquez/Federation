@@ -31,7 +31,7 @@ public class EditUndoAction extends AbstractAction {
 
     public EditUndoAction() {
         super("Undo", null);
-        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/16x16/actions/edit-undo.png");
+        Icon icon = ImageIconUtils.loadIconById("edit-undo-icon");
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control Z"));
         this.putValue(Action.LONG_DESCRIPTION, "Undo previous action");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_U);

@@ -30,15 +30,14 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  * Launch a web browser to show the online help web site.
  * @author dmarques
  */
-public class ShowHelpWebSiteAction extends AbstractAction {
+public class ShowWebSiteAction extends AbstractAction {
 
-    private static final Logger logger = Logger.getLogger(ShowHelpWebSiteAction.class.getName());
+    private static final Logger logger = Logger.getLogger(ShowWebSiteAction.class.getName());
 
-    public ShowHelpWebSiteAction() {
-        super("Online Help Documents", null);
-        this.putValue(Action.LONG_DESCRIPTION, "Online Help Documents");
-        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_H);
-        this.putValue(Action.SHORT_DESCRIPTION, "Online Help Documents");
+    public ShowWebSiteAction() {
+        super("Project Web Site", null);
+        this.putValue(Action.LONG_DESCRIPTION, "Project Web Site");
+        this.putValue(Action.SHORT_DESCRIPTION, "Project Web Site");
     }
     
     /**
@@ -47,14 +46,14 @@ public class ShowHelpWebSiteAction extends AbstractAction {
      */
     public void actionPerformed(ActionEvent ae) {
         try {
-            URI uri = new URI(ApplicationContext.PROJECT_HELP_WEBSITE_URL);
+            URI uri = new URI(ApplicationContext.PROJECT_WEBSITE_URL);
             // open the default web browser for the HTML page
             logger.log(Level.INFO,"Opening desktop browser to {0}",uri.toString()); 
             Desktop.getDesktop().browse(uri);
         } catch (Exception ex) {
             String stack = ExceptionUtils.getFullStackTrace(ex);
-            logger.log(Level.WARNING,"Could not open browser for help web site {0}\n\n{1}", 
-                    new Object[]{ApplicationContext.PROJECT_HELP_WEBSITE_URL,stack});
+            logger.log(Level.WARNING,"Could not open browser for URL {0}\n\n{1}", 
+                    new Object[]{ApplicationContext.PROJECT_WEBSITE_URL,stack});
         } 
     }
     

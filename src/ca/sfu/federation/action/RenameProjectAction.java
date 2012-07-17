@@ -23,7 +23,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JOptionPane;
 
 /**
  * Rename the parametric model.
@@ -35,11 +38,9 @@ public class RenameProjectAction extends AbstractAction {
     
     public RenameProjectAction() {
         super("Rename Project",null);
-        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
         this.putValue(Action.LONG_DESCRIPTION, "Rename project");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_R);
         this.putValue(Action.SHORT_DESCRIPTION, "Rename project");
-        this.putValue(Action.SMALL_ICON, icon);
     }
     
     /**

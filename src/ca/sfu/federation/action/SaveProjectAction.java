@@ -24,7 +24,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
 /**
  * Save the project state to persistent storage.
@@ -36,7 +39,7 @@ public class SaveProjectAction extends AbstractAction {
     
     public SaveProjectAction() {
         super("Save Project", null);
-        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/16x16/actions/document-save.png");
+        Icon icon = ImageIconUtils.loadIconById("file-save-project-icon");
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control S"));
         this.putValue(Action.LONG_DESCRIPTION, "Save project");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
@@ -56,8 +59,7 @@ public class SaveProjectAction extends AbstractAction {
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control S"));
-        Icon icon = new ImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
-        this.putValue(Action.SMALL_ICON, icon);
+        this.putValue(Action.SMALL_ICON, MyIcon);
     }
     
     //--------------------------------------------------------------------------

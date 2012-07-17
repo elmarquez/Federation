@@ -15,6 +15,7 @@
  */
 package ca.sfu.federation.utils;
 
+import ca.sfu.federation.Application;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,14 +28,35 @@ import javax.swing.ImageIcon;
 public class ImageIconUtils {
 
     private static final Logger logger = Logger.getLogger(ImageIconUtils.class.getName());
+
+    /**
+     * Load icon by resource ID.
+     * @param Id Resource ID
+     * @return 
+     */
+    public static ImageIcon loadIconById(String Id) {
+        String path = Application.getResource().getString(Id);
+        return loadIconFromPath(path);
+    }
+
+    /**
+     * Load icon by resource ID.
+     * @param Id Resource ID 
+     * @param Description Description
+     * @return 
+     */
+    public static ImageIcon loadIconById(String Id, String Description) {
+        String path = Application.getResource().getString(Id);
+        return loadIconFromPath(path,Description);
+    }
     
     /**
      * Load image icon from path. Returns null if the icon could not be loaded.
      * @param path
      * @return 
      */
-    public static ImageIcon loadImageIcon(String path) {
-        return loadImageIcon(path,"");
+    public static ImageIcon loadIconFromPath(String path) {
+        return loadIconFromPath(path,"");
     }
 
     /**
@@ -43,7 +65,7 @@ public class ImageIconUtils {
      * @param description
      * @return 
      */
-    public static ImageIcon loadImageIcon(String path, String description) {
+    public static ImageIcon loadIconFromPath(String path, String description) {
         URL imgURL = ImageIconUtils.class.getResource(path);
         if (imgURL != null) {
             return new ImageIcon(imgURL, description);

@@ -55,8 +55,7 @@ public class ProjectExplorerPanel extends JPanel implements ActionListener, Obse
      */
     public ProjectExplorerPanel() {
         // observe the application context
-        ApplicationContext context = Application.getContext();
-        context.addObserver(this);
+        Application.getContext().addObserver(this);
         // add scrollpane to panel
         this.scrollPane = new JScrollPane();
         this.setLayout(new BorderLayout());

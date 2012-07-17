@@ -19,6 +19,7 @@ import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.exception.NonExistantMethodException;
 import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.Image;
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -27,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.media.j3d.Group;
 import javax.media.j3d.Node;
+import javax.swing.ImageIcon;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openide.util.Utilities;
 
@@ -86,7 +88,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     private IViewable result;          // displayable result object .. in theory the result may not be displayable
 
     // display properties
-    private Image icon;                     // icon representation of component
+    private ImageIcon icon;                     // icon representation of component
     private Image thumbnail;                // thumbnail representation of component
     private boolean visible;                // true if the result object should be displayed
     
@@ -117,7 +119,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         this.updateMethod = null;
         this.inputTable = new InputTable(this);
         this.result = null;
-        this.icon = Utilities.loadImage(config.getString("component-icon"));
+        this.icon = ImageIconUtils.loadIconFromPath("/ca/sfu/federation/resources/icons/16x16/federation/component-icon.gif");
         this.thumbnail = Utilities.loadImage(config.getString("component-thumbnail"));
         // observe the input table for changes
         Observable o = (Observable) this.inputTable;
@@ -146,7 +148,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         this.updateMethod = null;
         this.inputTable = new InputTable(this);
         this.result = null;
-        this.icon = Utilities.loadImage(config.getString("component-icon"));
+        this.icon = ImageIconUtils.loadIconFromPath("/ca/sfu/federation/resources/icons/16x16/federation/component-icon.gif");
         this.thumbnail = Utilities.loadImage(config.getString("component-thumbnail"));
         // observe the input table for changes
         Observable o = (Observable) this.inputTable;
@@ -218,8 +220,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get icon representation for this Component.
      * @return Icon
      */
-    @Override
-    public Image getIcon() {
+    public ImageIcon getIcon() {
         return this.icon;
     }
 
@@ -305,10 +306,10 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
             }
         }
         // copy vector into array
-        Method[] result = new Method[updatemethods.size()];
-        updatemethods.addAll(Arrays.asList(result));
+        Method[] theresult = new Method[updatemethods.size()];
+        updatemethods.addAll(Arrays.asList(theresult));
         // return result
-        return result;
+        return theresult;
     }
     
     /**
@@ -351,7 +352,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Set the icon.
      * @param MyIcon Icon image.
      */
-    protected void setIcon(Image MyIcon) {
+    protected void setIcon(ImageIcon MyIcon) {
         this.icon = MyIcon;
         // generate change event
         this.setChanged();
@@ -459,7 +460,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     @Override
     public boolean update() {
         // init
-        boolean result = false;
+        boolean theresult = false;
         // if an update method has been set
         if (this.updateMethod != null) {
             // the update method has been set but the input table has not been primed;
@@ -472,18 +473,18 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
             // invoke the update method
             try {
                 Object updateresult = this.updateMethod.invoke(this,args);
-                result = true;
+                theresult = true;
             } catch (Exception ex) {
                 String stack = ExceptionUtils.getFullStackTrace(ex);
                 logger.log(Level.WARNING,"Could not update state\n\n{0}",stack);
             }
         } else {
             // no update method set so just pass by for now
-            result = true;
+            theresult = true;
         }
-        logger.log(Level.INFO,"Update on {0}:{1}", new Object[]{this.toString(), result});
+        logger.log(Level.INFO,"Update on {0}:{1}", new Object[]{this.toString(), theresult});
         // return result
-        return result;
+        return theresult;
     }   
 
     /**

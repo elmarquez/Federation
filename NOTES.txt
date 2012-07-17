@@ -15,22 +15,31 @@ Versions
 . 2D model viewer
 . Component classes that implement 2D graphics drawing
 . Open 2D model views from Scenario view
-
-0.2.3
-. Consider moving action to register an object in a particular context out of the constructor
+. Factor out repetitious code from component, container classes
 . Basic test suite for core model and utility classes
 
-0.2.2
+0.2.3
 . Only Scenario and ParametricModel should update when an item is added. All 
   other items should wait for user keyboard entry to update.
-. Component constructor methods should throw exceptions
-. Viewers should observe model, maintain proper state
+. Component constructor methods should not register items in contexts
+
+0.2.2
 * All viewers watch the application context for changes in the model
+* GraphViewer
+- PropertySheet watches ApplicationContext for model load, close events
+- StackViewer watches ApplicationContext for model load, close events
+- Explorer watches ApplicationContext for model load, close events
+- Various application, viewer, action icons specified in Application resource bundle
+- Icons are loaded by id using ImageIconUtils class
+- Created toolbar classes
+- Added Tango icons
 
 0.2.1
 - Moved the view state into the ApplicationContext class
 - Replaced all System.out.println calls to logging framework calls
 - Removed code for singleton implementation of ParametricModel
+- Attached log handler output to Console view
+- Created new Command Output Viewer
 
 0.2.0
 - Docking panel layout

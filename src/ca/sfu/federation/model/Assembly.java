@@ -17,6 +17,7 @@ package ca.sfu.federation.model;
 
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.exception.GraphCycleException;
+import ca.sfu.federation.utils.ImageIconUtils;
 import com.developer.rose.BeanProxy;
 import java.awt.Image;
 import java.io.Serializable;
@@ -27,28 +28,28 @@ import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Group;
 import javax.media.j3d.Node;
 import javax.media.j3d.Shape3D;
+import javax.swing.ImageIcon;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.openide.util.Utilities;
 
 /**
  * A parametric object.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class Assembly extends Observable implements IContext, IViewable, IUpdateable, Observer, Serializable {
     
-    private String name;        // unique identifier for this object
-    private IContext context;   // the parent context
-    private ArrayList elements;    // a collection of parts for this object
-    private ArrayList updateOrder; // the order by which systolic array elements are updated
+    private String name;                // unique identifier for this object
+    private IContext context;           // the parent context
+    private ArrayList elements;         // a collection of parts for this object
+    private ArrayList updateOrder;      // the order by which systolic array elements are updated
 
     // metadata, visual properties
-    private String description; // description of this assembly
-    private Image thumbnail;    // thumbnail representation of the assembly
-    private Image icon;         // icon representation of object
-    private boolean visible;    // visibility state
+    private String description;         // description of this assembly
+    private Image thumbnail;            // thumbnail representation of the assembly
+    private ImageIcon icon;             // icon representation of object
+    private boolean visible;            // visibility state
 
-    private ArrayList behaviors;   // behaviors that are bound to this assembly. this is to be removed shortly
+    private ArrayList behaviors;        // behaviors that are bound to this assembly. this is to be removed shortly
     
     private static final Logger logger = Logger.getLogger(Assembly.class.getName());
     
@@ -80,7 +81,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
         context = Context;
         behaviors = new ArrayList();
         description = null;
-        icon = Utilities.loadImage(config.getString("assembly-icon"));
+        this.icon = ImageIconUtils.loadIconById("assembly-icon");
         thumbnail = Utilities.loadImage(config.getString("assembly-thumbnail"));
         visible = true;
         // register in the context
@@ -110,7 +111,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
         this.context = Context;
         this.behaviors = new ArrayList();
         this.description = null;
-        this.icon = Utilities.loadImage(config.getString("assembly-icon"));
+        this.icon = ImageIconUtils.loadIconById("assembly-icon");
         this.thumbnail = Utilities.loadImage(config.getString("assembly-thumbnail"));
         this.visible = true;
         // register in the context
@@ -316,8 +317,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Get icon.
      * @return Icon.
      */
-    @Override
-    public Image getIcon() {
+    public ImageIcon getIcon() {
         return this.icon;
     }
     
@@ -332,11 +332,10 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
         Iterator it = this.elements.iterator();
         while (it.hasNext()) {
             Object object = it.next();
-            LinkedHashMap dep = new LinkedHashMap();
             // if the object can have dependancies
             if (object instanceof IGraphable) {
                 IGraphable graphobject = (IGraphable) object;
-                dep = (LinkedHashMap) graphobject.getDependancies();
+                LinkedHashMap dep = (LinkedHashMap) graphobject.getDependancies();
                 // if the elements has no dependancies, then it is an independant elements
                 if (dep.size()==0) {
                     independant.add(object);
@@ -496,10 +495,10 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
                     }
                 }
                 // cast object as IContext
-                IContext context = (IContext) named;
+                IContext thecontext = (IContext) named;
                 // try to get the object value
                 try {
-                    result = context.lookup(query);
+                    result = thecontext.lookup(query);
                 } catch (Exception ex) {
                     String stack = ExceptionUtils.getFullStackTrace(ex);
                     logger.log(Level.SEVERE,"Could not complete lookup\n\n{0}",stack);
@@ -585,7 +584,7 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
      * Set the icon.
      * @param MyIcon Icon.
      */
-    public void setIcon(Image MyIcon) {
+    public void setIcon(ImageIcon MyIcon) {
         this.icon = MyIcon;
     }
     
