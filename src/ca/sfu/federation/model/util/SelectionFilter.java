@@ -462,4 +462,4 @@ public class SelectionFilter implements Serializable {
         return result;
     }
     
-} // end class
+} 

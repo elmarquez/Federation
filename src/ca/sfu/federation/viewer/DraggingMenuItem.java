@@ -57,4 +57,4 @@ public class DraggingMenuItem extends JRadioButtonMenuItem {
         addActionListener(new DraggingListener(draggerFactory));
     }
     
-} // end class
+} 

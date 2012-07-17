@@ -314,4 +314,4 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
         }
     }
     
-} // end class
+} 

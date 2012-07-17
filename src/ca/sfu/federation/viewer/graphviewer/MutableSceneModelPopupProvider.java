@@ -78,4 +78,4 @@ public class MutableSceneModelPopupProvider implements PopupMenuProvider, Action
         this.scene.setActiveTool(e.getActionCommand());
     }
     
-} // end class
+} 

@@ -45,4 +45,4 @@ public class Canvas3DPopupMenu extends PopupMenu {
     //--------------------------------------------------------------------------
 
     
-} // end class
+} 

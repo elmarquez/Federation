@@ -16,7 +16,7 @@
 package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.viewer.console.ConsolePanel;
-import ca.sfu.federation.viewer.explorer.AbstractTreeExplorerPanel;
+import ca.sfu.federation.viewer.projectexplorer.ProjectExplorerPanel;
 import ca.sfu.federation.viewer.propertysheet.PropertySheetPanel;
 import com.javadocking.DockingManager;
 import com.javadocking.dock.*;
@@ -82,7 +82,7 @@ public class DockingPanel extends JPanel {
         JButton button4 = new JButton("Model View 1");
         JButton button5 = new JButton("Model View 2");
         JButton button6 = new JButton("Stack View");
-        AbstractTreeExplorerPanel explorerPanel = new AbstractTreeExplorerPanel();
+        ProjectExplorerPanel explorerPanel = new ProjectExplorerPanel();
         PropertySheetPanel propertysheetPanel = new PropertySheetPanel();
         ConsolePanel consolePanel = new ConsolePanel();
 
@@ -363,4 +363,4 @@ public class DockingPanel extends JPanel {
         dockable.getContent().addMouseMotionListener(dragListener);
     }
     
-} // end class
+} 

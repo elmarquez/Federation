@@ -41,4 +41,4 @@ public class MalformedSelectionRuleException extends Exception {
         super(msg);
     }
 
-} // end class MalformedObjectReferenceException
+}  

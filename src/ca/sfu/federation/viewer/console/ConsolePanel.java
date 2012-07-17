@@ -77,5 +77,5 @@ public class ConsolePanel extends javax.swing.JPanel {
     private javax.swing.JTextArea jTextArea2;
     // End of variables declaration//GEN-END:variables
 
-} // end class
+} 
 

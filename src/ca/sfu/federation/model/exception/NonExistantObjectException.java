@@ -42,4 +42,4 @@ public class NonExistantObjectException extends Exception {
     //-------------------------------------------------------------------------
 
     
-} // end class NonExistantObjectException
+} 

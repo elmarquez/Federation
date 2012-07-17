@@ -199,4 +199,4 @@ public class BeanProxy implements IBeanProxy {
         return beanClass.getMethod(name,types).invoke(bean,parameters);
     }
     
-} // end class BeanProxy
+}  

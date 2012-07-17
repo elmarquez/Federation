@@ -482,7 +482,8 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
                 try {
                     result = thecontext.lookup(query);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    String stack = ExceptionUtils.getFullStackTrace(ex);
+                    logger.log(Level.WARNING,"{0}",stack);
                 }
             } else {
                 // the reference is malformed, throw an error
@@ -702,4 +703,4 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         }
     }
     
-} // end class
+} 

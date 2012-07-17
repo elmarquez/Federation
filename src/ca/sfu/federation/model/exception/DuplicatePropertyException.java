@@ -48,4 +48,4 @@ public class DuplicatePropertyException extends Exception {
     //-------------------------------------------------------------------------
 
     
-} // end class NamedObjectStorageDuplicateObjectException
+} 

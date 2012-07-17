@@ -75,4 +75,4 @@ public class JTextAreaOutputHandler extends Handler {
         output.append(log);
     }
     
-} // end class
+} 

@@ -85,4 +85,4 @@ public class LwPoint extends LightWeightObject implements IPoint {
         this.z = Z.doubleValue();
     }
     
-} // end class
+} 

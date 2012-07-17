@@ -17,7 +17,7 @@ package ca.sfu.federation;
 
 import ca.sfu.federation.model.ParametricModel;
 import java.awt.Color;
-import java.net.URL;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -33,9 +33,13 @@ public class ApplicationContext extends Observable {
 
     private static ParametricModel model;
     private static HashMap viewstate = new HashMap();
+    private static File projectDir;
 
+    // STRINGS
     public static final String APPLICATION_PROPERTIES = "ca/sfu/federation/resources/application";
 
+    public static final String APPLICATION_HELP_WEBSITE_URL = "http://www.davismarques.com";
+    
     // APPLICATION APPEARANCE
     public static final Color BACKGROUND_DARK = new Color(40,40,40);
     public static final Color BACKGROUND_MEDIUM = new Color(48,48,48);
@@ -48,8 +52,6 @@ public class ApplicationContext extends Observable {
     public static final Color TEXT_DARK = new Color(40,40,40);
     public static final Color TEXT_MEDIUM = new Color(197,200,205);
     public static final Color TEXT_LIGHT = new Color(255,255,255);
-
-    private static String home;
 
     //..........................................................................
     // PARAMETER KEYS
@@ -116,18 +118,9 @@ public class ApplicationContext extends Observable {
     //--------------------------------------------------------------------------
 
     /**
-     * Get the current working directory path.
-     * @return Path to the application working directory.
+     * Get the model.
+     * @return 
      */
-    public static String getHome() {
-        if (home!= null && !home.trim().equals("")) {
-            return home;
-        } else {
-            setHome();
-            return home;
-        }
-    }
-
     public ParametricModel getModel() {
         return model;
     }
@@ -158,50 +151,26 @@ public class ApplicationContext extends Observable {
     }
 
     /**
-     * Sets the current working directory path.
-     */
-    public static void setHome() {
-        // the current working directory
-        home = "file:\\\\localhost\\\\" + System.getProperty("user.dir");
-    }
-
-    /**
-     * Sets home to a user specified path.
-     * @param Home Local filesystem path.
-     */
-    public static void setHome(String Home) {
-        if (Home!=null && !Home.trim().equals("")) {
-            Home = Home.replace('\\', '/').trim();
-            if (!Home.endsWith("/")) {
-                Home += "/";
-            }
-        }
-        URL url = ApplicationContext.class.getClassLoader().getResource(Home);
-        if(url != null){
-            String path = url.getPath();
-            if(path!=null && !path.trim().equals("")){
-                home = url.getPath();
-            } else {
-                throw new RuntimeException("Problem in locating Home directory." +
-                        "Please check if the home directory is in classpath");
-            }
-        } else {
-            throw new RuntimeException("Home directory cannot be located " +
-                    "in the classpath. Please check.");
-        }
-    }
-
-    /**
-     * Set the model.
-     * @param Model
+     * Set the model. If the model is set to null, then it is considered closed.
+     * @param Model Model
      */
     public void setModel(ParametricModel Model) {
         model = Model;
-        notifyObservers(ApplicationContext.MODEL_LOADED);
+        this.setChanged();
+        if (model == null) {
+            this.notifyObservers(ApplicationContext.MODEL_CLOSED);
+        } else {
+            this.notifyObservers(ApplicationContext.MODEL_LOADED);
+        }
     }
-    
+
+    /**
+     * Set the view state by key.
+     * @param Key
+     * @param Value 
+     */
     public void setViewState(Object Key, Object Value) {
         viewstate.put(Key, Value);
     }
 
-} // end class
+} 

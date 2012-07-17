@@ -28,4 +28,4 @@ import java.io.Serializable;
  * @version 0.1.0
  */
 public abstract class LightWeightObject implements Serializable {
-} // end class
+} 

@@ -60,4 +60,4 @@ public interface IViewable extends INamed {
      */
     public abstract void setVisible(boolean state);
 
-} // end class
+} 

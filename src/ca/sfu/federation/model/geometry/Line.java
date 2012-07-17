@@ -240,4 +240,4 @@ public class Line extends Component implements ILine {
         return true;
     }
 
-} // end class
+} 

@@ -81,4 +81,4 @@ public class InputTextField extends JTextField implements Observer {
     public void update(Observable o, Object arg) {
     }
     
-} // end class
+} 

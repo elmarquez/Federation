@@ -220,4 +220,4 @@ public class Plane extends Component implements IPlane, IPoint {
         return true;
     }
    
-} // end class
+} 

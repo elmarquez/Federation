@@ -85,4 +85,4 @@ public class DockableMediator implements ItemListener, DockingListener {
         dockable.addDockingListener(this);
     }
 
-} // end class
+} 

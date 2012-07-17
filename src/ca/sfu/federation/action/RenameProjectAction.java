@@ -71,4 +71,4 @@ public class RenameProjectAction extends AbstractAction {
         }
     }
     
-} // end class 
+}  

@@ -37,16 +37,20 @@ public class ApplicationMenuBar extends JMenuBar {
     }
 
     /**
-     * Get the help menu
+     * Get the help menu.
      * @return 
      */
     private JMenu getAboutMenu() {
         JMenu menu = new JMenu("Help");
         menu.setMnemonic(KeyEvent.VK_H);
+
+        ShowHelpWebSiteAction showweb = new ShowHelpWebSiteAction();
+        ShowAboutWindowAction showabout = new ShowAboutWindowAction();
+
+        menu.add(showweb);
         menu.add(new JSeparator());
-        ShowAboutWindowAction aaa = new ShowAboutWindowAction("About this Application",null,"About this Application",KeyEvent.VK_A);
-        menu.add(aaa);
-        // return result
+        menu.add(showabout);
+        
         return menu;
     }
     
@@ -58,12 +62,12 @@ public class ApplicationMenuBar extends JMenuBar {
         JMenu menu = new JMenu("Edit");
         menu.setMnemonic(KeyEvent.VK_E);
         
-        UndoAction undo = new UndoAction();
-        RedoAction redo = new RedoAction();
-        CutINamedAction cut = new CutINamedAction();
+        EditUndoAction undo = new EditUndoAction();
+        EditRedoAction redo = new EditRedoAction();
+        EditCutAction cut = new EditCutAction();
         CopyINamedAction copy = new CopyINamedAction();
-        PasteINamedAction paste = new PasteINamedAction();
-        DeleteINamedAction delete = new DeleteINamedAction();
+        EditPasteAction paste = new EditPasteAction();
+        EditDeleteAction delete = new EditDeleteAction();
 
         JMenuItem selectall = new JMenuItem("Select All", KeyEvent.VK_A);
         JMenu selectby = new JMenu("Select");
@@ -105,8 +109,8 @@ public class ApplicationMenuBar extends JMenuBar {
         menu.setMnemonic(KeyEvent.VK_F);
         // menu items
         CreateProjectAction np = new CreateProjectAction();
-        OpenProjectAction op = new OpenProjectAction("Open Project",null,"Open Project",KeyEvent.VK_O);
-        SaveProjectAction sp = new SaveProjectAction("Save Project",null,"Save Project",KeyEvent.VK_S);
+        OpenProjectAction op = new OpenProjectAction();
+        SaveProjectAction sp = new SaveProjectAction();
         ExitApplicationAction ax = new ExitApplicationAction("Exit",null,"Exit",KeyEvent.VK_X);
         menu.add(np);
         menu.add(op);
@@ -217,4 +221,4 @@ public class ApplicationMenuBar extends JMenuBar {
         add(getAboutMenu());
     }
     
-} // end class
+} 

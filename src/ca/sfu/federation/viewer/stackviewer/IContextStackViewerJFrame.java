@@ -56,4 +56,4 @@ public class IContextStackViewerJFrame extends JFrame {
     //--------------------------------------------------------------------------
 
     
-} // end class
+} 

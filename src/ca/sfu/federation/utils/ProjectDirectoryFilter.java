@@ -1,7 +1,4 @@
 /**
- * ProjectFilter.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -20,27 +17,18 @@
 package ca.sfu.federation.utils;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.logging.Logger;
 import javax.swing.filechooser.FileFilter;
 
 /**
  * Filter an input list to return only project directories.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class ProjectDirectoryFilter extends FileFilter {
 
-    //--------------------------------------------------------------------------
-
-    
-    /**
-     * DirectoryFilter constructor.
-     */
-    public ProjectDirectoryFilter() {
-    }
+    private static final Logger logger = Logger.getLogger(ProjectDirectoryFilter.class.getName());
     
     //--------------------------------------------------------------------------
-
 
     /**
      * Determine whether the file is a project directory.
@@ -71,4 +59,4 @@ public class ProjectDirectoryFilter extends FileFilter {
         return "Filesystem Directory";
     }
     
-} // end class
+} 

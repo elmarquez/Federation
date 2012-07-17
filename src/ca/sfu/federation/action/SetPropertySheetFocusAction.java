@@ -66,4 +66,4 @@ public class SetPropertySheetFocusAction extends AbstractAction {
         }
     }
 
-} // end class
+} 

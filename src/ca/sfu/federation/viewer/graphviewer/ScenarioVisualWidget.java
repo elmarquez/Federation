@@ -18,7 +18,7 @@ package ca.sfu.federation.viewer.graphviewer;
 
 import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
-import ca.sfu.federation.action.DeleteINamedAction;
+import ca.sfu.federation.action.EditDeleteAction;
 import ca.sfu.federation.action.RenameINamedAction;
 import ca.sfu.federation.action.SetCurrentIContextAction;
 import ca.sfu.federation.action.SetPropertySheetFocusAction;
@@ -207,7 +207,7 @@ public class ScenarioVisualWidget extends Widget implements Observer {
             RenameINamedAction rename = new RenameINamedAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),target);
             menu.add(rename);
             // menu item - delete context object
-            DeleteINamedAction delete = new DeleteINamedAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),target);
+            EditDeleteAction delete = new EditDeleteAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),target);
             menu.add(delete);
             // separator
             menu.add(new JSeparator());
@@ -233,4 +233,4 @@ public class ScenarioVisualWidget extends Widget implements Observer {
         
     }
     
-} // end class
+} 

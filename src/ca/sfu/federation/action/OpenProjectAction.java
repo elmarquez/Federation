@@ -19,22 +19,34 @@
 
 package ca.sfu.federation.action;
 
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
 /**
- *
+ * Open an existing project.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class OpenProjectAction extends AbstractAction {
     
+    private static final Logger logger = Logger.getLogger(CreateProjectAction.class.getName());
+
     //--------------------------------------------------------------------------
 
-    
-    //--------------------------------------------------------------------------
-
+    public OpenProjectAction() {
+        super("Open Project", null);
+        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/16x16/actions/document-open.png");
+        this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift O"));
+        this.putValue(Action.LONG_DESCRIPTION, "Open an existing project");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_O);
+        this.putValue(Action.SHORT_DESCRIPTION, "Open an existing project");
+        this.putValue(Action.SMALL_ICON, icon);
+    }
     
     /**
      * AssemblyNewInstanceAction constructor.
@@ -51,8 +63,14 @@ public class OpenProjectAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
-
+    /**
+     * Handle event.
+     * @param e 
+     */
     public void actionPerformed(ActionEvent e) {
+        // show dialog box
+        // try to load project data
+        // set project
     }
     
 } 

@@ -1,7 +1,4 @@
 /**
- * Selection.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,13 +16,16 @@
 
 package ca.sfu.federation.model.util;
 
-import ca.sfu.federation.model.util.exception.MalformedSelectionRuleException;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
+import ca.sfu.federation.model.util.exception.MalformedSelectionRuleException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * <p>
@@ -46,14 +46,12 @@ import java.util.ArrayList;
  * </p>
  *
  * @author Davis Marques
- * @version 0.1.0
  *
  * TODO: the scope setup is not correct.  it gets the right objects when parsing, but then doesn't consider the scope during update
  */
 public class Selection implements Serializable {
 
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(Selection.class.getName());
     
     private static final String[] REQUIRED_DIRECTIVES = {"SELECT","WHERE"};
     private static final String[] POSTPROCESSING_DIRECTIVES = {"ORDEREDBY","NEAR","LIMIT"};
@@ -132,7 +130,8 @@ public class Selection implements Serializable {
                     }
                 }
             } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"{0}",stack);
             }
         }
         // CONDITIONS go from third atom to the next directive in the list, if one is present
@@ -218,4 +217,4 @@ public class Selection implements Serializable {
         return outputset;
     }
     
-} // end class
+} 

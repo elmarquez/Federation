@@ -217,4 +217,4 @@ public class ScenarioPropertySheet extends javax.swing.JPanel implements Observe
         }
     }
             
-} // end class
+} 

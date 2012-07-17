@@ -41,13 +41,16 @@ public class CreateProjectAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
     
+    /**
+     * CreateProjectAction default constructor.
+     */
     public CreateProjectAction() {
         super("New Project", null);
-        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/behavior-icon.gif");
+        Icon icon = ImageIconUtils.loadImageIcon("/ca/sfu/federation/resources/icons/16x16/actions/document-new.png");
         this.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control shift N"));
-        this.putValue(Action.LONG_DESCRIPTION, "Create a new project");
+        this.putValue(Action.LONG_DESCRIPTION, "Create a New Project");
         this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_N);
-        this.putValue(Action.SHORT_DESCRIPTION, "Create a new project");
+        this.putValue(Action.SHORT_DESCRIPTION, "Create a New Project");
         this.putValue(Action.SMALL_ICON, icon);
     }
     
@@ -71,23 +74,23 @@ public class CreateProjectAction extends AbstractAction {
     //--------------------------------------------------------------------------
 
     /**
-     * Action performed event handler.
+     * Handle action performed event.
      * @param e 
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        logger.log(Level.INFO,"Creating a sample model");
         ParametricModel model = initDemoModel();
         Application.getContext().setModel(model);
         // updating the model for the first time
-        logger.log(Level.INFO,"Updating the model state");
-        model.update();
+        // logger.log(Level.INFO,"Updating the model state");
+        // model.update();
     }
     
     /**
      * Create a demo model.
      */
     private ParametricModel initDemoModel() {
+        logger.log(Level.INFO,"Creating a sample model");
         ParametricModel model = new ParametricModel();
         // scenario 0
         Scenario sc0 = new Scenario("scenario0",model);

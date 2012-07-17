@@ -70,4 +70,4 @@ public class DisplayObject3D extends Shape3D {
         this.target = Target;
     }
     
-} // end class
+} 

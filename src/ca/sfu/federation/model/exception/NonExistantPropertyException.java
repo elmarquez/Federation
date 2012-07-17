@@ -42,4 +42,4 @@ public class NonExistantPropertyException extends Exception {
     //-------------------------------------------------------------------------
 
     
-} // end class NonExistantPropertyException
+}  

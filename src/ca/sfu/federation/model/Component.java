@@ -506,4 +506,4 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         }
     }
     
-} // end class
+} 

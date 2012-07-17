@@ -59,5 +59,5 @@ public class DirectoryFilterTest extends TestCase {
         
     }
 
-} // end class
+} 
 

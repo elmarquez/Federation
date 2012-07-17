@@ -143,4 +143,4 @@ public class StaticSceneModelPopupProvider implements PopupMenuProvider, ActionL
         this.scene.setActiveTool(e.getActionCommand());
     }
     
-} // end class
+} 

@@ -22,7 +22,7 @@ package ca.sfu.federation.viewer.graphviewer;
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
 import ca.sfu.federation.action.SetCurrentIContextAction;
-import ca.sfu.federation.action.DeleteINamedAction;
+import ca.sfu.federation.action.EditDeleteAction;
 import ca.sfu.federation.action.RenameINamedAction;
 import ca.sfu.federation.action.SetPropertySheetFocusAction;
 import java.awt.event.ActionEvent;
@@ -68,7 +68,7 @@ public class ScenarioSmallVisualWidgetPopupProvider implements PopupMenuProvider
         RenameINamedAction rename = new RenameINamedAction("Rename Object",null,"Rename Object",new Integer(KeyEvent.VK_R),(INamed)target);
         menu.add(rename);
         // menu item - delete target object
-        DeleteINamedAction delete = new DeleteINamedAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),(INamed)target);
+        EditDeleteAction delete = new EditDeleteAction("Delete Object",null,"Delete Object",new Integer(KeyEvent.VK_D),(INamed)target);
         menu.add(delete);
         // separator
         menu.add(new JSeparator());
@@ -88,4 +88,4 @@ public class ScenarioSmallVisualWidgetPopupProvider implements PopupMenuProvider
         this.scene.setActiveTool(e.getActionCommand());
     }
     
-} // end class
+} 

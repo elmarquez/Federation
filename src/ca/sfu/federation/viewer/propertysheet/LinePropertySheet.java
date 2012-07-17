@@ -387,4 +387,4 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
         }
     }
     
-} // end class
+} 

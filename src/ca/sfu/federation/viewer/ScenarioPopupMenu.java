@@ -60,7 +60,7 @@ public class ScenarioPopupMenu extends JPopupMenu {
         RenameINamedAction inora = new RenameINamedAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R),this.scenario);
         this.add(inora);
         // delete
-        DeleteINamedAction inoda = new DeleteINamedAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),this.scenario);
+        EditDeleteAction inoda = new EditDeleteAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),this.scenario);
         this.add(inoda);
         // properties
         SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),
@@ -71,4 +71,4 @@ public class ScenarioPopupMenu extends JPopupMenu {
     //--------------------------------------------------------------------------
 
     
-} // end class
+} 

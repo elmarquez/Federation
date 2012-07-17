@@ -11,20 +11,26 @@ Versions
 0.3.0
 . Save project model and application state to file
 
-0.2.2
+0.2.4
 . 2D model viewer
 . Component classes that implement 2D graphics drawing
 . Open 2D model views from Scenario view
-. Viewers should observe model, maintain proper state
-. Move anything related to view state into the ApplicationContext class
+
+0.2.3
 . Consider moving action to register an object in a particular context out of the constructor
+. Basic test suite for core model and utility classes
+
+0.2.2
+. Only Scenario and ParametricModel should update when an item is added. All 
+  other items should wait for user keyboard entry to update.
+. Component constructor methods should throw exceptions
+. Viewers should observe model, maintain proper state
+* All viewers watch the application context for changes in the model
 
 0.2.1
-* Replace all System.out.println calls to logging framework calls >> in progress
-* Removed code for singleton implementation of ParametricModel
-* All viewers watch the application context for changes in the model
-. Basic test suite for core model and utility classes
-. Component constructor methods should throw exceptions
+- Moved the view state into the ApplicationContext class
+- Replaced all System.out.println calls to logging framework calls
+- Removed code for singleton implementation of ParametricModel
 
 0.2.0
 - Docking panel layout

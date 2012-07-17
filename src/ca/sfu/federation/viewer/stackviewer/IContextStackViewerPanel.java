@@ -277,4 +277,4 @@ public class IContextStackViewerPanel extends JPanel implements Observer {
         }
     }
 
-} // end class
+} 

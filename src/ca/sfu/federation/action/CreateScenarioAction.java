@@ -62,4 +62,4 @@ public class CreateScenarioAction extends AbstractAction {
         }
     }
     
-} // end class
+} 

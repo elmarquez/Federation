@@ -23,6 +23,9 @@ import ca.sfu.federation.model.exception.ParameterCountMismatchException;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * A table to hold Input arguments for an Update method.  Arguments are stored
@@ -32,6 +35,8 @@ import java.util.*;
  * @version 0.2.0
  */
 public class InputTable extends Observable implements Serializable {
+    
+    private static final Logger logger = Logger.getLogger(InputTable.class.getName());
     
     private ArrayList inputs;       // the inputs, in order
     private String description;  // description of the update method
@@ -99,8 +104,9 @@ public class InputTable extends Observable implements Serializable {
             for (int i=0;i<param.length;i++) {
                 try {
                     this.addInput(param[i],"Input description pulled from Update method annotation.",type[i]);
-                } catch (DuplicatePropertyException dpe) {
-                    dpe.printStackTrace();
+                } catch (DuplicatePropertyException ex) {
+                    String stack = ExceptionUtils.getFullStackTrace(ex);
+                    logger.log(Level.WARNING,"{0}",stack);
                 }
             }
         } else {
@@ -203,16 +209,16 @@ public class InputTable extends Observable implements Serializable {
      */
     public Input[] getInputs() {
         // init
-        Input[] inputs = new Input[this.inputs.size()];
+        Input[] theinputs = new Input[this.inputs.size()];
         // copy inputs into array
         Iterator e = this.inputs.iterator();
         int count = 0;
         while (e.hasNext()) {
-            inputs[count] = (Input) e.next();
+            theinputs[count] = (Input) e.next();
             count++;
         }
         // return result
-        return inputs;
+        return theinputs;
     }
     
     /**
@@ -324,11 +330,12 @@ public class InputTable extends Observable implements Serializable {
         try {
             myInput.setUserInput(UserInputValue);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         // notify parent object of change
         this.setChanged();
         this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_INPUT_CHANGE));
     }
     
-} // end class
+} 

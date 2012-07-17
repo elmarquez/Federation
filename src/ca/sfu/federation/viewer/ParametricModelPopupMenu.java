@@ -62,4 +62,4 @@ public class ParametricModelPopupMenu extends JPopupMenu {
     //--------------------------------------------------------------------------
 
     
-} // end class
+} 

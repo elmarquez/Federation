@@ -1,7 +1,4 @@
 /**
- * DirectoryFilter.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -21,26 +18,20 @@ package ca.sfu.federation.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.filechooser.FileFilter;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * Filter an input list to return only directory objects.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class ParametricModelFilter extends FileFilter {
 
-    //--------------------------------------------------------------------------
-
-    
-    /**
-     * DirectoryFilter constructor.
-     */
-    public ParametricModelFilter() {
-    }
+    private static final Logger logger = Logger.getLogger(ParametricModelFilter.class.getName());
     
     //--------------------------------------------------------------------------
-
 
     /**
      * Determine whether the file is a directory.
@@ -53,17 +44,18 @@ public class ParametricModelFilter extends FileFilter {
                 return true;
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
         }
         return false;
     }
 
     /**
-     * Get the directory description.
+     * Get the filter description.
      * @return Directory description.
      */
     public String getDescription() {
-        return "Filesystem Directory";
+        return "Project Directory";
     }
     
-} // end class
+} 

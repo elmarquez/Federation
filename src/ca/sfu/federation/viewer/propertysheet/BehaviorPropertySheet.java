@@ -214,4 +214,4 @@ public class BehaviorPropertySheet extends JPanel implements Observer {
         }
     }
     
-} // end class
+} 

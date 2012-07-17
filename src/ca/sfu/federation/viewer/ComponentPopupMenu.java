@@ -55,4 +55,4 @@ public class ComponentPopupMenu extends JPopupMenu {
     //--------------------------------------------------------------------------
 
     
-} // end class
+} 

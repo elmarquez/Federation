@@ -1,7 +1,4 @@
 /**
- * ShowAboutWindowAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,23 +16,35 @@
 
 package ca.sfu.federation.action;
 
+import ca.sfu.federation.viewer.AboutJPanel;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
-import javax.swing.JOptionPane;
+import javax.swing.JDialog;
 
 /**
- *
+ * Show about window.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class ShowAboutWindowAction extends AbstractAction {
     
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(ShowAboutWindowAction.class.getName());
     
     //--------------------------------------------------------------------------
 
+    public ShowAboutWindowAction() {
+        super("About this Application", null);
+        this.putValue(Action.LONG_DESCRIPTION, "About this Application");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
+        this.putValue(Action.SHORT_DESCRIPTION, "About this Application");
+    }
     
     /**
      * ShowAboutWindowAction constructor.
@@ -52,13 +61,28 @@ public class ShowAboutWindowAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
-
     /**
      * Show About Application dialog.
      * @param e Event
      */
     public void actionPerformed(ActionEvent e) {
-        JOptionPane.showMessageDialog(null,"Parametric Modelling Application\nDavis Marques <dmarques@sfu.ca>\nProf. Robert Woodbury\nProf. John Dill","About this Application",JOptionPane.INFORMATION_MESSAGE);
+        AboutJPanel aboutpanel = new AboutJPanel();
+        JDialog dialog = new JDialog();
+        Container container = dialog.getContentPane();
+        container.setLayout(new BorderLayout());
+        container.add(aboutpanel);
+        dialog.setModal(true);
+        dialog.setSize(473,300);
+        dialog.setTitle("About");
+        dialog.pack();
+        // position in center of screen
+        dialog.setLocationRelativeTo(null);
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = dialog.getHeight();
+        int width = dialog.getWidth();
+        // dialog.setLocation((screen.height-height)/2,(screen.width-width)/2);
+        // show dialog
+        dialog.setVisible(true);
     }
     
 } 

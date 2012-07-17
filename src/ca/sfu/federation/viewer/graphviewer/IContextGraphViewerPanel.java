@@ -286,4 +286,4 @@ public class IContextGraphViewerPanel extends JPanel implements MouseListener, O
         
     }
     
-} // end class
+} 

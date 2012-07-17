@@ -241,4 +241,4 @@ public class Point extends Component implements IPoint {
         return true;
     }
    
-} // end class
+} 

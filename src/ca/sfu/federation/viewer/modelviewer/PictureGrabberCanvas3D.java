@@ -181,7 +181,7 @@ class PictureGrabberCanvas3D extends Canvas3D {
         setSize(getWidth(), getHeight());
     }
 
-} // end class
+} 
 
 //public class OffScreenTest extends JFrame {
 //  

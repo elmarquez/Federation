@@ -65,4 +65,4 @@ public class ParametricModelPopupProvider implements PopupMenuProvider, ActionLi
     public void actionPerformed(ActionEvent e) {
     }
     
-} // end class
+} 

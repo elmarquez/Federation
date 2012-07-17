@@ -180,4 +180,4 @@ public class ContainerVisualWidget extends Widget implements IVisualWidget, Obse
         }
     }
 
-} // end class
+} 

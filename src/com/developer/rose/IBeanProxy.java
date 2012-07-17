@@ -48,4 +48,4 @@ public interface IBeanProxy {
      */
     public Object invoke(String name, Class[] types, Object[] parameters) throws Exception;
     
-} // end class IBeanProxy
+} 

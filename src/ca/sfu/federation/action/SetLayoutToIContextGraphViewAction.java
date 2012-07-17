@@ -57,4 +57,4 @@ public class SetLayoutToIContextGraphViewAction extends AbstractAction {
         model.setViewState(ApplicationContext.VIEWER_CURRENT_LAYOUT,ApplicationContext.VIEWER_LAYOUT_ICONTEXTGRAPHVIEW);
     }
     
-} // end class
+} 

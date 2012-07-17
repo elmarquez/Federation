@@ -65,4 +65,4 @@ public class SetLayoutToParametricModelGraphAction extends AbstractAction {
         }
     }
     
-} // end class
+} 

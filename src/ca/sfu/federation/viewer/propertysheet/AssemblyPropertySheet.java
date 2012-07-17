@@ -323,4 +323,4 @@ public class AssemblyPropertySheet extends JPanel implements Observer {
         }
     }
     
-} // end class
+} 

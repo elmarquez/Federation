@@ -45,4 +45,4 @@ public class DraggingListener implements ActionListener {
         DockingManager.setDraggerFactory(draggerFactory);
     }
 
-} // end class
+} 

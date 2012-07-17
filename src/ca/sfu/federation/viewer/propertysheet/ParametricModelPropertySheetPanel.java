@@ -200,4 +200,4 @@ public class ParametricModelPropertySheetPanel extends JPanel implements Observe
         }
     }
                
-} // end class
+} 

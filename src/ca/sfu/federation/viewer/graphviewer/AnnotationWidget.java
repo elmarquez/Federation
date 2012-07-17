@@ -132,4 +132,4 @@ public class AnnotationWidget extends Widget {
 
     }
     
-} // end class
+} 

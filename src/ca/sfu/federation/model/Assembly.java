@@ -681,4 +681,4 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
         }
     }
 
-} // end class
+} 

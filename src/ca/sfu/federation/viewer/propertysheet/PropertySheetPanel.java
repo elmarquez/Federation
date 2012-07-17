@@ -70,5 +70,5 @@ public class PropertySheetPanel extends JPanel {
 //        }
     }
 
-} // end class
+} 
 

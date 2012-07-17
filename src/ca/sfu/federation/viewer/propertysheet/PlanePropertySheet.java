@@ -345,4 +345,4 @@ public class PlanePropertySheet extends javax.swing.JPanel implements Observer {
         }
     }
 
-} // end class
+} 

@@ -60,4 +60,4 @@ public class JTextAreaOutputFormatter extends Formatter {
         return sb.toString();
     }
     
-} // end class
+} 

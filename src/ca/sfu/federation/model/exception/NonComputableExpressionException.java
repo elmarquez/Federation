@@ -42,5 +42,5 @@ public class NonComputableExpressionException extends Exception {
     //-------------------------------------------------------------------------
 
 
-} // end class NonComputableExpressionException
+} 
 

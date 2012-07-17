@@ -22,7 +22,7 @@ package ca.sfu.federation.viewer;
 import ca.sfu.federation.model.Assembly;
 import ca.sfu.federation.model.INamed;
 import ca.sfu.federation.action.CreateComponentAction;
-import ca.sfu.federation.action.DeleteINamedAction;
+import ca.sfu.federation.action.EditDeleteAction;
 import ca.sfu.federation.action.RenameINamedAction;
 import ca.sfu.federation.action.SetCurrentIContextAction;
 import ca.sfu.federation.action.SetPropertySheetFocusAction;
@@ -66,7 +66,7 @@ public class AssemblyPopupMenu extends JPopupMenu {
         RenameINamedAction inora = new RenameINamedAction("Rename",null,"Rename",new Integer(KeyEvent.VK_R),target);
         this.add(inora);
         // delete
-        DeleteINamedAction inoda = new DeleteINamedAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),target);
+        EditDeleteAction inoda = new EditDeleteAction("Delete",null,"Delete",new Integer(KeyEvent.VK_D),target);
         this.add(inoda);
         // properties
         SetPropertySheetFocusAction pssfa = new SetPropertySheetFocusAction("Properties",null,"Properties",new Integer(KeyEvent.VK_P),(INamed)this.target);
@@ -76,4 +76,4 @@ public class AssemblyPopupMenu extends JPopupMenu {
     //--------------------------------------------------------------------------
 
     
-} // end class
+} 

@@ -243,4 +243,4 @@ public class CoordinateSystem extends Component implements IPoint {
         return true;
     }
     
-} // end class
+} 

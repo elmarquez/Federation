@@ -135,4 +135,4 @@ public class ScenarioSmallVisualWidget extends Widget implements Observer {
         }
     }
     
-} // end class
+} 

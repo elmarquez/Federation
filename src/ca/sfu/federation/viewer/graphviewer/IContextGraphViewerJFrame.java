@@ -60,4 +60,4 @@ public class IContextGraphViewerJFrame extends JFrame {
     //--------------------------------------------------------------------------
 
 
-} // end class
+} 

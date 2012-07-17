@@ -602,4 +602,4 @@ public class MutableSceneModel extends Scene implements Observer {
         logger.log(Level.WARNING,"updateVisualState not implemented");
     }
     
-} // end class
+} 

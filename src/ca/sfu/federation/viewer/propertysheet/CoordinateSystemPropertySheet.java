@@ -340,4 +340,4 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
         }
     }
 
-} // end class
+} 

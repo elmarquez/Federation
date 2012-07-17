@@ -78,4 +78,4 @@ class OffScreenCanvas3D extends Canvas3D {
     public void postSwap() {
     }
     
-} // end class
+} 

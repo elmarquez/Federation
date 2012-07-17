@@ -56,4 +56,4 @@ public class AntialiasedScene extends Scene {
         getGraphics().setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, textAnti);
     }
     
-} // end class
+} 

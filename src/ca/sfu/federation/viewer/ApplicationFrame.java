@@ -76,7 +76,7 @@ public class ApplicationFrame extends JFrame implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer) {
             Integer eventId = (Integer) arg;
-            logger.log(Level.INFO,"ApplicationFrame received event \'{0}\'", eventId);
+            logger.log(Level.INFO,"ApplicationFrame received event {0}", eventId.toString());
             String appname = Application.getResource().getString("application-title");
             switch (eventId) {
                 // update the frame title
@@ -92,4 +92,4 @@ public class ApplicationFrame extends JFrame implements Observer {
         }
     }
 
-} // end class
+} 

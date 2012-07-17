@@ -1,7 +1,4 @@
 /**
- * ShowExplorerAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,22 +16,19 @@
 
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.viewer.explorer.AbstractTreeExplorerJFrame;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
 
 /**
+ * Toggle the visibility state of the project explorer panel.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class ShowExplorerAction extends AbstractAction {
     
-    //--------------------------------------------------------------------------
-
-    
-    //--------------------------------------------------------------------------
-
+    private static final Logger logger = Logger.getLogger(ShowExplorerAction.class.getName());
     
     /**
      * ShowExplorerAction constructor.
@@ -51,13 +45,12 @@ public class ShowExplorerAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
-
     /**
      * Set the current context.
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        AbstractTreeExplorerJFrame frame = new AbstractTreeExplorerJFrame();
+        logger.log(Level.WARNING,"Not implemented yet.");
     }
     
 } 

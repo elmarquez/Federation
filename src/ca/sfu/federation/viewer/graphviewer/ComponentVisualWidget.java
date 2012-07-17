@@ -159,4 +159,4 @@ public class ComponentVisualWidget extends Widget implements IVisualWidget, Obse
         this.repaint();
     }
     
-} // end class
+} 

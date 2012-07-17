@@ -37,4 +37,4 @@ public class DockableMenuItem extends JCheckBoxMenuItem {
         addItemListener(dockableMediator);
     }
     
-} // end class
+} 
