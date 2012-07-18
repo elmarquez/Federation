@@ -185,21 +185,22 @@ public class IContextStackViewerPanel extends JPanel implements Observer {
         // draw model objects
         if (this.context != null) {
             ArrayList parents = (ArrayList) this.context.getParents();
-            IContext[] pa = new IContext[parents.size()];
-            parents.addAll(Arrays.asList(pa));
             int y = 0;
             boolean leading = false;
             boolean fill = false;
             boolean trailing = false;
             int leadingBlock = -1;
-            for (int i=0;i<pa.length;i++) {
-                IContext parent = pa[i];
-                if (i+1==pa.length) {
+            Iterator<IContext> it = parents.iterator();
+            int count = 0;
+            while (it.hasNext()) {
+                IContext parent = it.next();
+                if (count+1==parents.size()) {
                     leading = false;
                     fill = true;
                     trailing = false;
                 }
-                this.drawScenarioBlock(g,0,y,60,parent.getName(),leading,fill,trailing);
+                String name = parent.getName();
+                this.drawScenarioBlock(g,0,y,60,name,leading,fill,trailing);
                 y += 60;
                 leading = true;
                 fill = false;

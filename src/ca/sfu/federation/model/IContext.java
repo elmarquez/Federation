@@ -1,7 +1,4 @@
 /**
- * IContext.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -28,7 +25,6 @@ import java.util.Map;
  * the child objects contained within it.
  *
  * @author Davis Marques
- * @version 0.0.2
  */
 public interface IContext extends INamed {
 
@@ -54,7 +50,7 @@ public interface IContext extends INamed {
      *
      * @return List of Parent contexts.
      */
-    public List getParents();
+    public List<IContext> getParents();
     
     /**
      * Determine if a NamedObject exists in the local collection.

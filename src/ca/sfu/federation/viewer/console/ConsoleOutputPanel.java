@@ -23,16 +23,16 @@ import java.util.logging.Logger;
  * Output and command panel.
  * @author dmarques
  */
-public class ConsolePanel extends javax.swing.JPanel {
+public class ConsoleOutputPanel extends javax.swing.JPanel {
 
-    private static final Logger logger = Logger.getLogger(ConsolePanel.class.getName());
+    private static final Logger logger = Logger.getLogger(ConsoleOutputPanel.class.getName());
 
     //--------------------------------------------------------------------------
     
     /**
-     * ConsolePanel constructor
+     * ConsoleOutputPanel constructor
      */
-    public ConsolePanel() {
+    public ConsoleOutputPanel() {
         initComponents();
         // attach log output to display
         JTextAreaOutputHandler handler = new JTextAreaOutputHandler(jTextArea2);

@@ -360,10 +360,9 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      * @return Thumbnail image.
      */
     public Image getThumbnail() {
-        LinkedHashMap thumbnails = (LinkedHashMap) Application.getContext().getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
+        Map thumbnails = (Map) Application.getContext().getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
         String canonicalname = this.getCanonicalName();
-        BufferedImage bimage = null;
-        if (thumbnails.containsKey(canonicalname)) {
+        if (thumbnails != null && thumbnails.containsKey(canonicalname)) {
             return (Image) thumbnails.get(canonicalname);
         }
         // return default thumbnail

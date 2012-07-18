@@ -85,7 +85,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     private String updateMethodName;        // the name of the user selected update method
     private transient Method updateMethod;  // the user selected update method
     private InputTable inputTable;          // inputTable corresponding with the user selected update method signature
-    private IViewable result;          // displayable result object .. in theory the result may not be displayable
+    private IViewable result;               // displayable result object .. in theory the result may not be displayable
 
     // display properties
     private ImageIcon icon;                     // icon representation of component

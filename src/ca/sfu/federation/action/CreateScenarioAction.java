@@ -18,10 +18,13 @@ package ca.sfu.federation.action;
 import ca.sfu.federation.Application;
 import ca.sfu.federation.model.ParametricModel;
 import ca.sfu.federation.model.Scenario;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
 
 /**
@@ -34,6 +37,15 @@ public class CreateScenarioAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
     
+    public CreateScenarioAction() {
+        super("Create Scenario", null);
+        Icon icon = ImageIconUtils.loadIconById("model-create-scenario");
+        this.putValue(Action.LONG_DESCRIPTION, "Create Scenario");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_S);
+        this.putValue(Action.SHORT_DESCRIPTION, "Create Scenario");
+        this.putValue(Action.SMALL_ICON, icon);
+    }
+
     /**
      * CreateScenarioAction constructor.
      * @param Name Action name that will appear in menus.
@@ -43,8 +55,9 @@ public class CreateScenarioAction extends AbstractAction {
      */
     public CreateScenarioAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
         super(Name, MyIcon);
-        this.putValue(SHORT_DESCRIPTION,ToolTip);
+        this.putValue(LONG_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
+        this.putValue(SHORT_DESCRIPTION,ToolTip);
     }
     
     //--------------------------------------------------------------------------

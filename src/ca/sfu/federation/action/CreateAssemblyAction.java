@@ -18,11 +18,14 @@ package ca.sfu.federation.action;
 
 import ca.sfu.federation.model.Assembly;
 import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
@@ -40,6 +43,14 @@ public class CreateAssemblyAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
+    public CreateAssemblyAction() {
+        super("Create Assembly", null);
+        Icon icon = ImageIconUtils.loadIconById("model-create-assembly");
+        this.putValue(Action.LONG_DESCRIPTION, "Create Assembly");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_A);
+        this.putValue(Action.SHORT_DESCRIPTION, "Create Assembly");
+        this.putValue(Action.SMALL_ICON, icon);
+    }
     
     /**
      * CreateAssemblyAction constructor.
@@ -80,7 +91,6 @@ public class CreateAssemblyAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
-    
     /**
      * Perform action.
      * @param e Action event.

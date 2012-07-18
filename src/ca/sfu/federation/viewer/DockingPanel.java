@@ -17,12 +17,13 @@
 package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.utils.ImageIconUtils;
-import ca.sfu.federation.viewer.console.ConsolePanel;
-import ca.sfu.federation.viewer.graphviewer.IContextGraphViewerPanel;
+import ca.sfu.federation.viewer.console.ConsoleOutputPanel;
+import ca.sfu.federation.viewer.graphviewer.GraphViewerPanel;
 import ca.sfu.federation.viewer.projectexplorer.ProjectExplorerPanel;
 import ca.sfu.federation.viewer.propertysheet.PropertySheetPanel;
 import ca.sfu.federation.viewer.stackviewer.StackViewerPanel;
 import ca.sfu.federation.viewer.toolbars.EditToolbar;
+import ca.sfu.federation.viewer.toolbars.ModelingToolbar;
 import ca.sfu.federation.viewer.toolbars.ProjectToolbar;
 import ca.sfu.federation.viewer.toolbars.ViewToolbar;
 import com.javadocking.DockingManager;
@@ -59,17 +60,17 @@ public class DockingPanel extends JPanel {
 
     private final int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
     private final int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
-    
+
     private final int LEFT_DOCK_WIDTH = 220;
     private final int RIGHT_DOCK_WIDTH = 220;
     private final int BOTTOM_DOCK_HEIGHT = 160;
     private final int TOOLBAR_WIDTH = 30;
-    
+
     private ArrayList<Dockable> dockables = new ArrayList<Dockable>();
     private Dockable[] buttonDockables = new Dockable[42];
 
     //--------------------------------------------------------------------------
-    
+
     /**
      * DockingPanel constructor
      * @param ParentFrame Application frame
@@ -86,7 +87,7 @@ public class DockingPanel extends JPanel {
         DockingManager.setDockModel(dockModel);
 
         // create the application viewers
-        IContextGraphViewerPanel projectGraphView = new IContextGraphViewerPanel();
+        GraphViewerPanel graphViewer = new GraphViewerPanel();
         StackViewerPanel stackViewer = new StackViewerPanel();
         JButton button2 = new JButton("Graph View 1");
         JButton button3 = new JButton("Graph View 2");
@@ -94,17 +95,17 @@ public class DockingPanel extends JPanel {
         JButton button5 = new JButton("Model View 2");
         ProjectExplorerPanel explorerPanel = new ProjectExplorerPanel();
         PropertySheetPanel propertysheetPanel = new PropertySheetPanel();
-        ConsolePanel consolePanel = new ConsolePanel();
+        ConsoleOutputPanel outputPanel = new ConsoleOutputPanel();
 
         // create the dockables around the content components
-        Dockable projectGraphDockable = createDockable("Project", projectGraphView, "Project", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Project");
+        Dockable projectGraphDockable = createDockable("Project", graphViewer, "Project", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Project");
         Dockable graphView1Dockable = createDockable("Graph View 1", button2, "Graph View 1", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Graph View 1");
         Dockable graphView2Dockable = createDockable("Graph View 2", button3, "Graph View 2", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Graph View 2");
         Dockable modelView1Dockable = createDockable("Model View 1", button4, "Model View 1", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Model View 1");
         Dockable modelView2Dockable = createDockable("Model View 2", button5, "Model View 2", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Model View 2");
         Dockable stackViewDockable = createDockable("Stack", stackViewer, "Stack", ImageIconUtils.loadIconById("view-stackviewer-icon"), "Context Dependency Stack");
         Dockable explorerDockable = createDockable("Project", explorerPanel, "Project", ImageIconUtils.loadIconById("view-explorer-icon"), "Project Explorer");
-        Dockable outputDockable = createDockable("Output", consolePanel, "Command", ImageIconUtils.loadIconById("view-commandwindow-icon"), "Command Output");
+        Dockable outputDockable = createDockable("Output", outputPanel, "Output", ImageIconUtils.loadIconById("view-outputwindow-icon"), "Output");
         Dockable propertySheetDockable = createDockable("Properties", propertysheetPanel, "Properties", ImageIconUtils.loadIconById("view-propertysheet-icon"), "Properties");
 
         // add dockables to list
@@ -117,7 +118,7 @@ public class DockingPanel extends JPanel {
         dockables.add(explorerDockable);
         dockables.add(outputDockable);
         dockables.add(propertySheetDockable);
-        
+
         // add actions to dockables
         for (int index = 0; index < dockables.size(); index++) {
             // dockables[index] = addLimitActions(dockables[index]);
@@ -143,9 +144,9 @@ public class DockingPanel extends JPanel {
         centerTabbedDock.addDockable(modelView2Dockable, new Position(4));
         bottomTabbedDock.addDockable(outputDockable, new Position(0));
         leftTabbedDock.addDockable(explorerDockable, new Position(0));
-        leftTabbedDock.addDockable(stackViewDockable, new Position(1));        
+        leftTabbedDock.addDockable(stackViewDockable, new Position(1));
         rightTabbedDock.addDockable(propertySheetDockable, new Position(0));
-        
+
         leftTabbedDock.setSelectedDockable(explorerDockable);
         centerTabbedDock.setSelectedDockable(projectGraphDockable);
 
@@ -154,18 +155,18 @@ public class DockingPanel extends JPanel {
         centerSplitDock.addChildDock(centerTabbedDock, new Position(Position.CENTER));
         centerSplitDock.addChildDock(rightTabbedDock, new Position(Position.RIGHT));
         centerSplitDock.setDividerLocation(SCREEN_WIDTH - RIGHT_DOCK_WIDTH - LEFT_DOCK_WIDTH - (TOOLBAR_WIDTH * 2));
-        
+
         SplitDock bottomSplitDock = new SplitDock();
         bottomSplitDock.addChildDock(bottomTabbedDock, new Position(Position.CENTER));
-        
+
         SplitDock rightSplitDock = new SplitDock();
         rightSplitDock.addChildDock(centerSplitDock, new Position(Position.CENTER));
         rightSplitDock.addChildDock(bottomSplitDock, new Position(Position.BOTTOM));
         rightSplitDock.setDividerLocation(SCREEN_HEIGHT - BOTTOM_DOCK_HEIGHT - (TOOLBAR_WIDTH * 3));
-        
+
         SplitDock leftSplitDock = new SplitDock();
         leftSplitDock.addChildDock(leftTabbedDock, new Position(Position.CENTER));
-        
+
         SplitDock totalSplitDock = new SplitDock();
         totalSplitDock.addChildDock(leftSplitDock, new Position(Position.LEFT));
         totalSplitDock.addChildDock(rightSplitDock, new Position(Position.RIGHT));
@@ -210,9 +211,7 @@ public class DockingPanel extends JPanel {
         compositeToolBarDock1.addChildDock(new ProjectToolbar(), new Position(0));
         compositeToolBarDock1.addChildDock(new EditToolbar(), new Position(1));
         compositeToolBarDock1.addChildDock(new ViewToolbar(), new Position(2));
-
-        // minimize the output panel
-        minimizer.visualizeDockable(outputDockable);
+        compositeToolBarDock1.addChildDock(new ModelingToolbar(), new Position(3));
 
         // add the paths of the docked dockables to the model with the docking paths
         Iterator<Dockable> it = dockables.iterator();
@@ -223,7 +222,7 @@ public class DockingPanel extends JPanel {
     }
 
     //--------------------------------------------------------------------------
-    
+
     /**
      * Decorates the given dockable with all state actions.
      * @param dockable	The dockable to decorate.
@@ -305,5 +304,5 @@ public class DockingPanel extends JPanel {
         dockable.getContent().addMouseListener(dragListener);
         dockable.getContent().addMouseMotionListener(dragListener);
     }
-    
-} 
+
+}

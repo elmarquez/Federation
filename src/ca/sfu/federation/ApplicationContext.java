@@ -15,6 +15,7 @@
  */
 package ca.sfu.federation;
 
+import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.ParametricModel;
 import java.awt.Color;
 import java.io.File;
@@ -40,7 +41,7 @@ public class ApplicationContext extends Observable {
 
     public static final String PROJECT_WEBSITE_URL = "https://github.com/elmarquez/Federation";
     public static final String PROJECT_HELP_WEBSITE_URL = "https://github.com/elmarquez/Federation";
-    
+
     // APPLICATION APPEARANCE
     public static final Color BACKGROUND_DARK = new Color(40,40,40);
     public static final Color BACKGROUND_MEDIUM = new Color(48,48,48);
@@ -120,7 +121,7 @@ public class ApplicationContext extends Observable {
 
     /**
      * Get the model.
-     * @return 
+     * @return
      */
     public ParametricModel getModel() {
         return model;
@@ -157,21 +158,32 @@ public class ApplicationContext extends Observable {
      */
     public void setModel(ParametricModel Model) {
         model = Model;
-        this.setChanged();
+        setView(model);
+        setChanged();
         if (model == null) {
-            this.notifyObservers(ApplicationContext.MODEL_CLOSED);
+            notifyObservers(ApplicationContext.MODEL_CLOSED);
         } else {
-            this.notifyObservers(ApplicationContext.MODEL_LOADED);
+            notifyObservers(ApplicationContext.MODEL_LOADED);
         }
+    }
+
+    /**
+     * Set the current context view.
+     * @param Context 
+     */
+    public void setView(IContext Context) {
+        viewstate.put(ApplicationContext.VIEWER_CURRENT_CONTEXT,Context);
     }
 
     /**
      * Set the view state by key.
      * @param Key
-     * @param Value 
+     * @param Value
      */
     public void setViewState(Object Key, Object Value) {
         viewstate.put(Key, Value);
+        setChanged();
+        notifyObservers(Key);
     }
 
-} 
+}

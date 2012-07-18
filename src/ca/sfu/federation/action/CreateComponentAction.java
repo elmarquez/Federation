@@ -1,7 +1,4 @@
 /**
- * CreateComponentAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -21,11 +18,14 @@ package ca.sfu.federation.action;
 
 import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
@@ -43,6 +43,14 @@ public class CreateComponentAction extends AbstractAction {
     
     //--------------------------------------------------------------------------
 
+    public CreateComponentAction() {
+        super("Create Componnet", null);
+        Icon icon = ImageIconUtils.loadIconById("model-create-component");
+        this.putValue(Action.LONG_DESCRIPTION, "Create Component");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_C);
+        this.putValue(Action.SHORT_DESCRIPTION, "Create Component");
+        this.putValue(Action.SMALL_ICON, icon);
+    }
     
     /**
      * CreateComponentAction constructor.

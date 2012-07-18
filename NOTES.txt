@@ -24,7 +24,7 @@ Versions
 . Component constructor methods should not register items in contexts
 
 0.2.2
-* All viewers watch the application context for changes in the model
+*** All viewers watch the application context for changes in the model
 * GraphViewer
 - PropertySheet watches ApplicationContext for model load, close events
 - StackViewer watches ApplicationContext for model load, close events

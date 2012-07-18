@@ -16,38 +16,47 @@
 
 package ca.sfu.federation.action;
 
+import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
 
 /**
+ * Create behavior action
  * @author Davis Marques
- * @version 0.1.0
  */
-public class CreateIContextGraphViewerAction extends AbstractAction {
+public class CreateBehaviorAction extends AbstractAction {
     
+    private static final Logger logger = Logger.getLogger(CreateBehaviorAction.class.getName());
     
-    /**
-     * CreateIContextGraphViewerAction constructor.
-     * @param Name The fully qualified context name to set as the current context.
-     * @param MyIcon Action icon.
-     * @param ToolTip Action description that will appear in Tool Tip.
-     * @param MnemonicId Key mnemonic.
-     */
-    public CreateIContextGraphViewerAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
-        super(Name, MyIcon);
-        this.putValue(SHORT_DESCRIPTION,ToolTip);
-        this.putValue(MNEMONIC_KEY,MnemonicId);
-    }
+    private IContext context;
+    private Class clazz;
+    private boolean byClass;
     
     //--------------------------------------------------------------------------
 
+    public CreateBehaviorAction() {
+        super("Create Behavior", null);
+        Icon icon = ImageIconUtils.loadIconById("model-create-behavior");
+        this.putValue(Action.LONG_DESCRIPTION, "Create Behavior");
+        this.putValue(Action.MNEMONIC_KEY, KeyEvent.VK_B);
+        this.putValue(Action.SHORT_DESCRIPTION, "Create Behavior");
+        this.putValue(Action.SMALL_ICON, icon);
+    }
+        
+    //--------------------------------------------------------------------------
 
     /**
-     * Set the current context.
+     * Perform action.
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
+        logger.log(Level.WARNING,"Not implemented yet");
     }
     
 } 
