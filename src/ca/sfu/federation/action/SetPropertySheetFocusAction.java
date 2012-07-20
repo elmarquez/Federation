@@ -52,18 +52,12 @@ public class SetPropertySheetFocusAction extends AbstractAction {
 
     //--------------------------------------------------------------------------
 
-
     /**
      * Set the current context.
      */
     public void actionPerformed(ActionEvent e) {
-        ParametricModel model = Application.getContext().getModel();
-        if (model != null) {
-            logger.log(Level.ALL,"Set PropertySheet focus to {0}", this.target.getName());
-            model.setViewState(ApplicationContext.VIEWER_SELECTION,this.target);
-        } else {
-            logger.log(Level.WARNING,"Could not set focus. No model loaded.");
-        }
+        Application.getContext().setViewState(ApplicationContext.VIEWER_SELECTION,this.target);
+        logger.log(Level.ALL,"Set PropertySheet focus to {0}", this.target.getName());
     }
 
 } 

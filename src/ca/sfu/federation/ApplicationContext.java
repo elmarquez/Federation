@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -115,6 +116,11 @@ public class ApplicationContext extends Observable {
      */
     public ApplicationContext() {
         registerPropertyEditors();
+        // default view state parameters
+        viewstate = new HashMap();
+        viewstate.put(ApplicationContext.VIEWER_CURRENT_CONTEXT,null);
+        viewstate.put(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS,new HashMap());
+        viewstate.put(ApplicationContext.VIEWER_ICONTEXTVIEWER_SCENES,new HashMap());
     }
 
     //--------------------------------------------------------------------------
@@ -176,14 +182,27 @@ public class ApplicationContext extends Observable {
     }
 
     /**
-     * Set the view state by key.
+     * Set a viewer parameter.
      * @param Key
      * @param Value
      */
     public void setViewState(Object Key, Object Value) {
-        viewstate.put(Key, Value);
+        // get the old value
+        Object oldValue = viewstate.get(Key);
+        // set the new value
+        viewstate.put(Key,Value);
         setChanged();
-        notifyObservers(Key);
+        // fire property change notification
+        if (Key.equals(ApplicationContext.VIEWER_CURRENT_CONTEXT)) {
+            logger.log(Level.INFO,"ParametricModel updated view state current context to {0}", Value.toString());
+            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_CONTEXT_CHANGE));
+        } else if (Key.equals(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS)) {
+            logger.log(Level.INFO,"ParametricModel updated IContext thumbnails");
+            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_THUMBNAIL_CHANGE));
+        } else if (Key.equals(ApplicationContext.VIEWER_SELECTION)) {
+            logger.log(Level.INFO,"ParametricModel updated Selection list state");
+            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_SELECTION_CHANGE));
+        }
     }
-
+    
 }

@@ -19,9 +19,10 @@ package ca.sfu.federation.viewer.propertysheet;
 import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
-import ca.sfu.federation.model.ParametricModel;
 import com.developer.rose.BeanProxy;
 import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -315,9 +316,10 @@ public class CoordinateSystemPropertySheet extends JPanel implements Observer {
         // this.jtfDescription.setText(this.target.getDescription());
         this.jtfCanonicalName.setText(this.target.getCanonicalName());
         this.jtfParentContext.setText(this.target.getContext().getName());
-        Method[] methods = this.target.getUpdateMethods();
-        for (int i=0;i<methods.length;i++) {
-            Method method = methods[i];
+        List<Method> methods = this.target.getUpdateMethods();
+        Iterator<Method> it = methods.iterator();
+        while (it.hasNext()) {
+            Method method = it.next();
             jcbUpdateMethod.addItem(method.getName());
         }
     }

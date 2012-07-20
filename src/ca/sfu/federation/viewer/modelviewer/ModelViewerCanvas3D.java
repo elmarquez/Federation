@@ -288,7 +288,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
         LinkedHashMap thumbnails = (LinkedHashMap) Application.getContext().getViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS);
         thumbnails.put(this.context.getCanonicalName(),image);
         // this will force an update event from the model
-        this.model.setViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS,thumbnails);
+        Application.getContext().setViewState(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS,thumbnails);
     }
     
     /**

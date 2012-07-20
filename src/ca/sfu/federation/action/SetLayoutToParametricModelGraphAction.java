@@ -57,12 +57,7 @@ public class SetLayoutToParametricModelGraphAction extends AbstractAction {
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        ParametricModel model = Application.getContext().getModel();
-        if (model != null) {
-            model.setViewState(ApplicationContext.VIEWER_CURRENT_LAYOUT,ApplicationContext.VIEWER_LAYOUT_PARAMETRICMODELGRAPHVIEW);
-        } else {
-            logger.log(Level.WARNING,"Could not set layout. No model loaded.");
-        }
+        Application.getContext().setViewState(ApplicationContext.VIEWER_CURRENT_LAYOUT,ApplicationContext.VIEWER_LAYOUT_PARAMETRICMODELGRAPHVIEW);
     }
     
 } 

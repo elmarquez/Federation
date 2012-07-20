@@ -364,14 +364,15 @@ public class PointPropertySheet extends javax.swing.JPanel implements Observer {
             String stack = ExceptionUtils.getFullStackTrace(ex);
             logger.log(Level.WARNING,"{0}",stack);
         }
-        
-        Method[] methods = this.target.getUpdateMethods();
-        Vector methodNameList = new Vector();
-        for (int i=0;i<methods.length;i++) {
-            Method method = methods[i];
+
+        List<Method> methods = this.target.getUpdateMethods();
+        ArrayList<String> methodNameList = new ArrayList<String>();
+        Iterator<Method>  it = methods.iterator();
+        while (it.hasNext()) {
+            Method method = it.next();
             methodNameList.add(method.getName());
         }
-        DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(methodNameList);
+        DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(methodNameList.toArray());
         jcbUpdateMethod.setModel(comboBoxModel);
         String selected = this.target.getUpdateMethodName();
         jcbUpdateMethod.setSelectedItem(selected);

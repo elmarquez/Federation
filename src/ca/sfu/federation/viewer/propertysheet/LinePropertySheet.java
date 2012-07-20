@@ -347,14 +347,15 @@ public class LinePropertySheet extends javax.swing.JPanel implements Observer {
             String stack = ExceptionUtils.getFullStackTrace(ex);
             logger.log(Level.WARNING,"{0}",stack);
         }
-        
-        Method[] methods = this.target.getUpdateMethods();
-        Vector methodNameList = new Vector();
-        for (int i=0;i<methods.length;i++) {
-            Method method = methods[i];
-            methodNameList.add(method.getName());
+        ArrayList<String> methodNameList = new ArrayList<String>();
+        List<Method> methods = this.target.getUpdateMethods();
+        Iterator<Method> it = methods.iterator();
+        while (it.hasNext()) {
+            Method method = it.next();
+            String name = method.getName();
+            methodNameList.add(name);
         }
-        DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(methodNameList);
+        DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(methodNameList.toArray());
         jcbUpdateMethod.setModel(comboBoxModel);
         String selected = this.target.getUpdateMethodName();
         jcbUpdateMethod.setSelectedItem(selected);

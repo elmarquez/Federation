@@ -19,7 +19,6 @@ package ca.sfu.federation.action;
 import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.ParametricModel;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,20 +27,20 @@ import javax.swing.Icon;
 
 /**
  * Set the current context of the model.  If the context is an instance of
- * Parametric Model, then we set the viewer type to 
+ * Parametric Model, then we set the viewer type to
  * @author Davis Marques
  */
 public class SetCurrentIContextAction extends AbstractAction {
 
     private static final Logger logger = Logger.getLogger(SetCurrentIContextAction.class.getName());
-    
+
     private IContext context;
 
     //--------------------------------------------------------------------------
 
     /**
      * SetCurrentIContextAction constructor.
-     * 
+     *
      * @param Name The fully qualified context name to set as the current context.
      * @param MyIcon Action icon.
      * @param ToolTip Action description that will appear in Tool Tip.
@@ -54,7 +53,7 @@ public class SetCurrentIContextAction extends AbstractAction {
         this.putValue(MNEMONIC_KEY,MnemonicId);
         this.context = MyContext;
     }
-    
+
     //--------------------------------------------------------------------------
 
     /**
@@ -62,13 +61,8 @@ public class SetCurrentIContextAction extends AbstractAction {
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        ParametricModel model = Application.getContext().getModel();
-        if (model != null) {
-            logger.log(Level.INFO,"Set context to {0}", this.context.getCanonicalName());
-            model.setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,this.context);            
-        } else {
-            logger.log(Level.WARNING,"Could not set context. No model loaded.");
-        }
+        Application.getContext().setViewState(ApplicationContext.VIEWER_CURRENT_CONTEXT,this.context);
+        logger.log(Level.INFO,"Set context to {0}", this.context.getCanonicalName());
     }
-    
-} 
+
+}

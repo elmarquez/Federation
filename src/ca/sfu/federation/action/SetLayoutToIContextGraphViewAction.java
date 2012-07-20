@@ -53,8 +53,7 @@ public class SetLayoutToIContextGraphViewAction extends AbstractAction {
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        ParametricModel model = Application.getContext().getModel();
-        model.setViewState(ApplicationContext.VIEWER_CURRENT_LAYOUT,ApplicationContext.VIEWER_LAYOUT_ICONTEXTGRAPHVIEW);
+        Application.getContext().setViewState(ApplicationContext.VIEWER_CURRENT_LAYOUT,ApplicationContext.VIEWER_LAYOUT_ICONTEXTGRAPHVIEW);
     }
     
 } 

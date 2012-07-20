@@ -38,7 +38,6 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
     private static final Logger logger = Logger.getLogger(ParametricModel.class.getName());
 
     private LinkedHashMap modelParam;   // model parameters
-    private LinkedHashMap viewState;    // view parameters
 
     private String name;                // unique identifier for this object
     private ArrayList elements;         // a collection of parts for this object
@@ -309,11 +308,6 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         // set properties
         this.name = Name;
         this.icon = ImageIconUtils.loadIconById("parametricmodel-icon");
-        // default view state parameters
-        this.viewState = new LinkedHashMap();
-        this.viewState.put(ApplicationContext.VIEWER_CURRENT_CONTEXT,this);
-        this.viewState.put(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS,new LinkedHashMap());
-        this.viewState.put(ApplicationContext.VIEWER_ICONTEXTVIEWER_SCENES,new LinkedHashMap());
     }
 
     /**
@@ -466,34 +460,6 @@ public class ParametricModel extends Observable implements IContext, IUpdateable
         // send rename notification to parent context
         this.setChanged();
         this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_NAME_CHANGE));
-    }
-
-    /**
-     * Set a viewer parameter.
-     * @param Key
-     * @param Value
-     */
-    public void setViewState(Object Key, Object Value) {
-        // get the old value
-        Object oldValue = this.viewState.get(Key);
-        // set the new value
-        this.viewState.put(Key,Value);
-        // fire property change notification
-        // changes.firePropertyChange((String) Key, oldValue, Value);
-        // fire state change notification
-        if (Key.equals(ApplicationContext.VIEWER_CURRENT_CONTEXT)) {
-            logger.log(Level.INFO,"ParametricModel updated view state current context to {0}", Value.toString());
-            this.setChanged();
-            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_CONTEXT_CHANGE));
-        } else if (Key.equals(ApplicationContext.VIEWER_ICONTEXT_THUMBNAILS)) {
-            logger.log(Level.INFO,"ParametricModel updated IContext thumbnails");
-            this.setChanged();
-            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_THUMBNAIL_CHANGE));
-        } else if (Key.equals(ApplicationContext.VIEWER_SELECTION)) {
-            logger.log(Level.INFO,"ParametricModel updated Selection list state");
-            this.setChanged();
-            this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_SELECTION_CHANGE));
-        }
     }
 
     /**

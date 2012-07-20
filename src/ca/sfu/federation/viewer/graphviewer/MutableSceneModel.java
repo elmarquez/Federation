@@ -41,7 +41,7 @@ import org.netbeans.api.visual.widget.Widget;
  * Builds and displays a dependancy graph for IContext objects.  Some display 
  * objects may provide thumbnails or icon views which then appear in the graph.
  *
- * TODO: when restoring an existing scene from disk or otherwise, we need to make sure we have restablish listeners on model objects otherwise we can't delete, etc. objects
+ * TODO: when restoring an existing scene from disk or otherwise, we need to make sure we restablish listeners on model objects otherwise we can't delete, etc. objects
  *
  * @author Davis Marques
  */

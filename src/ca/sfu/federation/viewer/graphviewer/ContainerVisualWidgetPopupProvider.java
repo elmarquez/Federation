@@ -1,7 +1,4 @@
 /**
- * VisualWidgetPopupProvider.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,15 +16,16 @@
 
 package ca.sfu.federation.viewer.graphviewer;
 
-import ca.sfu.federation.model.IContext;
-import ca.sfu.federation.model.INamed;
-import ca.sfu.federation.action.SetCurrentIContextAction;
 import ca.sfu.federation.action.EditDeleteAction;
 import ca.sfu.federation.action.RenameINamedAction;
+import ca.sfu.federation.action.SetCurrentIContextAction;
 import ca.sfu.federation.action.SetPropertySheetFocusAction;
+import ca.sfu.federation.model.IContext;
+import ca.sfu.federation.model.INamed;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.logging.Logger;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import org.netbeans.api.visual.action.PopupMenuProvider;
@@ -38,17 +36,14 @@ import org.netbeans.api.visual.widget.Widget;
  * Popup menu provider.
  */
 public class ContainerVisualWidgetPopupProvider implements PopupMenuProvider, ActionListener {
-    
-    //----------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(ContainerVisualWidgetPopupProvider.class.getName());
     
-    private JPopupMenu menu;
     private Scene scene;
     private ContainerVisualWidget widget;
     private INamed target;
     
     //----------------------------------------------------------------------
-
     
     /**
      * Popup menu provider.
@@ -61,7 +56,6 @@ public class ContainerVisualWidgetPopupProvider implements PopupMenuProvider, Ac
     }
     
     //----------------------------------------------------------------------
-
     
     public JPopupMenu getPopupMenu(Widget widget) {
         // create menu

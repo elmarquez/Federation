@@ -291,25 +291,19 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     }
     
     /**
-     * Get the available Update Methods.
-     * @return Update Methods.
-     * TODO: reimplent to use annotations to locate update methods
+     * Get the list of update methods.
+     * @return Update methods
      */
-    public Method[] getUpdateMethods() {
-        // init
-        ArrayList updatemethods = new ArrayList();
+    public List<Method> getUpdateMethods() {
+        ArrayList<Method> updatemethods = new ArrayList<Method>();
         Method[] methods = this.getClass().getDeclaredMethods();
-        // add update methods to the update methods list
+        // is method is annotated as an update method, add it to the list
         for (int i=0;i<methods.length;i++) {
             if (methods[i].isAnnotationPresent(Update.class)) {
                 updatemethods.add(methods[i]);
             }
         }
-        // copy vector into array
-        Method[] theresult = new Method[updatemethods.size()];
-        updatemethods.addAll(Arrays.asList(theresult));
-        // return result
-        return theresult;
+        return updatemethods;
     }
     
     /**
