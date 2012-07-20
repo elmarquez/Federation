@@ -16,14 +16,11 @@
 
 package ca.sfu.federation.model.geometry;
 
-import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
-import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.Color;
-import java.util.ResourceBundle;
 import javax.media.j3d.GeometryArray;
 import javax.media.j3d.LineArray;
 import javax.media.j3d.Node;
@@ -38,6 +35,7 @@ import javax.vecmath.Point3f;
  */
 public class CoordinateSystem extends Component implements IPoint {
     
+    private static final String DEFAULT_NAME = CoordinateSystem.class.getName();
     private static final float ORIGIN_AXIS_LENGTH = 1.0f;
     private static final boolean ORIGIN_NEGATIVE_AXES = false;
 
@@ -50,24 +48,9 @@ public class CoordinateSystem extends Component implements IPoint {
 
     /**
      * CoordinateSystem constructor.
-     * @param MyContext The parent Context.
      */
-    public CoordinateSystem(IContext MyContext) {
-        super(MyContext);
-        // generate a name for the new object
-        String basename = "CoordinateSystem";
-        int index = 0;
-        boolean match = false;
-        while (!match) {
-            String newname = basename + index;
-            if (!MyContext.hasObject(newname)) {
-                this.setName(newname);
-                match = true;
-            }
-            index++;
-        }
-        // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
+    public CoordinateSystem() {
+        super(DEFAULT_NAME);
         this.setIcon(ImageIconUtils.loadIconById("coordinatesystem-icon"));
     }
     
@@ -76,12 +59,12 @@ public class CoordinateSystem extends Component implements IPoint {
      * @param Name Coordinate System name.
      * @param MyContext Parent context.
      */
-    public CoordinateSystem(String Name, IContext MyContext) {
-        super(Name,MyContext);
+    public CoordinateSystem(String Name) {
+        super(Name);
+        this.setIcon(ImageIconUtils.loadIconById("coordinatesystem-icon"));
     }
     
     //--------------------------------------------------------------------------
-
     
     /**
      * Get 3d renderable icon for coordinate system.

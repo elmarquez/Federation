@@ -18,25 +18,21 @@ package ca.sfu.federation.model.geometry;
 
 import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
-import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
 import ca.sfu.federation.utils.ImageIconUtils;
 import ca.sfu.federation.viewer.modelviewer.DisplayObject3D;
-import java.util.ResourceBundle;
 import javax.media.j3d.*;
 import javax.vecmath.Color3f;
 
 /**
  * A Point in 3D space.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class Point extends Component implements IPoint {
 
-    //--------------------------------------------------------------------------
-
+    private static final String DEFAULT_NAME = Point.class.getName();
     
     private CoordinateSystem cs;
     private double x;
@@ -47,41 +43,22 @@ public class Point extends Component implements IPoint {
     
     /**
      * Point constructor.
-     * @param MyContext The parent Context.
      */
-    public Point(IContext MyContext) {
-        super(MyContext);
-        // generate a name for the new object
-        String basename = "Point";
-        int index = 0;
-        boolean match = false;
-        while (!match) {
-            String newname = basename + index;
-            if (!MyContext.hasObject(newname)) {
-                this.setName(newname);
-                match = true;
-            }
-            index++;
-        }
-        // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(ImageIconUtils.loadIconById("point-icon"));
+    public Point() {
+        super(DEFAULT_NAME);
+        setIcon(ImageIconUtils.loadIconById("point-icon"));
     }
 
     /**
      * Point constructor.
      * @param Name
-     * @param MyContext The parent Context.
      */
-    public Point(String Name,IContext MyContext) {
-        super(Name,MyContext);
-        // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(ImageIconUtils.loadIconById("point-icon"));
+    public Point(String Name) {
+        super(Name);
+        setIcon(ImageIconUtils.loadIconById("point-icon"));
     }
     
     //--------------------------------------------------------------------------
-
 
     /**
      * Add Point2 to Point1.

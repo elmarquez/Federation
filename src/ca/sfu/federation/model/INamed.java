@@ -1,7 +1,4 @@
 /**
- * INamedObject.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -23,28 +20,25 @@ import javax.swing.ImageIcon;
 
 /**
  * A model object that is identified by a unique name.
- *
  * TODO: delete operation should throw an exception if the object can not be deleted
  * TODO: set name should throw an exception if the object can not be renamed
- *
  * @author Davis Marques
- * @version 0.1.0
  */
 public interface INamed {
     
     /**
-     * Delete the object from the model.
+     * Delete the object from the context.
      */
     public void delete();
     
     /**
-     * Get Context.
-     * @return Context of this object.
+     * Get the parent context of the object.
+     * @return Parent context
      */
     public IContext getContext();
     
     /**
-     * Get fully qualified name.
+     * Get the fully qualified object name.
      * @return Canonical name.
      */
     public String getCanonicalName();
@@ -56,21 +50,28 @@ public interface INamed {
     public abstract ImageIcon getIcon();
     
     /*
-     * Retreives name value.
-     * @return Name of this object.
+     * Get the name
+     * @return Name
      */
     public String getName();
+
+    /**
+     * Try to register the object in the parent context.
+     * @param Context
+     * @throws Exception 
+     */
+    public void registerInContext(IContext Context) throws Exception;
     
     /**
-     * Set Context.
-     * @param MyContext Context of this object.
+     * Set the parent context.
+     * @param Context Parent context
      */
-    public void setContext(IContext MyContext);
+    public void setContext(IContext Context);
 
     /* 
-     * Sets name value.
-     * @param name Name of this object.
+     * Set the name
+     * @param Name Name
      */
-    public void setName(String name);
+    public void setName(String Name);
     
 } // end interface

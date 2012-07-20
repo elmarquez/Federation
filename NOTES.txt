@@ -10,6 +10,9 @@ Versions
 
 0.3.0
 . Save project model and application state to file
+. Create an object table model
+    - Remove the need to maintain a parent reference inside the object, while
+      enabling parent lookup
 
 0.2.5
 . 2D model viewer
@@ -26,10 +29,10 @@ Versions
 . Added Processing and G libraries
 
 0.2.3
-. Component constructor methods should not register items in contexts
+. Removed (this) parent reference for InputTable in constructor
+- Component constructor methods should not register items in contexts
 
 0.2.2
-** need to make sure all viewers are responding correctly to navigation, updates before moving forward
 - GraphViewer watches ApplicationContext for model load, close events
 - PropertySheet watches ApplicationContext for model load, close events
 - StackViewer watches ApplicationContext for model load, close events

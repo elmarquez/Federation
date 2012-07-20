@@ -196,7 +196,7 @@ public class ModelViewerCanvas3D extends Canvas3D implements MouseListener, Obse
         group.addChild(buildOriginAxis());
         // add context objects
         if (this.context != null) {
-            LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
+            LinkedHashMap elements = (LinkedHashMap) this.context.getElementMap();
             Iterator iter = elements.values().iterator();
             while (iter.hasNext()) {
                 Object object = iter.next();

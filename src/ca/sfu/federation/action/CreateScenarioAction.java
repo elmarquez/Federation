@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * Create scenario action.
@@ -69,7 +70,14 @@ public class CreateScenarioAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         ParametricModel model = Application.getContext().getModel();
         if (model != null) {
-            Scenario scenario = new Scenario(model);
+            String name = model.getNextName(Scenario.DEFAULT_NAME); 
+            Scenario scenario = new Scenario(name);
+            try {
+                scenario.registerInContext(model);
+            } catch (Exception ex) {
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"{0}",stack);
+            }
         } else {
             logger.log(Level.WARNING,"Could not create new scenario because model does not exist");
         }

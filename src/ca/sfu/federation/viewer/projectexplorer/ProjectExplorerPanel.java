@@ -89,7 +89,7 @@ public class ProjectExplorerPanel extends JPanel implements ActionListener, Obse
             node.add(contextualNodes);
             // add transactional subnodes
             DefaultMutableTreeNode transactionalNodes = new DefaultMutableTreeNode("Transactional Elements");
-            LinkedHashMap transactional = (LinkedHashMap) scenario.getElements();
+            LinkedHashMap transactional = (LinkedHashMap) scenario.getElementMap();
             Iterator itr = transactional.values().iterator();
             while (itr.hasNext()) {
                 INamed named = (INamed) itr.next();
@@ -100,7 +100,7 @@ public class ProjectExplorerPanel extends JPanel implements ActionListener, Obse
         } else if (Named instanceof IContext) {
             IContext context = (IContext) Named;
             // add subnodes
-            LinkedHashMap elements = (LinkedHashMap) context.getElements();
+            LinkedHashMap elements = (LinkedHashMap) context.getElementMap();
             Iterator iter = elements.values().iterator();
             while (iter.hasNext()) {
                 INamed named = (INamed) iter.next();

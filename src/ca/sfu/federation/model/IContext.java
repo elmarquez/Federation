@@ -23,7 +23,6 @@ import java.util.Map;
  * A model object that acts as a namespace for resolving INamed objects and 
  * values.  We say that an object implementing IContext is the <i>Context</i> of 
  * the child objects contained within it.
- *
  * @author Davis Marques
  */
 public interface IContext extends INamed {
@@ -35,14 +34,26 @@ public interface IContext extends INamed {
      * @throws IllegalArgumentException An object identified by the same name already exists in the Context.
      */
     public void add(INamed Named) throws IllegalArgumentException;
+
+    /**
+     * Get a list of elements in the context.
+     * @return 
+     */
+    public List<INamed> getElements();
     
     /**
-     * Get element collection.
-     *
-     * @return Collection of NamedObjects in this context.
+     * Get a map of elements in the context.
+     * @return Name, object element map.
      */
-    public Map getElements();
+    public Map<String,INamed> getElementMap();
 
+    /**
+     * Get the next valid name.
+     * @param Name
+     * @return 
+     */
+    public String getNextName(String Name);
+    
     /**
      * Get List of Parent Contexts, inclusive of the current element.  The list 
      * is ordered from root context to the current element.  An instance of 

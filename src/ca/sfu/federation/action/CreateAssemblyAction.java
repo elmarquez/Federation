@@ -21,7 +21,6 @@ import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.Constructor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -96,19 +95,16 @@ public class CreateAssemblyAction extends AbstractAction {
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        if (this.byClass) {
-            if (this.clazz != null) {
-                try {
-                    Constructor constructor = this.clazz.getConstructor(IContext.class);
-                    constructor.newInstance(this.context);
-                } catch (Exception ex) {
-                    String stack = ExceptionUtils.getFullStackTrace(ex);
-                    logger.log(Level.WARNING,"{0}",stack);
-                }
+        if (context != null) {
+            try {
+                String name = context.getNextName(Assembly.DEFAULT_NAME);
+                Assembly assembly = new Assembly(name); 
+                assembly.registerInContext(context);
+            } catch (Exception ex) {
+                String stack = ExceptionUtils.getFullStackTrace(ex);
+                logger.log(Level.WARNING,"{0}",stack);
             }
-            return;
-        } 
-        Assembly assembly = new Assembly(this.context);
+        }
     }
     
 } 

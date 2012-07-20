@@ -103,7 +103,7 @@ public class Selection implements Serializable {
         // SCOPE (aka context) is second atom; try to get the collection of objects in the scope
         this.scope = atoms[1].trim();
         if (this.scope.equals("*")) {
-            this.scopeobjects = (LinkedHashMap) MyContext.getElements();
+            this.scopeobjects = (LinkedHashMap) MyContext.getElementMap();
         } else {
             // scope not in the current context, so try to get the named context
             int selectall = this.scope.lastIndexOf(".*");
@@ -115,7 +115,7 @@ public class Selection implements Serializable {
                 if (selectall != -1) {
                     if (obj instanceof IContext) {
                         IContext context = (IContext) obj;
-                        this.scopeobjects = (LinkedHashMap) context.getElements();
+                        this.scopeobjects = (LinkedHashMap) context.getElementMap();
                     } else {
                         // TODO: can not do a subselection on this object. throw error
                     }

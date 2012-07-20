@@ -28,19 +28,20 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.openide.util.Exceptions;
 
 /**
  * @author Davis Marques
  * @version 0.1.0
  */
 public class CreateComponentAction extends AbstractAction {
-    
+
     private static final Logger logger = Logger.getLogger(CreateComponentAction.class.getName());
-    
+
     private IContext context;
     private Class clazz;
     private boolean byClass;
-    
+
     //--------------------------------------------------------------------------
 
     public CreateComponentAction() {
@@ -51,7 +52,7 @@ public class CreateComponentAction extends AbstractAction {
         this.putValue(Action.SHORT_DESCRIPTION, "Create Component");
         this.putValue(Action.SMALL_ICON, icon);
     }
-    
+
     /**
      * CreateComponentAction constructor.
      * @param Name Action name that will appear in menus.
@@ -67,7 +68,7 @@ public class CreateComponentAction extends AbstractAction {
         this.context = MyContext;
         this.byClass = false;
     }
-    
+
     /**
      * CreateComponentAction constructor.
      * @param Name Action name that will appear in menus.
@@ -88,28 +89,36 @@ public class CreateComponentAction extends AbstractAction {
             this.byClass = true;
         }
     }
-    
+
     //--------------------------------------------------------------------------
 
-    
+
     /**
      * Perform action.
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        if (this.byClass) {
-            if (this.clazz != null) {
-                try {
-                    Constructor constructor = this.clazz.getConstructor(IContext.class);
-                    constructor.newInstance(this.context);
-                } catch (Exception ex) {
-                    String stack = ExceptionUtils.getFullStackTrace(ex);
-                    logger.log(Level.WARNING,"{0}",stack);
-                }
-                return;
+        if (context != null) {
+            try {
+                String name = context.getNextName(Component.DEFAULT_NAME);
+                Component component = new Component(name);
+                component.registerInContext(context);
+            } catch (Exception ex) {
+                Exceptions.printStackTrace(ex);
             }
         }
-        Component component = new Component(this.context);
+//        if (this.byClass) {
+//            if (this.clazz != null) {
+//                try {
+//                    Constructor constructor = this.clazz.getConstructor(IContext.class);
+//                    constructor.newInstance(this.context);
+//                } catch (Exception ex) {
+//                    String stack = ExceptionUtils.getFullStackTrace(ex);
+//                    logger.log(Level.WARNING,"{0}",stack);
+//                }
+//                return;
+//            }
+//        }
     }
-    
-} 
+
+}

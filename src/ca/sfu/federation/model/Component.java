@@ -19,6 +19,7 @@ import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.exception.NonExistantMethodException;
 import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
+import ca.sfu.federation.utils.INamedUtils;
 import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.Image;
 import java.io.Serializable;
@@ -76,6 +77,8 @@ import org.openide.util.Utilities;
  */
 public class Component extends Observable implements IViewable, IGraphable, IUpdateable, Observer, Serializable {
 
+    public static String DEFAULT_NAME = "Component";
+    
     private static final Logger logger = Logger.getLogger(Component.class.getName());
     
     private String name;                    // the name for this node
@@ -96,82 +99,24 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
 
    /**
      * Component constructor.
-     * @param MyContext The parent Context.
+     * @param Name Name
      */
-    public Component(IContext MyContext) {
+    public Component(String Name) {
         // load configuration settings
         ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        // generate a name for the new scenario
-        basename = "Component";
-        int index = 0;
-        boolean match = false;
-        while (!match) {
-            String newname = basename + index;
-            if (!MyContext.hasObject(newname)) {
-                this.name = newname;
-                match = true;
-            }
-            index++;
-        }
-        // set properties
-        this.context = MyContext;
-        this.updateMethodName = null;
-        this.updateMethod = null;
-        this.inputTable = new InputTable(this);
-        this.result = null;
-        this.icon = ImageIconUtils.loadIconFromPath("/ca/sfu/federation/resources/icons/16x16/federation/component-icon.gif");
-        this.thumbnail = Utilities.loadImage(config.getString("component-thumbnail"));
-        // observe the input table for changes
-        Observable o = (Observable) this.inputTable;
-        o.addObserver(this);
-        // try to register in the parent context
-        try {
-            this.context.add(this);            
-        } catch (IllegalArgumentException ex) {
-            String stack = ExceptionUtils.getFullStackTrace(ex);
-            logger.log(Level.WARNING,"Could not register in context",stack);
-        }
-    }
-    
-    /**
-     * Component constructor.
-     * @param Name The name of this object.
-     * @param MyContext The parent Context.
-     */
-    public Component(String Name, IContext MyContext) {
-        // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        // set properties
         this.name = Name;
-        this.context = MyContext;
         this.updateMethodName = null;
         this.updateMethod = null;
         this.inputTable = new InputTable(this);
         this.result = null;
-        this.icon = ImageIconUtils.loadIconFromPath("/ca/sfu/federation/resources/icons/16x16/federation/component-icon.gif");
+        this.icon = ImageIconUtils.loadIconById("component-icon");
         this.thumbnail = Utilities.loadImage(config.getString("component-thumbnail"));
         // observe the input table for changes
         Observable o = (Observable) this.inputTable;
         o.addObserver(this);
-        // try to register in the parent context
-        try {
-            MyContext.add(this);            
-        } catch (IllegalArgumentException ex) {
-            String stack = ExceptionUtils.getFullStackTrace(ex);
-            logger.log(Level.WARNING,"Could not register in context",stack);
-        }
     }
-    
+        
     //--------------------------------------------------------------------------
-
-   
-    /**
-     * Clear the Result cache.
-     */
-    @Override
-    public void clearResultCache() {
-        this.result = null;
-    }
     
     /**
      * Delete the object from its context.
@@ -315,6 +260,10 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         return this.visible;
     }
     
+    public void registerInContext(IContext Context) throws Exception {
+        INamedUtils.registerInContext(Context, this);
+    }
+
     /**
      * Restore the update method field value after deserialization.
      */

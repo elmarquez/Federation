@@ -373,7 +373,7 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     public void initScene() {
         // add viewable elements to the scene
-        LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
+        LinkedHashMap elements = (LinkedHashMap) this.context.getElementMap();
         Iterator iter = elements.values().iterator();
         while (iter.hasNext()) {
             INamed named = (INamed) iter.next();
@@ -484,7 +484,7 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     private void updateAddElements() {
         // get the list of objects in the context
-        LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
+        LinkedHashMap elements = (LinkedHashMap) this.context.getElementMap();
         LinkedHashMap nodesByName = (LinkedHashMap) this.getNodesByTargetName();
         // determine which elements are new
         ArrayList newElements = new ArrayList();
@@ -540,7 +540,7 @@ public class MutableSceneModel extends Scene implements Observer {
      */
     private void updateDeleteElements() {
         // get the list of context objects
-        LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
+        LinkedHashMap elements = (LinkedHashMap) this.context.getElementMap();
         // get the list of visual widgets
         LinkedHashMap widgets = (LinkedHashMap) this.getNodesByTargetName();
         // find out which widget does not have a corresponding model element
@@ -569,7 +569,7 @@ public class MutableSceneModel extends Scene implements Observer {
         // clear all current edges
         this.edgeLayer.removeChildren();
         // get the list of namedobjects in the scene
-        LinkedHashMap elements = (LinkedHashMap) this.context.getElements();
+        LinkedHashMap elements = (LinkedHashMap) this.context.getElementMap();
         Iterator iter = elements.values().iterator();
         while (iter.hasNext()) {
             INamed named = (INamed) iter.next();

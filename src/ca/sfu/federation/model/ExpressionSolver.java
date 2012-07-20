@@ -1,7 +1,4 @@
 /**
- * ExpressionSolver.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -22,19 +19,17 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Takes a user defined expression string, builds an expression tree to 
- * represent the expression, and attempts to resolve the expression value.
- * Determines dependancies for the expression tree.
- * 
+ * represent the expression, then attempts to resolve the expression value.
+ * Determines dependencies for the expression tree.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class ExpressionSolver implements Serializable {
-    
-    //--------------------------------------------------------------------------
 
+    private static final Logger logger = Logger.getLogger(ExpressionSolver.class.getName());
 
     private Expression expressionTree; // expressionTree tree
     private IContext context;          // the collection of NamedObjects accessible by this solver
@@ -43,7 +38,6 @@ public class ExpressionSolver implements Serializable {
     private HashSet dependancies;     // SystolicArrayElements that the expressionTree is dependant upon
     
     //--------------------------------------------------------------------------
-
 
     /**
      * ExpressionSolver constructor.
@@ -77,7 +71,6 @@ public class ExpressionSolver implements Serializable {
 
     //--------------------------------------------------------------------------
 
-
     /**
      * Build an expression tree from the user specified statement.
      * @param Statement A user specifed statement.
@@ -100,8 +93,8 @@ public class ExpressionSolver implements Serializable {
      * occur whenever an expressionTree is atomic and of type reference.
      * @return SystolicArrayElements upon which this expressionTree solver is dependant.
      */
-    public Set getDependancies() {
-        return (Set) this.dependancies;
+    public Set<INamed> getDependancies() {
+        return this.dependancies;
     }
 
     /**
@@ -128,8 +121,8 @@ public class ExpressionSolver implements Serializable {
     }
 
     /**
-     * Executes a post-order traversal of the Expression tree to solve the 
-     * expressionTree and set the result object.
+     * Executes a post-order traversal of the expression tree to solve the 
+     * expression and set the result object.
      */
     public void solve() {
         this.resultObj = this.expressionTree.solve();

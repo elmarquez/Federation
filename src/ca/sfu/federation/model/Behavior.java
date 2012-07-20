@@ -169,7 +169,7 @@ public class Behavior implements Observer, Serializable {
             // determine the type of the update
             System out println("INFO: Behavior update: "+o.toString()+", "+arg.toString());
             // get the set of elements in the environment; remove bound assembly self from list
-            LinkedHashMap inputset = (LinkedHashMap) this.context.getElements();
+            LinkedHashMap inputset = (LinkedHashMap) this.context.getElementMap();
             // filter the list using the user provided rules
             LinkedHashMap outputset = (LinkedHashMap) this.selection.update();
             // take action based on the user rules

@@ -16,15 +16,12 @@
 
 package ca.sfu.federation.model.geometry;
 
-import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
-import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
 import ca.sfu.federation.utils.ImageIconUtils;
 import ca.sfu.federation.viewer.modelviewer.DisplayObject3D;
-import java.util.ResourceBundle;
 import javax.media.j3d.*;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
@@ -32,10 +29,10 @@ import javax.vecmath.Point3d;
 /**
  * A Line in 3D space.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class Line extends Component implements ILine {
-    
+
+    private static final String DEFAULT_NAME = Line.class.getName();
     private IPoint startPoint;
     private IPoint midPoint;
     private IPoint endPoint;
@@ -43,45 +40,25 @@ public class Line extends Component implements ILine {
     private double length;
     
     //--------------------------------------------------------------------------
-
     
     /**
-     * Line constructor.
-     * @param MyContext The parent Context.
+     * Line default constructor.
      */
-    public Line(IContext MyContext) {
-        super(MyContext);
-        // generate a name for the new scenario
-        String basename = "Line";
-        int index = 0;
-        boolean match = false;
-        while (!match) {
-            String newname = basename + index;
-            if (!MyContext.hasObject(newname)) {
-                this.setName(newname);
-                match = true;
-            }
-            index++;
-        }
-        // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(ImageIconUtils.loadIconById("line-icon"));
+    public Line() {
+        super(DEFAULT_NAME);
+        setIcon(ImageIconUtils.loadIconById("line-icon"));
     }
     
     /**
      * Line constructor.
      * @param Name Name of this object.
-     * @param MyContext The parent Context.
      */
-    public Line(String Name, IContext MyContext) {
-        super(Name,MyContext);
-        // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(ImageIconUtils.loadIconById("line-icon"));
+    public Line(String Name) {
+        super(Name);
+        setIcon(ImageIconUtils.loadIconById("line-icon"));
     }
     
     //--------------------------------------------------------------------------
-
 
     /**
      * Calculate direction, length and midpoint properties.

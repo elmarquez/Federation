@@ -299,7 +299,6 @@ public class AssemblyPropertySheet extends JPanel implements Observer {
         this.lblINamedObject.setText(this.target.getName());
         this.jtfClass.setText(this.target.getClass().toString());
         this.jtfName.setText(this.target.getName());
-        this.jtfDescription.setText(this.target.getDescription());
         this.jtfCanonicalName.setText(this.target.getCanonicalName());
         this.jtfParentContext.setText(this.target.getContext().getName());
     }

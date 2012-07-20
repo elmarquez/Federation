@@ -18,10 +18,11 @@ package ca.sfu.federation.model;
 
 import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.exception.GraphCycleException;
+import ca.sfu.federation.utils.IContextUtils;
+import ca.sfu.federation.utils.INamedUtils;
 import ca.sfu.federation.utils.ImageIconUtils;
-import com.developer.rose.BeanProxy;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
@@ -30,106 +31,54 @@ import javax.media.j3d.Group;
 import javax.media.j3d.Node;
 import javax.swing.ImageIcon;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.openide.util.Utilities;
 
 /**
- * Scenario is a SystolicArray that manages collections of object instances and 
- * their instance parameters, peforms operations on collections of instances, 
+ * Scenario is a SystolicArray that manages collections of object instances and
+ * their instance parameters, peforms operations on collections of instances,
  * and maintains metadata describing the context of the Scenario object.
- * Scenario is comprised of objects that fall into one of two categories.  
- * Contextual objects are those which can be referenced but that can not be 
- * modified by local objects.  Transactional objects are those which can be 
+ * Scenario is comprised of objects that fall into one of two categories.
+ * Contextual objects are those which can be referenced but that can not be
+ * modified by local objects.  Transactional objects are those which can be
  * referenced and modified by local objects.
  *
  * @author Davis Marques
  */
 public class Scenario extends Observable implements IContext, IViewable, IGraphable, IUpdateable, Observer, Serializable {
 
-    private static final Logger logger = Logger.getLogger(Scenario.class.getName());
-    
+    public static final String DEFAULT_NAME = "Scenario";
+
     private String name;                    // object name
-    private IContext context;               // the parent context
-    private boolean isVisible;              // visibility state
-    
-    private LinkedHashMap contextual;       // collection of objects from external contexts
-    private LinkedHashMap transactional;    // collection of objects in the local context
-    private ArrayList updateOrder;          // the order by which objects are updated
-    
-    // metadata
-    private String description;             // description of this scenario
     private ImageIcon icon;                 // icon
     private Image thumbnail;                // generated thumbnail
-    
+    private IContext context;               // the parent context
+    private boolean isVisible;              // visibility state
+
+    // collection of objects from external contexts
+    private LinkedHashMap<String,INamed> contextual = new LinkedHashMap<String,INamed>();
+
+    // collection of objects in the local context
+    private LinkedHashMap<String,INamed> transactional = new LinkedHashMap<String,INamed>();
+
+    private static final Logger logger = Logger.getLogger(Scenario.class.getName());
+
     //--------------------------------------------------------------------------
 
     /**
-     * Scenario constructor.
-     * @param MyContext The parent Context.
+     * Scenario constructor
+     * @param Name Name
      */
-    public Scenario(IContext MyContext) {
-        // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        // generate a name for the new scenario
-        String basename = "Scenario";
-        int index = 0;
-        boolean match = false;
-        while (!match) {
-            String newname = basename + index;
-            if (!MyContext.hasObject(newname)) {
-                this.name = newname;
-                match = true;
-            }
-            index++;
-        }
-        // set properties
-        this.context = MyContext;
-        this.contextual = new LinkedHashMap();
-        this.transactional = new LinkedHashMap();
-        this.updateOrder = new ArrayList();
-        this.description = "Empty Scenario description.";
-        this.icon = ImageIconUtils.loadIconById("view-scenario-icon");
-        this.thumbnail = Utilities.loadImage(config.getString("scenario-thumbnail"));
-        // register in the context
-        try {
-            MyContext.add(this);
-        } catch (IllegalArgumentException ex) {
-            String stack = ExceptionUtils.getFullStackTrace(ex);
-            logger.log(Level.WARNING,"{0}",stack);
-        }
+    public Scenario(String Name) {
+        name = Name;
+        icon = ImageIconUtils.loadIconById("scenario-icon");
+        thumbnail = ImageIconUtils.loadIconById("scenario-thumbnail").getImage();
     }
-    
-    /**
-     * Scenario constructor.
-     * @param Name Scenario name.
-     * @param MyContext The parent Context.
-     */
-    public Scenario(String Name, IContext MyContext) {
-        // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        // set properties
-        this.name = Name;
-        this.context = MyContext;
-        this.contextual = new LinkedHashMap();
-        this.transactional = new LinkedHashMap();
-        this.updateOrder = new ArrayList();
-        this.description = "Empty Scenario description.";
-        this.icon = ImageIconUtils.loadIconById("scenario-icon");
-        this.thumbnail = Utilities.loadImage(config.getString("scenario-thumbnail"));
-        // register in the context
-        try {
-            MyContext.add(this);
-        } catch (IllegalArgumentException ex) {
-            String stack = ExceptionUtils.getFullStackTrace(ex);
-            logger.log(Level.WARNING,"{0}",stack);
-        }
-    }
-    
+
     //--------------------------------------------------------------------------
-    
+
     /**
-     * Add a NamedObject to the Scenario.
-     * @param Named NamedObject to add to the Scenario.
-     * @throws DuplicateObjectException An object with the same name already exists in the Scenario.
+     * Add a transactional element to the context.
+     * @param Named Named object
+     * @throws DuplicateObjectException An object with the same name already exists in the context.
      */
     public void add(INamed Named) throws IllegalArgumentException {
         if (!this.transactional.containsKey(Named.getName())) {
@@ -152,7 +101,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
 
     /**
      * Add an INamed as a Contextual Element of the Scenario.
-     * 
+     *
      * @param Named INamed to add as a Contextual object.
      * @throws DuplicateObjectException An object by the same name already exists in this Scenario.
      */
@@ -176,23 +125,6 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     }
 
     /**
-     * Clear the Result cache for each local Element.
-     */
-    public void clearResultCache() {
-        Iterator iter = this.transactional.values().iterator();
-        while (iter.hasNext()) {
-            Object object = iter.next();
-            if (object instanceof IUpdateable) {
-                IUpdateable updateable = (IUpdateable) object;
-                updateable.clearResultCache();
-            }
-        }
-        // generate change event
-        this.setChanged();
-        this.notifyObservers();
-    }
-    
-    /**
      * Delete the object from its context.
      */
     public void delete() {
@@ -201,28 +133,23 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         this.setChanged();
         this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_DELETE_REQUEST));
     }
-    
+
     /**
      * Get canonical name.
      * @return Fully qualified name.
      */
     public String getCanonicalName() {
-        String fqn = "";
-        if (this.context != null) {
-            fqn = this.context.getCanonicalName() + ".";
-        }
-        fqn += this.name;
-        return fqn;
+        return INamedUtils.getCanonicalName(this);
     }
-    
-    /** 
+
+    /**
      * Get the Context.
      * @return The parent Context.
      */
     public IContext getContext() {
         return this.context;
     }
-    
+
     /**
      * Get the collection of Contextual elements in this Scenario.
      * @return Collection of Contextual elements in this Scenario.
@@ -232,85 +159,38 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     }
 
     /**
-     * Get the dependancies for the Scenario.
+     * Get the dependencies for the scenario.
      * @return List of Scenarios and other objects upon which this Scenario is dependant.
      */
-    public Map getDependancies() {
-        // init
-        LinkedHashMap results = new LinkedHashMap();
-        HashSet dependancies = new HashSet();
-        // scenario dependancies come from contextual object references
-        Iterator iter = this.contextual.values().iterator();
-        while (iter.hasNext()) {
-            INamed named = (INamed) iter.next();
-            dependancies.add(named.getContext());
-        }
-        // convert set to map
-        iter = dependancies.iterator();
-        while (iter.hasNext()) {
-            INamed named = (INamed) iter.next();
-            results.put(named.getName(),named);
-        }
-        // return result
-        return (Map) results;
+    public Map<String,INamed> getDependancies() {
+        return IContextUtils.getDependancies(this.contextual);
     }
 
-    /**
-     * Get description.
-     * @return Description.
-     */
-    public String getDescription() {
-        return this.description;
+    public List<INamed> getElements() {
+        ArrayList<INamed> elements = new ArrayList<INamed>();
+        elements.addAll(this.contextual.values());
+        elements.addAll(this.transactional.values());
+        return elements;
     }
     
    /**
     * Get the local Element collection.
     * @return Collection of NamedObjects in this context.
     */
-    public Map getElements() {
-        // init
-        LinkedHashMap results = new LinkedHashMap();
-        // put all objects into result table
+    public Map<String,INamed> getElementMap() {
+        LinkedHashMap<String,INamed> results = new LinkedHashMap<String,INamed>();
         results.putAll(this.contextual);
         results.putAll(this.transactional);
-        // return results
-        return (Map) results;
-    }    
-    
+        return results;
+    }
+
     /**
-     * Get Elements in topological order.
-     * @return SystolicArrayElements in Update order.
+     * Get elements in topological order.
+     * @return Elements in order
      */
-    private List getElementsInTopologicalOrder() {
-        // init
-        ArrayList ordered = new ArrayList();
-        // create the update order
-        Iterator iter = this.transactional.values().iterator();
-        while (iter.hasNext()) {
-            Object object = iter.next();
-            // if the object can have dependancies
-            if (object instanceof IGraphable) {
-                IGraphable graphobject = (IGraphable) object;
-                LinkedHashMap d = (LinkedHashMap) graphobject.getDependancies();
-                // add dependencies first, then add object
-                Iterator it = d.values().iterator();
-                while (it.hasNext()) {
-                    Object independant = it.next();
-                    if (!ordered.contains(independant)) {
-                        ordered.add(independant);
-                    }
-                }
-                // add self
-                if (!ordered.contains(object)) {
-                    ordered.add(object);
-                }
-            } else {
-                // add the object
-                ordered.add(object);
-            }
-        }
-        // return results
-        return (List) ordered;
+    private List<INamed> getElementsInTopologicalOrder() throws GraphCycleException {
+        Map map = getElementMap();
+        return IContextUtils.getElementsInTopologicalOrder(map);
     }
 
     /**
@@ -328,24 +208,28 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     public String getName() {
         return this.name;
     }
-    
+
+    public String getNextName(String Name) {
+        return IContextUtils.getNextName(this, Name);
+    }
+
     /**
-     * Get List of Parent Contexts, inclusive of the current element.  The list 
-     * is ordered from root context to the current element.  An instance of 
+     * Get List of Parent Contexts, inclusive of the current element.  The list
+     * is ordered from root context to the current element.  An instance of
      * ParametricModel will always be the first element.
      * @return List of Parent contexts.
      */
-    public List getParents() {
-        ArrayList parents = new ArrayList();
+    public List<IContext> getParents() {
+        ArrayList<IContext> parents = new ArrayList<IContext>();
         // add predecessors first
         if (this.context != null) {
             parents.addAll(this.context.getParents());
         }
         // add self
         parents.add(this);
-        return (List) parents;
+        return parents;
     }
-    
+
     /**
      * Get 3D renderable object representation.  Scenario does not currently
      * return any object for itself or its children.
@@ -375,7 +259,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      * @return Version stack for a NamedObject, ordered from most recent to oldest.
      * TODO: develop more so that the complete version stack for an object can be returned
      */
-    public List getVersions(String Name) {
+    public List<INamed> getVersions(String Name) {
         // init
         ArrayList version = new ArrayList();
         // get versions recursively
@@ -391,7 +275,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         return (List) version;
     }
 
-    /** 
+    /**
      * Get the visibility state of this object.
      * @return True if visible, false otherwise.
      */
@@ -400,18 +284,17 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     }
 
     /**
-     * True if the Scenario has the NamedObject.  Transactional (ie. local) 
+     * Determine if the context has the named object. Transactional (ie. local)
      * elements supercede or mask Contextual elements.
-     * @return True if the NamedObject exists in the Scenario, false otherwise.
+     * @return True if found, false otherwise.
      */
     public boolean hasObject(String Name) {
-        boolean result = false;
         if (this.transactional.containsKey(Name)) {
-            result = true;
+            return true;
         } else if (this.contextual.containsKey(Name)) {
-            result = true;
+            return true;
         }
-        return result;
+        return false;
     }
 
     /**
@@ -420,81 +303,12 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      * @throws IllegalArgumentException The referenced object could not be located, or the resultant value is null.
      */
     public Object lookup(String Query) throws IllegalArgumentException {
-        // initialize
-        INamed named = null;
-        Object result = null;
-        // check to see if the Query is well formed
-        if (Query.length()<1) {
-            // TODO: do checks for malformed names.  I think there is a Java library that checks names
-            throw new IllegalArgumentException("An empty or null object reference was provided.");
-        }
-        // convert the query into a path
-        String[] path = Query.split("\\.");
-        // lookup the object in the local context
-        if (this.transactional.containsKey(path[0])) {
-            named = (INamed) this.transactional.get(path[0]);
-        } else if (this.contextual.containsKey(path[0])) {
-            named = (INamed) this.contextual.get(path[0]);
-        }
-        // if not found, throw an error
-        if (named == null) {
-            throw new IllegalArgumentException("The referenced object could not be found in the current Context.");
-        }
-        // lookup object subparts
-        if (path.length==1) {
-            // objectname
-            result = named;
-        } else if (path.length==2) {
-            // objectname.propertyname
-            BeanProxy proxy = null;
-            try {
-                // create a bean proxy object to help us access properties, then try to retrieve the value
-                proxy = new BeanProxy(named);
-                result = proxy.get(path[1]);
-            } catch (Exception ex) {
-                throw new IllegalArgumentException("Named property '" + path[1] + "' could not be resolved.");
-            }
-            if (result == null) {
-                if (named instanceof IContext) {
-                    // try to lookup the subpart
-                    IContext thecontext = (IContext) named;
-                    result = thecontext.lookup(path[1]);
-                }
-            }
-            if (result == null) {
-                throw new IllegalArgumentException("Property value is null.");
-            }
-        } else if (path.length>2) {
-            // if the object supports IContext, then send the subquery to the object
-            if (named instanceof IContext) {
-                // convert path back to a normal query
-                String query = "";
-                for (int i=1;i<path.length;i++) {
-                    if (i+1<path.length) {
-                        query += path[i] + ".";
-                    } else {
-                        query += path[i];
-                    }
-                }
-                // cast object as IContext
-                IContext thecontext = (IContext) named;
-                // try to get the object value
-                try {
-                    result = thecontext.lookup(query);
-                } catch (Exception ex) {
-                    String stack = ExceptionUtils.getFullStackTrace(ex);
-                    logger.log(Level.WARNING,"{0}",stack);
-                }
-            } else {
-                // the reference is malformed, throw an error
-                throw new IllegalArgumentException("Object " + named.getName() + " does not support IContext.  Subparts of this object can not be resolved.");
-            }
-        } else {
-            // the reference is malformed, throw an error
-            throw new IllegalArgumentException("Object reference is malformed.");
-        }
-        // return result
-        return result;
+        Map map = getElementMap();
+        return IContextUtils.lookup(map, Query);
+    }
+
+    public void registerInContext(IContext Context) throws Exception {
+        INamedUtils.registerInContext(Context, this);
     }
 
     /**
@@ -534,16 +348,9 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
      * Restore non-serializable objects following deserialization.
      */
     public void restore() {
-       Iterator iter = this.transactional.values().iterator();
-       while (iter.hasNext()) {
-           Object object = iter.next();
-           if (object instanceof IUpdateable) {
-               IUpdateable updateable = (IUpdateable) object;
-               updateable.restore();
-           }
-       }
+        IContextUtils.restore(this);
     }
-    
+
     /**
      * Set the parent Context.
      * @param MyContext The parent Context.
@@ -554,18 +361,7 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         this.setChanged();
         this.notifyObservers();
     }
-    
-    /**
-     * Set the description.
-     * @param Description Scenario description.
-     */
-    public void setDescription(String Description) {
-        this.description = Description;
-        // generate change event
-        this.setChanged();
-        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_PROPERTY_CHANGE));
-    }
-    
+
     /**
      * Set the object Name.
      * @param Name The object name.
@@ -588,15 +384,18 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     }
 
     /**
-    * Update the state of the SystolicArray.
-    * @return True if updated successfully, false otherwise.
-    */
+     * Update the state of the scenario.
+     * @return True if updated successfully, false otherwise.
+     */
     public boolean update() {
-        // clearResult the SAE result caches
-        this.clearResultCache();
-        // get nodes in topological order
-        ArrayList elements = (ArrayList) this.getElementsInTopologicalOrder();
-        // update nodes
+        List<INamed> elements;
+        try {
+            elements = getElementsInTopologicalOrder();
+        } catch (GraphCycleException ex) {
+            String stack = ExceptionUtils.getFullStackTrace(ex);
+            logger.log(Level.WARNING,"{0}",stack);
+            return false;
+        }
         boolean updateSuccessful = true;
         Iterator e = elements.iterator();
         while (e.hasNext() && updateSuccessful) {
@@ -664,10 +463,9 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
             }
         }
     }
-    
+
     /**
-     * Update a NamedObject in our context.
-     * 
+     * Update a named object in our context.
      * @param Named INamed
      */
     private void updateElementName(INamed Named) {
@@ -702,5 +500,5 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
             this.transactional.put(Named.getName(),Named); // put the updated reference in
         }
     }
-    
-} 
+
+}

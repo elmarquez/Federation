@@ -16,16 +16,13 @@
 
 package ca.sfu.federation.model.geometry;
 
-import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.Component;
-import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
 import ca.sfu.federation.utils.ImageIconUtils;
 import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.Primitive;
-import java.util.ResourceBundle;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.ColoringAttributes;
 import javax.media.j3d.Node;
@@ -33,58 +30,38 @@ import javax.media.j3d.Shape3D;
 import javax.vecmath.Color3f;
 
 /**
- * A Plane in 3D space, defined by 4 points.  Also known as a 'Quad'.
+ * A plane in 3D space, defined by 4 points.  Also known as a 'Quad'.
  * @author Davis Marques
- * @version 0.1.0
  */
 public class Plane extends Component implements IPlane, IPoint {
 
-    private String basename = "Plane";
-    private CoordinateSystem cs;        // embedding space
+    private static final String DEFAULT_NAME = Plane.class.getName();
     
+    private CoordinateSystem cs;        // embedding space
     private double p1_x, p1_y, p1_z;    // plane point 1
     private double p2_x, p2_y, p2_z;    // plane point 2
     private double p3_x, p3_y, p3_z;    // plane point 3
     private double p4_x, p4_y, p4_z;    // plane point 4
-    
     private double o_x;                 // plane origin x coordinate
     private double o_y;                 // plane origin y coordinate
     private double o_z;                 // plane origin z coordinate
     
     //--------------------------------------------------------------------------
-
     
     /**
-     * Point constructor.
-     * @param MyContext The parent Context.
+     * Plane constructor
      */
-    public Plane(IContext MyContext) {
-        super(MyContext);
-        // generate a name for the new scenario
-        int index = 0;
-        boolean match = false;
-        while (!match) {
-            String newname = basename + index;
-            if (!MyContext.hasObject(newname)) {
-                this.setName(newname);
-                match = true;
-            }
-            index++;
-        }
-        // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        this.setIcon(ImageIconUtils.loadIconById("plane-icon"));
+    public Plane() {
+        super(DEFAULT_NAME);
+        setIcon(ImageIconUtils.loadIconById("plane-icon"));
     }
 
     /**
      * Point constructor.
      * @param Name
-     * @param MyContext The parent Context.
      */
-    public Plane(String Name,IContext MyContext) {
-        super(Name,MyContext);
-        // set the icon
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
+    public Plane(String Name) {
+        super(Name);
         this.setIcon(ImageIconUtils.loadIconById("plane-icon"));
     }
     
