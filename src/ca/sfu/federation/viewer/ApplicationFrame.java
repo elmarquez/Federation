@@ -17,6 +17,7 @@ package ca.sfu.federation.viewer;
 
 import ca.sfu.federation.Application;
 import ca.sfu.federation.ApplicationContext;
+import ca.sfu.federation.model.ParametricModel;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Toolkit;
@@ -83,12 +84,15 @@ public class ApplicationFrame extends JFrame implements Observer {
             switch (eventId) {
                 // update the frame title
                 case ApplicationContext.MODEL_LOADED:
-                case ApplicationContext.MODEL_RENAMED:
-                    String modelname = Application.getContext().getModel().getName();
-                    setTitle(appname + " - " + modelname);
+                    setTitle(appname + " - " + Application.getContext().getModel().getName());
+                    ParametricModel model = Application.getContext().getModel();
+                    model.addObserver(this);
                     break;
                 case ApplicationContext.MODEL_CLOSED:
                     setTitle(appname);
+                    break;
+                case ApplicationContext.EVENT_NAME_CHANGE:
+                    setTitle(appname + " - " + Application.getContext().getModel().getName());
                     break;
             }
         }

@@ -17,9 +17,10 @@ package ca.sfu.federation.utils;
 
 import ca.sfu.federation.model.IContext;
 import ca.sfu.federation.model.INamed;
+import java.util.Map;
 
 /**
- *
+ * Common utility methods for INamed objects.
  * @author dmarques
  */
 public class INamedUtils {
@@ -37,10 +38,31 @@ public class INamedUtils {
         name += Named.getName();
         return name;
     }
-    
+
+    /**
+     *
+     * @param Context
+     * @param Named
+     * @throws Exception
+     */
     public static void registerInContext(IContext Context,INamed Named) throws Exception {
         Context.add(Named);
         Named.setContext(Context);
+    }
+
+    /**
+     * Set the object name.
+     * @param Name Name
+     * @throws Exception
+     */
+    public static void setName(INamed Named, String Name) throws Exception {
+        IContext context = Named.getContext();
+        Map<String,INamed> map = context.getElementMap();
+        if (!map.containsKey(Name)) {
+            
+        } else {
+            
+        }
     }
 
 }

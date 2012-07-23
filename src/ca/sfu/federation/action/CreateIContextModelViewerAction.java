@@ -19,7 +19,6 @@
 
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.viewer.modelviewer.ModelViewerJFrame;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -57,7 +56,6 @@ public class CreateIContextModelViewerAction extends AbstractAction {
      * @param e Action event.
      */
     public void actionPerformed(ActionEvent e) {
-        ModelViewerJFrame frame = new ModelViewerJFrame();
     }
     
 } 

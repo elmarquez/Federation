@@ -102,18 +102,9 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * @param Name Name
      */
     public Component(String Name) {
-        // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
         this.name = Name;
-        this.updateMethodName = null;
-        this.updateMethod = null;
-        this.inputTable = new InputTable(this);
-        this.result = null;
         this.icon = ImageIconUtils.loadIconById("component-icon");
-        this.thumbnail = Utilities.loadImage(config.getString("component-thumbnail"));
-        // observe the input table for changes
-        Observable o = (Observable) this.inputTable;
-        o.addObserver(this);
+        this.thumbnail = ImageIconUtils.loadIconById("component-thumbnail").getImage();
     }
         
     //--------------------------------------------------------------------------
@@ -121,7 +112,6 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     /**
      * Delete the object from its context.
      */
-    @Override
     public void delete() {
         // tell observers to release me
         logger.log(Level.INFO,"Component signalled Observers to release and delete object");
@@ -133,21 +123,14 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get canonical name.
      * @return Fully qualified name.
      */
-    @Override
     public String getCanonicalName() {
-        String fqn = "";
-        if (this.context != null) {
-            fqn = this.context.getCanonicalName() + ".";
-        }
-        fqn += this.name;
-        return fqn;
+        return INamedUtils.getCanonicalName(this);
     }
     
     /**
      * Get the context for this Element.
      * @return The context for this Element.
      */
-    @Override
     public IContext getContext() {
         return this.context;
     }
@@ -156,8 +139,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get the Elements on which this Element is dependant.
      * @return Elements upon which this Element is dependant.
      */
-    @Override
-    public Map getDependancies() {
+    public Map<String,INamed> getDependancies() {
         return this.inputTable.getDependancies();
     }
     
@@ -170,11 +152,11 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     }
 
     /**
-     * Get Update Method inputs.
-     * @return Update Method inputs.
+     * Get update method input keys.
+     * @return Inputs.
      */
-    public List getInputKeys() {
-        ArrayList keys = new ArrayList();
+    public List<String> getInputKeys() {
+        ArrayList<String> keys = new ArrayList<String>();
         Input[] inputs = this.inputTable.getInputs();
         for (int i=0;i<inputs.length;i++) {
             Input input = inputs[i];
@@ -195,7 +177,6 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get the name of this object.
      * @return The name of this object.
      */
-    @Override
     public String getName() {
         return this.name;
     }
@@ -205,7 +186,6 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Subclasses of Component must override this method.
      * @return Java3D Node
      */
-    @Override
     public Node getRenderable() {
         return new Group();
     }
@@ -214,14 +194,13 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get thumbnail image representation for this component.
      * @return Image.
      */
-    @Override
     public Image getThumbnail() {
         return this.thumbnail;
     }
 
     /**
-     * Get the Update Method description.
-     * @return Update Method description.
+     * Get the update method description.
+     * @return Description
      */
     public String getUpdateMethodDescription() {
         return this.inputTable.getUpdateMethodDescription();
@@ -255,7 +234,6 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * Get the visibility state of this object.
      * @return The visibility state of this object. True if visible, false otherwise.
      */
-    @Override
     public boolean getVisible() {
         return this.visible;
     }
@@ -267,7 +245,6 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     /**
      * Restore the update method field value after deserialization.
      */
-    @Override
     public void restore() {
         if (!this.updateMethodName.equals("")) {
             try {
@@ -297,7 +274,6 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      */
     protected void setIcon(ImageIcon MyIcon) {
         this.icon = MyIcon;
-        // generate change event
         this.setChanged();
         this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ICON_CHANGE));
     }
@@ -310,18 +286,16 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * TODO: need to consider here what happens if there is no input table, or the named input does not exist
      */
     public void setInput(String InputName, String UserInput) {
-        if (this.inputTable != null) {
-            if (this.inputTable.hasInput(InputName)) {
-                this.inputTable.setInput(InputName,UserInput);
-                if (this.inputTable.isPrimed()) {
-                    if (this.context instanceof IUpdateable) {
-                        IUpdateable updateable = (IUpdateable) this.context;
-                        updateable.update();
-                    }
-                } else {
-                    // just update this element
-                    this.update();
+        if (this.inputTable != null && this.inputTable.hasInput(InputName)) {
+            this.inputTable.setInput(InputName,UserInput);
+            if (this.inputTable.isPrimed()) {
+                if (this.context instanceof IUpdateable) {
+                    IUpdateable updateable = (IUpdateable) this.context;
+                    updateable.update();
                 }
+            } else {
+                // just update this element
+                this.update();
             }
         }
     }
@@ -331,7 +305,6 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      * @param Name Name for this object.
      * TODO: need to make sure that the new name does not already exist in the context.  there should be a vetoable change listener in play here
      */
-    @Override
     public void setName(String Name) {
         String old = this.name;
         this.name = Name;
@@ -355,16 +328,14 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         // for each method
         while (!found && i<method.length) {
             // if it is the named method
-            if (method[i].getName().equals(UpdateMethodName)) {
-                // if the method has an update annotation
-                if (method[i].isAnnotationPresent(Update.class)) {
-                    // set it as the current update method
-                    this.updateMethod = method[i];
-                    this.updateMethodName = UpdateMethodName;
-                    found = true;
-                } else {
-                    throw new NonExistantUpdateAnnotationException();
-                }
+            if (method[i].getName().equals(UpdateMethodName) &&
+                method[i].isAnnotationPresent(Update.class)) {
+                // set it as the current update method
+                this.updateMethod = method[i];
+                this.updateMethodName = UpdateMethodName;
+                found = true;
+            } else {
+                throw new NonExistantUpdateAnnotationException();
             }
             i++;
         }
@@ -379,9 +350,9 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
             String stack = ExceptionUtils.getFullStackTrace(ex);
             logger.log(Level.WARNING,"Could not get inputs\n\n{0}",stack);
         }
-        // notify observers
-        this.setChanged();
-        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_CHANGE));
+//        // notify observers
+//        this.setChanged();
+//        this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_ELEMENT_CHANGE));
     }
     
     /**
@@ -405,7 +376,7 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
         // init
         boolean theresult = false;
         // if an update method has been set
-        if (this.updateMethod != null) {
+        if (this.updateMethod != null && this.inputTable != null) {
             // the update method has been set but the input table has not been primed;
             // we can not update, so return false to signal that the update has not succeeded
             if (!this.inputTable.isPrimed()) {

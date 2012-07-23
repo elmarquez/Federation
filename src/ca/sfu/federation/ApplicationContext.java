@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -204,5 +205,5 @@ public class ApplicationContext extends Observable {
             this.notifyObservers(Integer.valueOf(ApplicationContext.EVENT_SELECTION_CHANGE));
         }
     }
-    
+
 }

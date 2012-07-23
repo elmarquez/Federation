@@ -28,20 +28,18 @@ import java.util.logging.Logger;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
- * A table to hold Input arguments for an Update method.  Arguments are stored
- * and retrieved in the same order they appear in the Update method signature.
- * TODO: need to investigate what happens when we delete this input table, or when the parent creates and assigns a new input table to itself.  Does that create a memory leak?
+ * A table to hold input arguments for an update method. Arguments are stored
+ * and retrieved in the same order they appear in the update method signature.
  * @author Davis Marques
- * @version 0.2.0
  */
 public class InputTable extends Observable implements Serializable {
     
     private static final Logger logger = Logger.getLogger(InputTable.class.getName());
     
-    private ArrayList inputs;       // the inputs, in order
-    private String description;  // description of the update method
-    private INamed parent; // the parent object
-    private boolean primed;      // all inputs have the required user input values
+    private ArrayList inputs = new ArrayList();     // the inputs, in order
+    private String description;                     // description of the update method
+    private INamed parent;                          // the parent object
+    private boolean primed;                         // all inputs have the required user input values
     
     //--------------------------------------------------------------------------
     
@@ -50,7 +48,6 @@ public class InputTable extends Observable implements Serializable {
      * @param Parent The parent object.
      */
     public InputTable(INamed Parent) {
-        this.inputs = new ArrayList();
         this.description = "";
         this.parent = Parent;
     }
@@ -280,7 +277,7 @@ public class InputTable extends Observable implements Serializable {
     
     /**
      * Get update method description.
-     * @return Update method description.
+     * @return Description
      */
     public String getUpdateMethodDescription() {
         return this.description;
@@ -317,6 +314,10 @@ public class InputTable extends Observable implements Serializable {
             }
         }
         return inputIsPrimed;
+    }
+
+    public void setContext(INamed Named) {
+        this.parent = Named;
     }
     
     /**

@@ -19,17 +19,18 @@ Versions
 . Component classes that implement 2D graphics drawing
 . Open 2D model views from Scenario view
 . Factor out repetitious code from component, container classes
-. Basic test suite for core model and utility classes
+. Added Processing and G libraries
 
 0.2.4
 . Only Scenario and ParametricModel should update when an item is added. All 
-  other items should wait for user keyboard entry to update.
-. Created new 2D model viewer panel
+  other items should wait for user keyboard entry to update. (F5 to regenerate)
 . Can directly draw shapes, move and rotate them in the 2d view, pan the view
-. Added Processing and G libraries
+. Basic test suite for core model and utility classes
+
+- Created new 2D model viewer panel based on G library
 
 0.2.3
-. Removed (this) parent reference for InputTable in constructor
+- Removed (this) parent reference for InputTable in constructor
 - Component constructor methods should not register items in contexts
 
 0.2.2
@@ -55,7 +56,3 @@ Versions
 
 0.1.0
 - First release
-
---------------------------------------------------------------------------------
-Notes
-

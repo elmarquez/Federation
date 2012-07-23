@@ -19,6 +19,7 @@ package ca.sfu.federation.viewer;
 import ca.sfu.federation.utils.ImageIconUtils;
 import ca.sfu.federation.viewer.console.ConsoleOutputPanel;
 import ca.sfu.federation.viewer.graphviewer.GraphViewerPanel;
+import ca.sfu.federation.viewer.modelviewer.ModelViewer2DPanel;
 import ca.sfu.federation.viewer.projectexplorer.ProjectExplorerPanel;
 import ca.sfu.federation.viewer.propertysheet.PropertySheetPanel;
 import ca.sfu.federation.viewer.stackviewer.StackViewerPanel;
@@ -48,7 +49,6 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.Icon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -89,20 +89,14 @@ public class DockingPanel extends JPanel {
         // create the application viewers
         GraphViewerPanel graphViewer = new GraphViewerPanel();
         StackViewerPanel stackViewer = new StackViewerPanel();
-        JButton button2 = new JButton("Graph View 1");
-        JButton button3 = new JButton("Graph View 2");
-        JButton button4 = new JButton("Model View 1");
-        JButton button5 = new JButton("Model View 2");
+        ModelViewer2DPanel modelViewer1 = new ModelViewer2DPanel();
         ProjectExplorerPanel explorerPanel = new ProjectExplorerPanel();
         PropertySheetPanel propertysheetPanel = new PropertySheetPanel();
         ConsoleOutputPanel outputPanel = new ConsoleOutputPanel();
 
         // create the dockables around the content components
         Dockable projectGraphDockable = createDockable("Project", graphViewer, "Project", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Project");
-        Dockable graphView1Dockable = createDockable("Graph View 1", button2, "Graph View 1", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Graph View 1");
-        Dockable graphView2Dockable = createDockable("Graph View 2", button3, "Graph View 2", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Graph View 2");
-        Dockable modelView1Dockable = createDockable("Model View 1", button4, "Model View 1", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Model View 1");
-        Dockable modelView2Dockable = createDockable("Model View 2", button5, "Model View 2", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Model View 2");
+        Dockable modelView1Dockable = createDockable("Model View 1", modelViewer1, "Model View 1", ImageIconUtils.loadIconById("view-graphviewer-icon"), "Model View 1");
         Dockable stackViewDockable = createDockable("Stack", stackViewer, "Stack", ImageIconUtils.loadIconById("view-stackviewer-icon"), "Context Dependency Stack");
         Dockable explorerDockable = createDockable("Project", explorerPanel, "Project", ImageIconUtils.loadIconById("view-explorer-icon"), "Project Explorer");
         Dockable outputDockable = createDockable("Output", outputPanel, "Output", ImageIconUtils.loadIconById("view-outputwindow-icon"), "Output");
@@ -110,10 +104,7 @@ public class DockingPanel extends JPanel {
 
         // add dockables to list
         dockables.add(projectGraphDockable);
-        dockables.add(graphView1Dockable);
-        dockables.add(graphView2Dockable);
         dockables.add(modelView1Dockable);
-        dockables.add(modelView2Dockable);
         dockables.add(stackViewDockable);
         dockables.add(explorerDockable);
         dockables.add(outputDockable);
@@ -138,10 +129,8 @@ public class DockingPanel extends JPanel {
 
         // Add the dockables to these tab docks.
         centerTabbedDock.addDockable(projectGraphDockable, new Position(0));
-        centerTabbedDock.addDockable(graphView1Dockable, new Position(1));
-        centerTabbedDock.addDockable(graphView2Dockable, new Position(2));
-        centerTabbedDock.addDockable(modelView1Dockable, new Position(3));
-        centerTabbedDock.addDockable(modelView2Dockable, new Position(4));
+        centerTabbedDock.addDockable(modelView1Dockable, new Position(1));
+        
         bottomTabbedDock.addDockable(outputDockable, new Position(0));
         leftTabbedDock.addDockable(explorerDockable, new Position(0));
         leftTabbedDock.addDockable(stackViewDockable, new Position(1));
@@ -219,6 +208,9 @@ public class DockingPanel extends JPanel {
             Dockable d = it.next();
             addDockingPath(d);
         }
+        
+        // force the graph panel to repaint itself
+        graphViewer.repaint();
     }
 
     //--------------------------------------------------------------------------

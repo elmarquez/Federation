@@ -24,17 +24,14 @@ import ca.sfu.federation.model.Scenario;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeSelectionModel;
 
 /**
  * Project explorer panel.
@@ -44,9 +41,23 @@ public class ProjectExplorerPanel extends JPanel implements ActionListener, Obse
 
     private static final Logger logger = Logger.getLogger(ProjectExplorerPanel.class.getName());
 
-    private AbstractModelTree tree;
+    private JTree tree;
     private JScrollPane scrollPane;
-    private DefaultMutableTreeNode root;
+
+    public static final int PROJECT_ROOT = 1;
+
+    public static final int MODEL_PACKAGE_ID = 10;
+    public static final int LIBRARY_NODE_ID = 20;
+    public static final int TEST_PACKAGE_NODE_ID = 30;
+    public static final int TEST_LIBRARY_ID = 40;
+
+    public static final String MODEL_PACKAGE_LABEL = "Model";
+    public static final String LIBRARY_LABEL = "Libraries";
+    public static final String TEST_PACKAGES_LABEL = "Test Packages";
+    public static final String TEST_LIBRARIES_LABEL = "Test Libraries";
+
+    public static final String CONTEXTUAL_LABEL = "Contextual";
+    public static final String TRANSACTIONAL_LABEL = "Transactional";
 
     //--------------------------------------------------------------------------
 
@@ -67,36 +78,36 @@ public class ProjectExplorerPanel extends JPanel implements ActionListener, Obse
     public void actionPerformed(ActionEvent e) {
     }
 
-    /**
-     * Build the subtree for the object.
-     * @param Named Named object.
-     */
-    private DefaultMutableTreeNode buildSubTree(INamed Named) {
-        // create node for self
-        DefaultMutableTreeNode node = new DefaultMutableTreeNode(Named);
-        // create child nodes for model elements
+    private DefaultMutableTreeNode buildModelLibraryTree() {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(ProjectExplorerPanel.LIBRARY_LABEL);
+        root.setUserObject(ProjectExplorerPanel.LIBRARY_NODE_ID);
+        return root;
+    }
+
+    private DefaultMutableTreeNode buildModelPackageSubTree(INamed Named) {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(Named);
         if (Named instanceof Scenario) {
             Scenario scenario = (Scenario) Named;
             // add contextual subnodes
-            DefaultMutableTreeNode contextualNodes = new DefaultMutableTreeNode("Contextual Elements");
-            LinkedHashMap contextual = (LinkedHashMap) scenario.getContextualElements();
-            Iterator iter = contextual.values().iterator();
+            DefaultMutableTreeNode contextualNodes = new DefaultMutableTreeNode(ProjectExplorerPanel.CONTEXTUAL_LABEL);
+            Map<String,INamed> contextual = scenario.getContextualElements();
+            Iterator<INamed> iter = contextual.values().iterator();
             while (iter.hasNext()) {
-                INamed named = (INamed) iter.next();
-                DefaultMutableTreeNode subnode = buildSubTree(named);
-                contextualNodes.add(subnode);
+                INamed named = iter.next();
+                DefaultMutableTreeNode node = buildModelPackageSubTree(named);
+                contextualNodes.add(node);
             }
-            node.add(contextualNodes);
+            root.add(contextualNodes);
             // add transactional subnodes
-            DefaultMutableTreeNode transactionalNodes = new DefaultMutableTreeNode("Transactional Elements");
-            LinkedHashMap transactional = (LinkedHashMap) scenario.getElementMap();
-            Iterator itr = transactional.values().iterator();
+            DefaultMutableTreeNode transactionalNodes = new DefaultMutableTreeNode(ProjectExplorerPanel.TRANSACTIONAL_LABEL);
+            Map<String,INamed> transactional = scenario.getElementMap();
+            Iterator<INamed> itr = transactional.values().iterator();
             while (itr.hasNext()) {
-                INamed named = (INamed) itr.next();
-                DefaultMutableTreeNode subnode = buildSubTree(named);
-                transactionalNodes.add(subnode);
+                INamed named = itr.next();
+                DefaultMutableTreeNode node = buildModelPackageSubTree(named);
+                transactionalNodes.add(node);
             }
-            node.add(transactionalNodes);
+            root.add(transactionalNodes);
         } else if (Named instanceof IContext) {
             IContext context = (IContext) Named;
             // add subnodes
@@ -104,31 +115,71 @@ public class ProjectExplorerPanel extends JPanel implements ActionListener, Obse
             Iterator iter = elements.values().iterator();
             while (iter.hasNext()) {
                 INamed named = (INamed) iter.next();
-                DefaultMutableTreeNode subnode = buildSubTree(named);
-                node.add(subnode);
+                DefaultMutableTreeNode node = buildModelPackageSubTree(named);
+                root.add(node);
             }
         }
-        // create child nodes for library packages
-        DefaultMutableTreeNode testpackages = new DefaultMutableTreeNode("Test Packages");
-        DefaultMutableTreeNode libraries = new DefaultMutableTreeNode("Libraries");
-        DefaultMutableTreeNode testlibraries = new DefaultMutableTreeNode("Test Libraries");
-        node.add(testpackages);
-        node.add(libraries);
-        node.add(testlibraries);
+        return root;
+    }
+    
+    /**
+     * Build the model tree.
+     * @param Named Named object.
+     */
+    private DefaultMutableTreeNode buildModelPackageTree(INamed Named) {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(ProjectExplorerPanel.MODEL_PACKAGE_LABEL);
+        root.setUserObject(ProjectExplorerPanel.MODEL_PACKAGE_ID);
+        // create child nodes for model elements
+        if (Named instanceof ParametricModel) {
+            ParametricModel model = (ParametricModel) Named;
+            List<INamed> elements = model.getElements();
+            Iterator<INamed> it = elements.iterator();
+            while (it.hasNext()) {
+                INamed named = it.next();
+                DefaultMutableTreeNode node = buildModelPackageSubTree(named);
+                root.add(node);
+            }
+        }        
         // return result
-        return node;
+        return root;
+    }
+
+    private DefaultMutableTreeNode buildTestLibraryTree() {
+        DefaultMutableTreeNode theroot = new DefaultMutableTreeNode(ProjectExplorerPanel.TEST_LIBRARIES_LABEL);
+        theroot.setUserObject(ProjectExplorerPanel.TEST_LIBRARY_ID);
+        return theroot;
+    }
+
+    private DefaultMutableTreeNode buildTestPackageTree() {
+        DefaultMutableTreeNode theroot = new DefaultMutableTreeNode(ProjectExplorerPanel.TEST_PACKAGES_LABEL);
+        theroot.setUserObject(ProjectExplorerPanel.TEST_PACKAGE_NODE_ID);
+        return theroot;
+    }
+
+    private void buildTree() {
+        DefaultMutableTreeNode model = buildTreeModel();
+        tree = new ProjectTree(model);
     }
 
     /**
      * Build abstract model tree.
      * @return Tree representation of model.
      */
-    private DefaultMutableTreeNode buildTree() {
-        // create tree
+    private DefaultMutableTreeNode buildTreeModel() {
         ParametricModel model = Application.getContext().getModel();
-        DefaultMutableTreeNode theroot = buildSubTree(model);
-        // return tree
-        return theroot;
+
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(model);
+        DefaultMutableTreeNode modelpackagetree = buildModelPackageTree(model);
+        DefaultMutableTreeNode testpackagetree = buildTestPackageTree();
+        DefaultMutableTreeNode modellibrarytree = buildModelLibraryTree();
+        DefaultMutableTreeNode testlibrarytree = buildTestLibraryTree();
+
+        root.add(modelpackagetree);
+        root.add(modellibrarytree);
+        root.add(testpackagetree);
+        root.add(testlibrarytree);
+
+        return root;
     }
 
     /**
@@ -149,22 +200,15 @@ public class ProjectExplorerPanel extends JPanel implements ActionListener, Obse
             switch (eventId) {
                 case ApplicationContext.MODEL_CLOSED:
                     this.scrollPane.getViewport().removeAll();
-                    this.root.removeAllChildren();
                     this.tree.removeAll();
-                    this.root = null;
                     this.tree = null;
                     break;
                 case ApplicationContext.MODEL_LOADED:
-                    this.root = buildTree();
-                    this.tree = new AbstractModelTree(this.root);
-                    this.tree.addTreeSelectionListener(this);
-                    this.tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-                    this.tree.putClientProperty("JTree.lineStyle","Horizontal");
-                    this.tree.setCellRenderer(new INamedTreeCellRenderer());
+                    buildTree();
                     this.scrollPane.setViewportView(this.tree);
                     break;
             }
         }
     }
 
-} 
+}

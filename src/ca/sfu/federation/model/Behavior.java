@@ -15,16 +15,19 @@
  */
 package ca.sfu.federation.model;
 
-import ca.sfu.federation.ApplicationContext;
 import ca.sfu.federation.model.util.Selection;
 import ca.sfu.federation.model.util.exception.MalformedSelectionRuleException;
+import ca.sfu.federation.utils.ImageIconUtils;
 import java.awt.Image;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.openide.util.Utilities;
 
 /**
  * Behaviors are concerned with the question of what should happen to a 'host' 
@@ -44,71 +47,23 @@ public class Behavior implements Observer, Serializable {
     private static final Logger logger = Logger.getLogger(Behavior.class.getName());
     
     private IContext context;       // the context which the behavior monitors
-    private INamed host;      // the object to which this behavior is bound
+    private INamed host;            // the object to which this behavior is bound
     private String updateCondition; // host selection rule
     private String updateAction;    // action to take when an update event occurs
     private Selection selection;    // selector
     private boolean active;         // active if true
     
-    private Image icon;             // icon representation of this object
+    private ImageIcon icon;             // icon representation of this object
     private Image thumbnail;        // thumbnail representation of this object
     
     //--------------------------------------------------------------------------
 
     /** 
-     * Behavior constructor.
-     * @param MyAssembly
+     * Behavior default constructor.
      */
-    public Behavior(Assembly MyAssembly) {
-        // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        // set properties
-        this.icon = Utilities.loadImage(config.getString("behavior-icon"));
-        this.thumbnail = Utilities.loadImage(config.getString("behavior-thumbnail"));
-        // set behavior host
-        host = MyAssembly;
-        // register behavior with the assembly
-        MyAssembly.add(this);
-        // listen for changes on the context
-        this.context = MyAssembly.getContext();
-        if (context instanceof Observable) {
-            Observable observable = (Observable) context;
-            observable.addObserver(this);
-        }
-    }
-    
-    /** 
-     * Behavior constructor.
-     * @param MyAssembly
-     * @param UpdateCondition
-     * @param UpdateAction
-     */
-    public Behavior(Assembly MyAssembly, String UpdateCondition, String UpdateAction) {
-        // load configuration settings
-        ResourceBundle config = ResourceBundle.getBundle(ApplicationContext.APPLICATION_PROPERTIES);
-        // set properties
-        this.icon = Utilities.loadImage(config.getString("behavior-icon"));
-        this.thumbnail = Utilities.loadImage(config.getString("behavior-thumbnail"));
-        // set behavior host
-        host = MyAssembly;
-        // register behavior with the assembly
-        MyAssembly.add(this);
-        // listen for changes on the context
-        this.context = MyAssembly.getContext();
-        if (context instanceof Observable) {
-            Observable observable = (Observable) context;
-            observable.addObserver(this);
-        }
-        // update condition
-        this.updateCondition = UpdateCondition;
-        try {
-            this.selection = new Selection(UpdateCondition,this.context);
-        } catch (MalformedSelectionRuleException ex) {
-            String stack = ExceptionUtils.getFullStackTrace(ex);
-            logger.log(Level.WARNING,"Malformed selection rule\n\n{0}",stack);
-        }
-        // update action
-        this.updateAction = UpdateAction;
+    public Behavior() {
+        this.icon = ImageIconUtils.loadIconById("behavior-icon");
+        this.thumbnail = ImageIconUtils.loadIconById("behavior-thumbnail").getImage();
     }
 
     //--------------------------------------------------------------------------
@@ -120,6 +75,15 @@ public class Behavior implements Observer, Serializable {
         if (context instanceof Observable) {
             Observable observable = (Observable) this.context;
             observable.deleteObserver(this);
+        }
+    }
+
+    public void setHost(INamed Named) {
+        this.host = Named;
+        this.context = Named.getContext();
+        if (context instanceof Observable) {
+            Observable observable = (Observable) context;
+            observable.addObserver(this);
         }
     }
     

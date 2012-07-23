@@ -32,7 +32,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  *
  * @author Davis Marques
  */
-public class ParametricModel extends Observable implements IContext, IUpdateable, Observer, Serializable {
+public class ParametricModel extends Observable implements IContext, INamed, IUpdateable, Observer, Serializable {
 
     public static final String DEFAULT_NAME = "Model";
 
