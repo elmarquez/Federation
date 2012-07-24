@@ -1,7 +1,4 @@
 /**
- * ApplicationAboutAction.java
- * * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,7 +16,6 @@
 
 package ca.sfu.federation.action;
 
-import ca.sfu.federation.viewer.modelviewer.ModelViewerCanvas3D;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -34,8 +30,6 @@ public class UpdateModelViewerThumbnailAction extends AbstractAction {
     //--------------------------------------------------------------------------
 
     
-    private ModelViewerCanvas3D canvas;
-    
     //--------------------------------------------------------------------------
 
     
@@ -47,11 +41,10 @@ public class UpdateModelViewerThumbnailAction extends AbstractAction {
      * @param MnemonicId Key mnemonic.
      * @param MyCanvas Canvas.
      */
-    public UpdateModelViewerThumbnailAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId, ModelViewerCanvas3D MyCanvas) {
+    public UpdateModelViewerThumbnailAction(String Name, Icon MyIcon, String ToolTip, Integer MnemonicId) {
         super(Name, MyIcon);
         this.putValue(SHORT_DESCRIPTION,ToolTip);
         this.putValue(MNEMONIC_KEY,MnemonicId);
-        this.canvas = MyCanvas;
     }
     
     //--------------------------------------------------------------------------
@@ -62,7 +55,6 @@ public class UpdateModelViewerThumbnailAction extends AbstractAction {
      * @param e Event
      */
     public void actionPerformed(ActionEvent e) {
-        this.canvas.setThumbnail();
     }
     
 } 

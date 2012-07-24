@@ -20,13 +20,7 @@ import ca.sfu.federation.model.Component;
 import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.utils.ImageIconUtils;
-import java.awt.Color;
-import javax.media.j3d.GeometryArray;
-import javax.media.j3d.LineArray;
-import javax.media.j3d.Node;
-import javax.media.j3d.Shape3D;
-import javax.vecmath.Color3f;
-import javax.vecmath.Point3f;
+import java.awt.Graphics;
 
 /**
  * Coordinate System in 3D space.
@@ -71,50 +65,50 @@ public class CoordinateSystem extends Component implements IPoint {
      * @return Renderable object.
      */
     @Override
-    public Node getRenderable() {
-        // axis shape
-        LineArray axis = null;
-        if (ORIGIN_NEGATIVE_AXES) {
-            // show positive and negative axes
-            axis = new LineArray(6,GeometryArray.COORDINATES | GeometryArray.COLOR_3);
-            // X-Axis
-            axis.setCoordinate(0,new Point3f(-(ORIGIN_AXIS_LENGTH),0.0f,0.0f));
-            axis.setCoordinate(1,new Point3f(ORIGIN_AXIS_LENGTH,0.0f,0.0f));
-            axis.setColor(0,new Color3f(Color.red));
-            axis.setColor(1,new Color3f(Color.red));
-            // Y-Axis
-            axis.setCoordinate(2,new Point3f(0.0f,-(ORIGIN_AXIS_LENGTH),0.0f));
-            axis.setCoordinate(3,new Point3f(0.0f,ORIGIN_AXIS_LENGTH,0.0f));
-            axis.setColor(2,new Color3f(Color.green));
-            axis.setColor(3,new Color3f(Color.green));
-            // Z-Axis
-            axis.setCoordinate(4,new Point3f(0.0f,0.0f,-(ORIGIN_AXIS_LENGTH)));
-            axis.setCoordinate(5,new Point3f(0.0f,0.0f,ORIGIN_AXIS_LENGTH));
-            axis.setColor(4,new Color3f(Color.blue));
-            axis.setColor(5,new Color3f(Color.blue));
-        } else {
-            // show positive axes
-            axis = new LineArray(6,GeometryArray.COORDINATES | GeometryArray.COLOR_3);
-            // X-Axis
-            axis.setCoordinate(0,new Point3f(0.0f,0.0f,0.0f));
-            axis.setCoordinate(1,new Point3f(ORIGIN_AXIS_LENGTH,0.0f,0.0f));
-            axis.setColor(0,new Color3f(Color.red));
-            axis.setColor(1,new Color3f(Color.red));
-            // Y-Axis
-            axis.setCoordinate(2,new Point3f(0.0f,0.0f,0.0f));
-            axis.setCoordinate(3,new Point3f(0.0f,ORIGIN_AXIS_LENGTH,0.0f));
-            axis.setColor(2,new Color3f(Color.green));
-            axis.setColor(3,new Color3f(Color.green));
-            // Z-Axis
-            axis.setCoordinate(4,new Point3f(0.0f,0.0f,0.0f));
-            axis.setCoordinate(5,new Point3f(0.0f,0.0f,ORIGIN_AXIS_LENGTH));
-            axis.setColor(4,new Color3f(Color.blue));
-            axis.setColor(5,new Color3f(Color.blue));
-        }
-        // create a shape
-        Shape3D shape = new Shape3D(axis);
-        // return result
-        return shape;
+    public void draw(Graphics g) {
+//        // axis shape
+//        LineArray axis = null;
+//        if (ORIGIN_NEGATIVE_AXES) {
+//            // show positive and negative axes
+//            axis = new LineArray(6,GeometryArray.COORDINATES | GeometryArray.COLOR_3);
+//            // X-Axis
+//            axis.setCoordinate(0,new Point3f(-(ORIGIN_AXIS_LENGTH),0.0f,0.0f));
+//            axis.setCoordinate(1,new Point3f(ORIGIN_AXIS_LENGTH,0.0f,0.0f));
+//            axis.setColor(0,new Color3f(Color.red));
+//            axis.setColor(1,new Color3f(Color.red));
+//            // Y-Axis
+//            axis.setCoordinate(2,new Point3f(0.0f,-(ORIGIN_AXIS_LENGTH),0.0f));
+//            axis.setCoordinate(3,new Point3f(0.0f,ORIGIN_AXIS_LENGTH,0.0f));
+//            axis.setColor(2,new Color3f(Color.green));
+//            axis.setColor(3,new Color3f(Color.green));
+//            // Z-Axis
+//            axis.setCoordinate(4,new Point3f(0.0f,0.0f,-(ORIGIN_AXIS_LENGTH)));
+//            axis.setCoordinate(5,new Point3f(0.0f,0.0f,ORIGIN_AXIS_LENGTH));
+//            axis.setColor(4,new Color3f(Color.blue));
+//            axis.setColor(5,new Color3f(Color.blue));
+//        } else {
+//            // show positive axes
+//            axis = new LineArray(6,GeometryArray.COORDINATES | GeometryArray.COLOR_3);
+//            // X-Axis
+//            axis.setCoordinate(0,new Point3f(0.0f,0.0f,0.0f));
+//            axis.setCoordinate(1,new Point3f(ORIGIN_AXIS_LENGTH,0.0f,0.0f));
+//            axis.setColor(0,new Color3f(Color.red));
+//            axis.setColor(1,new Color3f(Color.red));
+//            // Y-Axis
+//            axis.setCoordinate(2,new Point3f(0.0f,0.0f,0.0f));
+//            axis.setCoordinate(3,new Point3f(0.0f,ORIGIN_AXIS_LENGTH,0.0f));
+//            axis.setColor(2,new Color3f(Color.green));
+//            axis.setColor(3,new Color3f(Color.green));
+//            // Z-Axis
+//            axis.setCoordinate(4,new Point3f(0.0f,0.0f,0.0f));
+//            axis.setCoordinate(5,new Point3f(0.0f,0.0f,ORIGIN_AXIS_LENGTH));
+//            axis.setColor(4,new Color3f(Color.blue));
+//            axis.setColor(5,new Color3f(Color.blue));
+//        }
+//        // create a shape
+//        Shape3D shape = new Shape3D(axis);
+//        // return result
+//        return shape;
     }
     
     /**

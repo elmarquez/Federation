@@ -22,9 +22,7 @@ import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
 import ca.sfu.federation.utils.ImageIconUtils;
-import ca.sfu.federation.viewer.modelviewer.DisplayObject3D;
-import javax.media.j3d.*;
-import javax.vecmath.Color3f;
+import java.awt.Graphics;
 
 /**
  * A Point in 3D space.
@@ -79,28 +77,27 @@ public class Point extends Component implements IPoint {
     }
 
     /**
-     * Get renderable objects.
-     * @return List of renderable objects.
+     * Draw model objects.
      */
     @Override
-    public Node getRenderable() {
-        // create a new shape3d node
-        DisplayObject3D shape = new DisplayObject3D(this);
-        // set capabilities
-        shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
-        shape.setCapability(Shape3D.ALLOW_GEOMETRY_READ);
-        // set appearance
-        ColoringAttributes colorAtt = new ColoringAttributes();
-        colorAtt.setColor(new Color3f(1.0f,1.0f,1.0f));
-        Appearance app = new Appearance();
-        app.setColoringAttributes(colorAtt);
-        shape.setAppearance(app);
-        // build geometry
-        PointArray array = new PointArray(1, PointArray.COORDINATES);
-        array.setCoordinates(0, new double[] {this.x, this.y, this.z});
-        shape.setGeometry(array);
-        // return result
-        return (Node) shape;
+    public void draw(Graphics g) {
+//        // create a new shape3d node
+//        DisplayObject3D shape = new DisplayObject3D(this);
+//        // set capabilities
+//        shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
+//        shape.setCapability(Shape3D.ALLOW_GEOMETRY_READ);
+//        // set appearance
+//        ColoringAttributes colorAtt = new ColoringAttributes();
+//        colorAtt.setColor(new Color3f(1.0f,1.0f,1.0f));
+//        Appearance app = new Appearance();
+//        app.setColoringAttributes(colorAtt);
+//        shape.setAppearance(app);
+//        // build geometry
+//        PointArray array = new PointArray(1, PointArray.COORDINATES);
+//        array.setCoordinates(0, new double[] {this.x, this.y, this.z});
+//        shape.setGeometry(array);
+//        // return result
+//        return (Node) shape;
     }
      
     /**

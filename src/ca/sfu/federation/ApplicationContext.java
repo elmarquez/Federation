@@ -22,7 +22,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -134,6 +133,10 @@ public class ApplicationContext extends Observable {
         return model;
     }
 
+    public File getProjectDirectory() {
+        return projectDir;
+    }
+    
     /**
      * Get viewer state parameters.
      * @return Map of parameters.
@@ -174,6 +177,10 @@ public class ApplicationContext extends Observable {
         }
     }
 
+    public void setProjectDir(File Dir) {
+        projectDir = Dir;
+    }
+    
     /**
      * Set the current context view.
      * @param Context 

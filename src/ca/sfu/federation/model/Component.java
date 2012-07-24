@@ -21,17 +21,15 @@ import ca.sfu.federation.model.exception.NonExistantMethodException;
 import ca.sfu.federation.model.exception.NonExistantUpdateAnnotationException;
 import ca.sfu.federation.utils.INamedUtils;
 import ca.sfu.federation.utils.ImageIconUtils;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.media.j3d.Group;
-import javax.media.j3d.Node;
 import javax.swing.ImageIcon;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.openide.util.Utilities;
 
 /**
  * <p>
@@ -120,6 +118,12 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
     }
     
     /**
+     * Draw model object.
+     */
+    public void draw(Graphics g) {
+    }
+
+    /**
      * Get canonical name.
      * @return Fully qualified name.
      */
@@ -179,15 +183,6 @@ public class Component extends Observable implements IViewable, IGraphable, IUpd
      */
     public String getName() {
         return this.name;
-    }
-
-    /**
-     * Get 3D renderable object representation of this component. 
-     * Subclasses of Component must override this method.
-     * @return Java3D Node
-     */
-    public Node getRenderable() {
-        return new Group();
     }
 
     /**

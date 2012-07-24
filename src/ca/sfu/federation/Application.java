@@ -82,7 +82,7 @@ public class Application implements Runnable {
         try {
             logger.log(Level.FINE,"Setting look and feel options");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            // JPopupMenu.setDefaultLightWeightPopupEnabled(false);
+            JPopupMenu.setDefaultLightWeightPopupEnabled(false);
             LookAndFeelUtil.removeAllSplitPaneBorders();
         } catch (Exception e) {
             String stack = ExceptionUtils.getFullStackTrace(e);

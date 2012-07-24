@@ -43,20 +43,16 @@ import com.javadocking.util.ToolBarButton;
 import com.javadocking.visualizer.DockingMinimizer;
 import com.javadocking.visualizer.FloatExternalizer;
 import com.javadocking.visualizer.SingleMaximizer;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.Icon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
  * Application docking panel.
  * @author dmarques
  */
-public class DockingPanel extends JPanel {
+public class DockingPanel extends Panel {
 
     private final int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
     private final int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -75,7 +71,7 @@ public class DockingPanel extends JPanel {
      * DockingPanel constructor
      * @param ParentFrame Application frame
      */
-    public DockingPanel(JFrame ParentFrame) {
+    public DockingPanel(Frame ParentFrame) {
         super(new BorderLayout());
 
         // create the dock model for the docks, minimizer and maximizer

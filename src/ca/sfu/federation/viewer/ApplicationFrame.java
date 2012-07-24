@@ -35,7 +35,6 @@ import javax.swing.JFrame;
  */
 public class ApplicationFrame extends JFrame implements Observer {
 
-    private static ApplicationFrame instance;
     private DockingPanel dockingpanel;
 
     private static final Logger logger = Logger.getLogger(ApplicationFrame.class.getName());
@@ -56,8 +55,7 @@ public class ApplicationFrame extends JFrame implements Observer {
             }
         });
         // set frame content
-        Container contentpane = getContentPane();
-        contentpane.setLayout(new BorderLayout());
+        Container contentpane = this.getContentPane();
         contentpane.add(new DockingPanel(this),BorderLayout.CENTER);
         contentpane.add(new StatusBarPanel(),BorderLayout.SOUTH);
         // listen for changes on the application context

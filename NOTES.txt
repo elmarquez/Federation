@@ -19,15 +19,16 @@ Versions
 . Component classes that implement 2D graphics drawing
 . Open 2D model views from Scenario view
 . Factor out repetitious code from component, container classes
-. Added Processing and G libraries
+. Basic test suite for core model and utility classes
 
 0.2.4
 . Only Scenario and ParametricModel should update when an item is added. All 
   other items should wait for user keyboard entry to update. (F5 to regenerate)
 . Can directly draw shapes, move and rotate them in the 2d view, pan the view
-. Basic test suite for core model and utility classes
 
-- Created new 2D model viewer panel based on G library
+- Removed Java3D libraries and associated graphics elements.
+- Changed IViewable interface to have objects draw to a 2D graphics canvas
+X Created new 2D model viewer panel based on G library
 
 0.2.3
 - Removed (this) parent reference for InputTable in constructor

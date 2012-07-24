@@ -21,10 +21,7 @@ import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
 import ca.sfu.federation.utils.ImageIconUtils;
-import ca.sfu.federation.viewer.modelviewer.DisplayObject3D;
-import javax.media.j3d.*;
-import javax.vecmath.Color3f;
-import javax.vecmath.Point3d;
+import java.awt.Graphics;
 
 /**
  * A Line in 3D space.
@@ -74,6 +71,44 @@ public class Line extends Component implements ILine {
     }
 
     /**
+     * Draw model object.
+     */
+    @Override
+    public void draw(Graphics g) {
+//        // create a new shape3d node
+//        DisplayObject3D shape = new DisplayObject3D(this);
+//        // set capabilities
+//        shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
+//        shape.setCapability(Shape3D.ALLOW_GEOMETRY_READ);
+//        // set appearance
+//        LineAttributes lineAtt = new LineAttributes();
+//        lineAtt.setLineWidth(1.0f);
+//        ColoringAttributes colorAtt = new ColoringAttributes();
+//        colorAtt.setColor(new Color3f(1.0f,0.0f,0.0f));
+//        Appearance app = new Appearance();
+//        app.setColoringAttributes(colorAtt);
+//        app.setLineAttributes(lineAtt);
+//        shape.setAppearance(app);
+//        // build geometry
+//        Point3d[] points = new Point3d[2];
+//        double x1, y1, z1;
+//        double x2, y2, z2;
+//        x1 = this.startPoint.getX();
+//        y1 = this.startPoint.getY();
+//        z1 = this.startPoint.getZ();
+//        x2 = this.endPoint.getX();
+//        y2 = this.endPoint.getY();
+//        z2 = this.endPoint.getZ();
+//        points[0] = new Point3d(x1, y1, z1);
+//        points[1] = new Point3d(x2, y2, z2);
+//        LineArray line = new LineArray(2, LineArray.COORDINATES);
+//        line.setCoordinates(0, points);
+//        shape.setGeometry(line);
+//        // return result
+//        return (Node) shape;
+    }
+
+    /**
      * Get direction.
      * @return IDirection.
      */
@@ -103,45 +138,6 @@ public class Line extends Component implements ILine {
      */
     public IPoint getMidPoint() {
         return this.midPoint;
-    }
-    
-    /**
-     * Get a Java3D renderable object.
-     * @return Java3D renderable object.
-     */
-    @Override
-    public Node getRenderable() {
-        // create a new shape3d node
-        DisplayObject3D shape = new DisplayObject3D(this);
-        // set capabilities
-        shape.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
-        shape.setCapability(Shape3D.ALLOW_GEOMETRY_READ);
-        // set appearance
-        LineAttributes lineAtt = new LineAttributes();
-        lineAtt.setLineWidth(1.0f);
-        ColoringAttributes colorAtt = new ColoringAttributes();
-        colorAtt.setColor(new Color3f(1.0f,0.0f,0.0f));
-        Appearance app = new Appearance();
-        app.setColoringAttributes(colorAtt);
-        app.setLineAttributes(lineAtt);
-        shape.setAppearance(app);
-        // build geometry
-        Point3d[] points = new Point3d[2];
-        double x1, y1, z1;
-        double x2, y2, z2;
-        x1 = this.startPoint.getX();
-        y1 = this.startPoint.getY();
-        z1 = this.startPoint.getZ();
-        x2 = this.endPoint.getX();
-        y2 = this.endPoint.getY();
-        z2 = this.endPoint.getZ();
-        points[0] = new Point3d(x1, y1, z1);
-        points[1] = new Point3d(x2, y2, z2);
-        LineArray line = new LineArray(2, LineArray.COORDINATES);
-        line.setCoordinates(0, points);
-        shape.setGeometry(line);
-        // return result
-        return (Node) shape;
     }
     
     /**

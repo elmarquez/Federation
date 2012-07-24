@@ -37,7 +37,7 @@ public class ApplicationMenuBar extends JMenuBar {
 
     /**
      * Get the help menu.
-     * @return 
+     * @return
      */
     private JMenu getAboutMenu() {
         JMenu menu = new JMenu("Help");
@@ -51,18 +51,18 @@ public class ApplicationMenuBar extends JMenuBar {
         menu.add(showhelp);
         menu.add(new Separator());
         menu.add(showabout);
-        
+
         return menu;
     }
-    
+
     /**
      * Get the edit menu
-     * @return 
+     * @return
      */
     private JMenu getEditMenu() {
         JMenu menu = new JMenu("Edit");
         menu.setMnemonic(KeyEvent.VK_E);
-        
+
         EditUndoAction undo = new EditUndoAction();
         EditRedoAction redo = new EditRedoAction();
         EditCutAction cut = new EditCutAction();
@@ -71,7 +71,7 @@ public class ApplicationMenuBar extends JMenuBar {
         EditDeleteAction delete = new EditDeleteAction();
         EditFindAction find = new EditFindAction();
 
-        JMenuItem selectall = new JMenuItem("Select All", KeyEvent.VK_A);
+        JMenuItem selectall = new JMenuItem("Select All",KeyEvent.VK_A);
         JMenu selectby = new JMenu("Select");
         selectby.setMnemonic(KeyEvent.VK_S);
         JMenuItem type = new JMenuItem("Type");
@@ -80,34 +80,34 @@ public class ApplicationMenuBar extends JMenuBar {
         JMenuItem property = new JMenuItem("Property");
 
         undo.setEnabled(false);
-        
+
         menu.add(undo);
         menu.add(redo);
-        menu.add(new Separator());
+        menu.addSeparator();
         menu.add(cut);
         menu.add(copy);
         menu.add(paste);
         menu.add(delete);
-        menu.add(new Separator());
+        menu.addSeparator();
         menu.add(selectall);
         menu.add(selectby);
         selectby.add(type);
         selectby.add(property);
         selectby.add(context);
         selectby.add(trans);
-        menu.add(new Separator());
+        menu.addSeparator();
         menu.add(find);
         // return result
         return menu;
     }
-    
+
     /**
      * Get the file menu.
-     * @return 
+     * @return
      */
     private JMenu getFileMenu() {
         JMenu menu = new JMenu("File");
-        menu.setMnemonic(KeyEvent.VK_F);
+        menu.setMnemonic((KeyEvent.VK_F));
         // menu items
         CreateProjectAction np = new CreateProjectAction();
         OpenProjectAction op = new OpenProjectAction();
@@ -118,54 +118,52 @@ public class ApplicationMenuBar extends JMenuBar {
         PrintDocumentAction print = new PrintDocumentAction();
         menu.add(np);
         menu.add(op);
-        menu.add(sp);        
-        menu.add(new Separator());
+        menu.add(sp);
+        menu.addSeparator();
         menu.add(export);
-        menu.add(new Separator());
+        menu.addSeparator();
         menu.add(pagesetup);
         menu.add(print);
-        menu.add(new Separator());
-        menu.add(ax);        
+        menu.addSeparator();
+        menu.add(ax);
         // return result
         return menu;
     }
 
     /**
      * Get the modeling menu
-     * @return 
+     * @return
      */
     private JMenu getModelMenu() {
         JMenu menu = new JMenu("Model");
-        menu.setMnemonic(KeyEvent.VK_M);
-        
+        menu.setMnemonic((KeyEvent.VK_M));
+
         JMenuItem newassembly = new JMenuItem("Assembly");
-        newassembly.setMnemonic(KeyEvent.VK_A);
+        newassembly.setMnemonic((KeyEvent.VK_A));
         menu.add(newassembly);
 
-        Separator s1 = new Separator();
-        menu.add(s1);
-        
+        menu.addSeparator();
+
         JMenuItem newpoint = new JMenuItem("Point");
-        newpoint.setMnemonic(KeyEvent.VK_A);
+        newpoint.setMnemonic((KeyEvent.VK_A));
         menu.add(newpoint);
 
         JMenuItem newline = new JMenuItem("Line");
-        newline.setMnemonic(KeyEvent.VK_L);
+        newline.setMnemonic((KeyEvent.VK_L));
         menu.add(newline);
 
         JMenuItem newrect = new JMenuItem("Rectangle");
-        newrect.setMnemonic(KeyEvent.VK_R);
+        newrect.setMnemonic((KeyEvent.VK_R));
         menu.add(newrect);
 
         JMenuItem newellipse = new JMenuItem("Ellipse");
-        newellipse.setMnemonic(KeyEvent.VK_E);
+        newellipse.setMnemonic((KeyEvent.VK_E));
         menu.add(newellipse);
-        
-        Separator s2 = new Separator();
-        menu.add(s2);
+
+        menu.addSeparator();
 
         JMenuItem newbehavior = new JMenuItem("Behavior");
-        newbehavior.setMnemonic(KeyEvent.VK_E);
+        newbehavior.setMnemonic((KeyEvent.VK_E));
         menu.add(newbehavior);
 
         return menu;
@@ -173,26 +171,26 @@ public class ApplicationMenuBar extends JMenuBar {
 
     private JMenu getScenarioMenu() {
         JMenu menu = new JMenu("Scenario");
-        menu.setMnemonic(KeyEvent.VK_S);
+        menu.setMnemonic((KeyEvent.VK_S));
 
         JMenuItem selectcontextual = new JMenuItem("Select Contextual");
-        selectcontextual.setMnemonic(KeyEvent.VK_C);
+        selectcontextual.setMnemonic((KeyEvent.VK_C));
         menu.add(selectcontextual);
-        
+
         JMenuItem selecttrans = new JMenuItem("Select Transactional");
-        selecttrans.setMnemonic(KeyEvent.VK_T);
+        selecttrans.setMnemonic((KeyEvent.VK_T));
         menu.add(selecttrans);
 
         return menu;
     }
-    
+
     /**
      * Get the view menu
-     * @return 
+     * @return
      */
     private JMenu getViewMenu() {
         JMenu menu = new JMenu("View");
-        menu.setMnemonic(KeyEvent.VK_V);
+        menu.setMnemonic((KeyEvent.VK_V));
 
         CreateIContextGraphViewerAction sv = new CreateIContextGraphViewerAction("Scenario View",null,"Graph View",new Integer(KeyEvent.VK_G));
         CreateIContextGraphViewerAction gv = new CreateIContextGraphViewerAction("Graph View",null,"Graph View",new Integer(KeyEvent.VK_G));
@@ -208,11 +206,11 @@ public class ApplicationMenuBar extends JMenuBar {
         menu.add(mv);
         menu.add(stv);
         menu.add(tv);
-        menu.add(new Separator());
+        menu.addSeparator();
         menu.add(toolbars);
         toolbars.add(projecttoolbar);
         toolbars.add(modeltoolbar);
-        
+
         // return result
         return menu;
     }
@@ -221,7 +219,7 @@ public class ApplicationMenuBar extends JMenuBar {
      * Initialize the menu bar.
      */
     private void init() {
-        setOpaque(true);
+        // setOpaque(true);
         add(getFileMenu());
         add(getEditMenu());
         add(getViewMenu());
@@ -229,5 +227,5 @@ public class ApplicationMenuBar extends JMenuBar {
         add(getModelMenu());
         add(getAboutMenu());
     }
-    
-} 
+
+}

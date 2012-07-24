@@ -22,13 +22,12 @@ import ca.sfu.federation.model.exception.GraphCycleException;
 import ca.sfu.federation.utils.IContextUtils;
 import ca.sfu.federation.utils.INamedUtils;
 import ca.sfu.federation.utils.ImageIconUtils;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.media.j3d.Group;
-import javax.media.j3d.Node;
 import javax.swing.ImageIcon;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
@@ -135,6 +134,12 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
     }
 
     /**
+     * Draw model object.
+     */
+    public void draw(Graphics g) {
+    }
+
+    /**
      * Get canonical name.
      * @return Fully qualified name.
      */
@@ -228,15 +233,6 @@ public class Scenario extends Observable implements IContext, IViewable, IGrapha
         // add self
         parents.add(this);
         return parents;
-    }
-
-    /**
-     * Get 3D renderable object representation.  Scenario does not currently
-     * return any object for itself or its children.
-     * @return Scene graph node.
-     */
-    public Node getRenderable() {
-        return new Group();
     }
 
     /**

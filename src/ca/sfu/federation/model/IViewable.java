@@ -1,7 +1,4 @@
 /**
- * IViewable.java
- * Copyright (c) 2006 Davis M. Marques <dmarques@sfu.ca>
- *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2 of the License, or (at your option)
@@ -19,16 +16,20 @@
 
 package ca.sfu.federation.model;
 
+import java.awt.Graphics;
 import java.awt.Image;
-import javax.media.j3d.Node;
 import javax.swing.ImageIcon;
 
 /**
- * An object that can be displayed in a 2D or 3D viewer.
+ * An object that can be rendered in a 2D viewer.
  * @author Davis Marques
- * @version 0.1
  */
 public interface IViewable extends INamed {
+    
+    /**
+     * Draw the model element.
+     */
+    public abstract void draw(Graphics g);
     
     /**
      * Get an icon representation of the object.
@@ -37,14 +38,7 @@ public interface IViewable extends INamed {
     public abstract ImageIcon getIcon();
     
     /**
-     * Get a Java3D renderable object.
-     * @return Java3D renderable node.
-     */
-    public abstract Node getRenderable();
-    
-    /**
      * Get a thumbnail representation of the object.
-     * TODO: consider returning a thumbnail set at different resolutions rather than a single thumbnail
      * @return Thumbnail image representation of the object.
      */
     public abstract Image getThumbnail();

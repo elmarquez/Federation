@@ -21,13 +21,7 @@ import ca.sfu.federation.model.annotations.Default;
 import ca.sfu.federation.model.annotations.Update;
 import ca.sfu.federation.model.geometry.lightweight.LwPoint;
 import ca.sfu.federation.utils.ImageIconUtils;
-import com.sun.j3d.utils.geometry.Box;
-import com.sun.j3d.utils.geometry.Primitive;
-import javax.media.j3d.Appearance;
-import javax.media.j3d.ColoringAttributes;
-import javax.media.j3d.Node;
-import javax.media.j3d.Shape3D;
-import javax.vecmath.Color3f;
+import java.awt.Graphics;
 
 /**
  * A plane in 3D space, defined by 4 points.  Also known as a 'Quad'.
@@ -67,6 +61,25 @@ public class Plane extends Component implements IPlane, IPoint {
     
     //--------------------------------------------------------------------------
 
+    /**
+     * Draw model objects.
+     */
+    @Override
+    public void draw(Graphics g) {
+//        // set appearance
+//        ColoringAttributes colorAtt = new ColoringAttributes();
+//        colorAtt.setColor(new Color3f(1.0f,1.0f,1.0f));
+//        Appearance app = new Appearance();
+//        app.setColoringAttributes(colorAtt);
+//        // build geometry
+//        Box box = new Box(4.0f,4.0f,0.25f,Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY | Primitive.ENABLE_GEOMETRY_PICKING,app);
+//        // set capabilities
+//        box.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
+//        box.setCapability(Shape3D.ALLOW_GEOMETRY_READ);
+//        box.setCapability(Node.ENABLE_PICK_REPORTING);
+//        // return result
+//        return (Node) box;
+    }
     
     /**
      * Get the plane origin.
@@ -86,27 +99,6 @@ public class Plane extends Component implements IPlane, IPoint {
         return (IDirection) new LwPoint(0,0,0);
     }
 
-    /**
-     * Get Java3D renderable object.
-     * @return Java3D renderable node.
-     */
-    @Override
-    public Node getRenderable() {
-        // set appearance
-        ColoringAttributes colorAtt = new ColoringAttributes();
-        colorAtt.setColor(new Color3f(1.0f,1.0f,1.0f));
-        Appearance app = new Appearance();
-        app.setColoringAttributes(colorAtt);
-        // build geometry
-        Box box = new Box(4.0f,4.0f,0.25f,Primitive.GENERATE_NORMALS | Primitive.ENABLE_APPEARANCE_MODIFY | Primitive.ENABLE_GEOMETRY_PICKING,app);
-        // set capabilities
-        box.setCapability(Shape3D.ALLOW_APPEARANCE_WRITE);
-        box.setCapability(Shape3D.ALLOW_GEOMETRY_READ);
-        box.setCapability(Node.ENABLE_PICK_REPORTING);
-        // return result
-        return (Node) box;
-    }
-     
     /**
      * Get the X coordinate.
      * @return X coordinate.

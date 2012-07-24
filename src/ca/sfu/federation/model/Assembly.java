@@ -20,15 +20,12 @@ import ca.sfu.federation.model.exception.GraphCycleException;
 import ca.sfu.federation.utils.IContextUtils;
 import ca.sfu.federation.utils.INamedUtils;
 import ca.sfu.federation.utils.ImageIconUtils;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.io.Serializable;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Group;
-import javax.media.j3d.Node;
-import javax.media.j3d.Shape3D;
 import javax.swing.ImageIcon;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
@@ -132,6 +129,12 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
     }
 
     /**
+     * Draw object.
+     */
+    public void draw(Graphics g) {
+    }
+
+    /**
      * Get canonical name.
      * @return Canonical name.
      */
@@ -222,38 +225,6 @@ public class Assembly extends Observable implements IContext, IViewable, IUpdate
         // add self
         parents.add(this);
         return (List) parents;
-    }
-
-    /**
-     * Get list of renderable objects.
-     * @return List of renderable objects.
-     */
-    public Node getRenderable() {
-        // init
-        BranchGroup group = new BranchGroup();
-        Shape3D shape3d = new Shape3D();
-        // set capabilities
-        group.setCapability(Group.ALLOW_CHILDREN_READ);
-        group.setCapability(Group.ALLOW_CHILDREN_WRITE);
-        group.setCapability(Group.ALLOW_CHILDREN_EXTEND);
-        ArrayList list = null;
-        try {
-            list = (ArrayList) this.getElementsInTopologicalOrder();
-        } catch (GraphCycleException ex) {
-            String stack = ExceptionUtils.getFullStackTrace(ex);
-            logger.log(Level.WARNING,"Could not get elements in topological order\n\n",stack);
-        }
-        Iterator it = list.iterator();
-        while (it.hasNext()) {
-            Object object = it.next();
-            if (object instanceof IViewable) {
-                IViewable displayobject = (IViewable) object;
-                Node node = displayobject.getRenderable();
-                group.addChild(node);
-            }
-        }
-        // return results
-        return (Node) group;
     }
 
     /**
